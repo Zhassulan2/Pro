@@ -1,0 +1,176 @@
+<div class="card mb-3">
+  <div class="card-header">
+    <div class="d-flex">
+      <div class="mr-auto p-2"><h4>{{ 'COMPANIES.TITLE' | translate }}</h4></div>        
+      <div class="p-2" *ngIf="check.checkPermissionOnRoute('company-write')">
+        <button type="button" class="btn" data-toggle="modal" data-target="#newCompany">
+          <span octicon="diff-added"></span>
+        </button>
+      </div>
+      <div class="p-2" *ngIf="check.checkPermissionOnRoute('company-write')">
+        <button type="button" class="btn" (click)=deleteCompany()>
+          <span octicon="trashcan"></span>
+        </button>
+      </div>
+      <div class="p-2">
+        <button type="button" class="btn" (click)=refreshCompany()>
+          <span octicon="sync"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="form-row">
+      <div *ngIf="companiesScope" class="form-group col-12">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>
+                {{ 'COMPANIES.NAME' | translate }}
+              </th>
+              <th>
+                {{ 'COMPANIES.BIN' | translate }}
+              </th>
+              <th>
+                {{ 'COMPANIES.ADDRESS' | translate }}
+              </th>
+              <th>
+                {{ 'COMPANIES.CONTACT' | translate }}
+              </th>
+              <th>
+              </th>
+            </tr>
+          </thead>
+          <tr *ngFor="let company of companies" (click)="onSelect(company)">
+            <td>
+              <span *ngIf="company==selectedCompany">--></span>
+              {{company.Name}}
+            </td>
+            <td>
+              {{company.Bin}}
+            </td>
+            <td>
+              {{company.Address}}
+            </td>
+            <td>
+              {{company.Contact}}
+            </td>
+            <td>
+              <button *ngIf="((company==selectedCompany) && check.checkPermissionOnRoute('company-write'))" class="btn" data-toggle="modal" data-target="#currentCompany">
+                <span octicon="pencil"></span>
+              </button>
+            </td>
+          </tr>
+        </table>
+        <nav *ngIf="paginationCompanies">
+          <ul class="pagination justify-content-center">
+            <li *ngIf="currentPage>1" class="page-item">
+              <a class="page-link" (click)="getCompanies(currentPage-1)">
+                <</a>
+            </li>
+            <li *ngFor="let companyPage of companyPages" [class.active]="companyPage == currentPage" (click)="getCompanies(companyPage)" class="page-item">
+              <a class="page-link">{{companyPage}}</a>
+            </li>
+            <li *ngIf="currentPage<companyPages.length" class="page-item">
+              <a class="page-link" (click)="getCompanies(currentPage+1)">></a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modals -->
+<div id="newCompany" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'COMPANIES.ADD' | translate }}</h5>
+      </div>
+      <div class="modal-body">
+        <form #newCompanyForm="ngForm">
+          <div class="form-group">
+            <input 
+              placeholder="{{ 'COMPANIES.NAME' | translate }}" 
+              class="form-control" 
+              name="name" 
+              [class.is-invalid]="name.invalid && (name.dirty || name.touched)"
+              required 
+              minlength="2"
+              [(ngModel)]="newName" 
+              #name="ngModel">
+          </div>
+          <div class="form-group">
+            <input 
+              placeholder="{{ 'COMPANIES.ADDRESS' | translate }}" 
+              class="form-control" 
+              name="address" 
+              [class.is-invalid]="address.invalid && (address.dirty || address.touched)"
+              required 
+              minlength="2"
+              [(ngModel)]="newAddress" 
+              #address="ngModel">
+          </div>
+          <div class="form-group">
+            <input 
+              placeholder="{{ 'COMPANIES.BIN' | translate }}" 
+              class="form-control" 
+              name="bin" 
+              [class.is-invalid]="bin.invalid && (bin.dirty || bin.touched)"
+              required 
+              minlength="12"
+              maxlength="12"
+              [(ngModel)]="newBIN" 
+              #bin="ngModel">
+          </div>
+          <div class="form-group">
+            <input 
+              placeholder="{{ 'COMPANIES.CONTACT' | translate }}" 
+              class="form-control" 
+              name="contact" 
+              [(ngModel)]="newContact" 
+              #contact="ngModel">
+          </div>
+          <button type="button" class="btn" (click)="newCompanyForm.resetForm({})"  data-dismiss="modal">{{ 'BUTTONS.REJECT' | translate }}</button>
+          <button type="button" class="btn" [disabled]="newCompanyForm.invalid" (click)="createCompany();" data-dismiss="modal">{{ 'BUTTONS.APPROVE' | translate }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="selectedCompany" id="currentCompany" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'COMPANIES.INF' | translate }}</h5>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <span>{{ 'COMPANIES.SELECTED' | translate }}: {{selectedCompany.Name}}
+          </span>
+        </div>
+        <div class="form-group">
+          <label>{{ 'COMPANIES.NAME' | translate }}</label>
+          <input class="form-control" [(ngModel)]="selectedCompany.Name">
+        </div>
+        <div class="form-group">
+          <label>{{ 'COMPANIES.BIN' | translate }}</label>
+          <input class="form-control" [(ngModel)]="selectedCompany.Bin">
+        </div>
+        <div class="form-group">
+          <label>{{ 'COMPANIES.ADDRESS' | translate }}</label>
+          <input class="form-control" [(ngModel)]="selectedCompany.Address">
+        </div>
+        <div class="form-group">
+          <label>{{ 'COMPANIES.CONTACT' | translate }}</label>
+          <input class="form-control" [(ngModel)]="selectedCompany.Contact">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'BUTTONS.REJECT' | translate }}</button>
+        <button type="button" class="btn btn-primary" (click)=updateCompany() data-dismiss="modal">{{ 'BUTTONS.APPROVE' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,6014 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "FBA POS API",
+    "version": "1.0"
+  },
+  "host": "FBAappuv01.fortebank.com:8082",
+  "paths": {
+    "/actiontype": {
+      "get": {
+        "description": "Получение списка типов действий для журнала движения товаров",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ActionTypes"
+        ],
+        "operationId": "ActionTypeGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив записей",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ActionType"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Изменение типа операции",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ActionTypes"
+        ],
+        "operationId": "ActionTypePUT",
+        "parameters": [
+          {
+            "description": "JSON для изменения модели типа операции",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ActionType"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON ответ на изменение города",
+            "schema": {
+              "$ref": "#/definitions/ActionType"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание города",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ActionTypes"
+        ],
+        "operationId": "ActionTypePOST",
+        "parameters": [
+          {
+            "description": "JSON для создания типа операции",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/City"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель типа операции",
+            "schema": {
+              "$ref": "#/definitions/ActionType"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/actiontype/{id}": {
+      "get": {
+        "description": "Получение типа операциий в журнале движения товаров по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ActionTypes"
+        ],
+        "operationId": "ActionTypeGETByID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор типа операции",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель типа операции",
+            "schema": {
+              "$ref": "#/definitions/ActionType"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление типа операции по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ActionTypes"
+        ],
+        "operationId": "ActionTypeDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор типа операции",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/actiontypes/count": {
+      "get": {
+        "description": "Получение количества типов операций",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ActionTypes"
+        ],
+        "operationId": "ActionTypeCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством типов операций",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/categories/count": {
+      "get": {
+        "description": "Получение количества категорий",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Category"
+        ],
+        "operationId": "CategoryCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством категорий",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/category": {
+      "put": {
+        "description": "Изменение категории",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Category"
+        ],
+        "operationId": "CategoryPUT",
+        "parameters": [
+          {
+            "description": "JSON для изменения модели категории",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON ответ на изменение категории",
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание категории",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Category"
+        ],
+        "operationId": "CategoryPOST",
+        "parameters": [
+          {
+            "description": "JSON для создания категории",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель категории",
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/category/{id}": {
+      "get": {
+        "description": "Получение категории по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Category"
+        ],
+        "operationId": "CategoryGETByID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор категории",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель категории",
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление категории по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Category"
+        ],
+        "operationId": "CategoryDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор категории",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/cities/count": {
+      "get": {
+        "description": "Получение количества городов",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "City"
+        ],
+        "operationId": "CityCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством городов",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/city": {
+      "get": {
+        "description": "Получение списка городов",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "City"
+        ],
+        "operationId": "CityGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив городов",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/City"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Изменение города",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "City"
+        ],
+        "operationId": "CityPUT",
+        "parameters": [
+          {
+            "description": "JSON для изменения модели города",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/City"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON ответ на изменение города",
+            "schema": {
+              "$ref": "#/definitions/City"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание города",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "City"
+        ],
+        "operationId": "CityPOST",
+        "parameters": [
+          {
+            "description": "JSON для создания города",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/City"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель города",
+            "schema": {
+              "$ref": "#/definitions/City"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/city/{id}": {
+      "get": {
+        "description": "Получение города по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "City"
+        ],
+        "operationId": "CityGETByID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор города",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель города",
+            "schema": {
+              "$ref": "#/definitions/City"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление города по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "City"
+        ],
+        "operationId": "CityDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор города",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/companies/count": {
+      "get": {
+        "description": "Получение количества компаний",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Company"
+        ],
+        "operationId": "CompanyCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством компаний",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/company": {
+      "get": {
+        "description": "Получение списка компаний",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Company"
+        ],
+        "operationId": "CompanyGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив компаний",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Company"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Изменение компании",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Company"
+        ],
+        "operationId": "CompanyPUT",
+        "parameters": [
+          {
+            "description": "JSON для изменения модели компании",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Company"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON ответ на изменение города",
+            "schema": {
+              "$ref": "#/definitions/City"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание компании",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Company"
+        ],
+        "operationId": "CompanyPOST",
+        "parameters": [
+          {
+            "description": "JSON для создания компании",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Company"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель компании",
+            "schema": {
+              "$ref": "#/definitions/Company"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/company/{id}": {
+      "get": {
+        "description": "Получение компании по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Company"
+        ],
+        "operationId": "CompanyGETByID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор компании",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель компании",
+            "schema": {
+              "$ref": "#/definitions/Company"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление города по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Company"
+        ],
+        "operationId": "CompanyDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор компании",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/customer": {
+      "get": {
+        "description": "Получение списка клиентов",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Customer"
+        ],
+        "operationId": "CustomerGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив городов",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Customer"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Изменение клиента",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Customer"
+        ],
+        "operationId": "CustomerPUT",
+        "parameters": [
+          {
+            "description": "JSON для изменения модели клиента",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Customer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON ответ на изменение клиента",
+            "schema": {
+              "$ref": "#/definitions/Customer"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание клиента",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Customer"
+        ],
+        "operationId": "CustomerPOST",
+        "parameters": [
+          {
+            "description": "JSON для создания клиента",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Customer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель клиента",
+            "schema": {
+              "$ref": "#/definitions/Customer"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/customer/{id}": {
+      "get": {
+        "description": "Получение клиента по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Customer"
+        ],
+        "operationId": "CustomerGETByID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор клиента",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель клиента",
+            "schema": {
+              "$ref": "#/definitions/Customer"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление клиента по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Customer"
+        ],
+        "operationId": "CustomerDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор клиента",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/customers/count": {
+      "get": {
+        "description": "Получение количества клиентов",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Customer"
+        ],
+        "operationId": "CustomerCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством клиентов",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/device": {
+      "get": {
+        "description": "Получение списка устройств",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Device"
+        ],
+        "operationId": "DeviceGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив устройств",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Device"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Изменение устройства",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Device"
+        ],
+        "operationId": "DevicePUT",
+        "parameters": [
+          {
+            "description": "JSON для изменения модели устройства",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Device"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON ответ на изменение устройства",
+            "schema": {
+              "$ref": "#/definitions/Device"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание устройства",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Device"
+        ],
+        "operationId": "DevicePOST",
+        "parameters": [
+          {
+            "description": "JSON для создания устройства",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Device"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель устройства",
+            "schema": {
+              "$ref": "#/definitions/Device"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/device/{id}": {
+      "get": {
+        "description": "Получение устройства по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Device"
+        ],
+        "operationId": "DeviceGETByID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор устройства",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель устройства",
+            "schema": {
+              "$ref": "#/definitions/Device"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление устройства по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Device"
+        ],
+        "operationId": "DeviceDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор устройства",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/devices/count": {
+      "get": {
+        "description": "Получение количества устройств",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Device"
+        ],
+        "operationId": "DeviceCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством устройств",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/discount": {
+      "get": {
+        "description": "Получение списка скидок",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Discount"
+        ],
+        "operationId": "DiscountGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив скидок",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Discount"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Изменение скидки",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Discount"
+        ],
+        "operationId": "DiscountPUT",
+        "parameters": [
+          {
+            "description": "JSON для изменения модели скидки",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Discount"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON ответ на изменение скидки",
+            "schema": {
+              "$ref": "#/definitions/Discount"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание скидки",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Discount"
+        ],
+        "operationId": "DiscountPOST",
+        "parameters": [
+          {
+            "description": "JSON для создания скидки",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Discount"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель скидки",
+            "schema": {
+              "$ref": "#/definitions/Discount"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/discount/{id}": {
+      "get": {
+        "description": "Получение скидки по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Discount"
+        ],
+        "operationId": "DiscountGETByID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор скидки",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель скидки",
+            "schema": {
+              "$ref": "#/definitions/Discount"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление скидки по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Discount"
+        ],
+        "operationId": "DiscountDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор скидки",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/discounts/count": {
+      "get": {
+        "description": "Получение количества скидок",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Discount"
+        ],
+        "operationId": "DiscountCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством скидок",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/discounttype": {
+      "get": {
+        "description": "Получение списка типов скидок",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "DiscountType"
+        ],
+        "operationId": "DiscountTypeGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "мнемоника типа скидки",
+            "name": "shortname",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив типов скидок",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/DiscountType"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Изменение типа скидки",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "DiscountType"
+        ],
+        "operationId": "DiscountTypePUT",
+        "parameters": [
+          {
+            "description": "JSON для изменения модели типа скидки",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DiscountType"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON ответ на изменение типа скидки",
+            "schema": {
+              "$ref": "#/definitions/DiscountType"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание типа скидки",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "DiscountType"
+        ],
+        "operationId": "DiscountTypePOST",
+        "parameters": [
+          {
+            "description": "JSON для создания типа скидки",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DiscountType"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель типа скидки",
+            "schema": {
+              "$ref": "#/definitions/DiscountType"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/discounttype/{id}": {
+      "get": {
+        "description": "Получение типов скидок по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "DiscountType"
+        ],
+        "operationId": "DiscountTypeGETByID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор типов скидок",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель типов скидок",
+            "schema": {
+              "$ref": "#/definitions/DiscountType"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление типа скидки по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "DiscountType"
+        ],
+        "operationId": "DiscountTypeDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор типа скидки",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/discounttypes/count": {
+      "get": {
+        "description": "Получение количества типов скидок",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "DiscountType"
+        ],
+        "operationId": "DiscountTypeCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством типов скидок",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/inventories/count": {
+      "get": {
+        "description": "Получение количества инвентаризаций",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Inventory"
+        ],
+        "operationId": "InventoryCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством городов",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/inventory": {
+      "get": {
+        "description": "Получение списка инвентаризаций",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Inventory"
+        ],
+        "operationId": "InventoryGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив инвентаризаций",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Inventory"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Изменение инвентаризации",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Inventory"
+        ],
+        "operationId": "InventoryPUT",
+        "parameters": [
+          {
+            "description": "JSON для изменения модели инвентаризации",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Inventory"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON ответ на изменение инвентаризации",
+            "schema": {
+              "$ref": "#/definitions/Inventory"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание инвентаризации",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Inventory"
+        ],
+        "operationId": "InventoryPOST",
+        "parameters": [
+          {
+            "description": "JSON для создания инвентаризации",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Inventory"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель инвентаризации",
+            "schema": {
+              "$ref": "#/definitions/Inventory"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/inventory/{id}": {
+      "get": {
+        "description": "Получение инвентаризации по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Inventory"
+        ],
+        "operationId": "InventoryGETByID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор инвентаризации",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель инвентаризации",
+            "schema": {
+              "$ref": "#/definitions/Inventory"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление инвентаризации по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Inventory"
+        ],
+        "operationId": "InventoryDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор инвентаризации",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/inventorydetail": {
+      "get": {
+        "description": "Получение списка детализаций инвентаризаций",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "InventoryDetail"
+        ],
+        "operationId": "InventoryDetailGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив детализаций инвентаризаций",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/InventoryDetail"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Изменение детализации инвентаризации",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "InventoryDetail"
+        ],
+        "operationId": "InventoryDetailPUT",
+        "parameters": [
+          {
+            "description": "JSON для изменения модели детализации инвентаризации",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/InventoryDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON ответ на изменение детализации инвентаризации",
+            "schema": {
+              "$ref": "#/definitions/InventoryDetail"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание детализации инвентаризации",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "InventoryDetail"
+        ],
+        "operationId": "InventoryDetailPOST",
+        "parameters": [
+          {
+            "description": "JSON для создания детализации инвентаризации",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/InventoryDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель детализации инвентаризации",
+            "schema": {
+              "$ref": "#/definitions/InventoryDetail"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/inventorydetail/{id}": {
+      "get": {
+        "description": "Получение детализации инвентаризации по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "InventoryDetail"
+        ],
+        "operationId": "InventoryDetailGETByID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор детализации инвентаризации",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель детализации инвентаризации",
+            "schema": {
+              "$ref": "#/definitions/InventoryDetail"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление детализации инвентаризации по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "InventoryDetail"
+        ],
+        "operationId": "InventoryDetailDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор детализации инвентаризации",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/inventorydetails/count": {
+      "get": {
+        "description": "Получение количества детализаций инвентаризаций",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "InventoryDetail"
+        ],
+        "operationId": "InventoryDetailCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством детализаций инвентаризаций",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/paymenttype": {
+      "get": {
+        "description": "Получение списка типов платежей",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "PaymentType"
+        ],
+        "operationId": "PaymentTypeGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив типов платежей",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PaymentType"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Изменение типа платежа",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "PaymentType"
+        ],
+        "operationId": "PaymentTypePUT",
+        "parameters": [
+          {
+            "description": "JSON для изменения модели типа платежа",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PaymentType"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON ответ на изменение типа платежа",
+            "schema": {
+              "$ref": "#/definitions/PaymentType"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание типа платежа",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "PaymentType"
+        ],
+        "operationId": "PaymentTypePOST",
+        "parameters": [
+          {
+            "description": "JSON для создания типа платежа",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PaymentType"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель типа платежа",
+            "schema": {
+              "$ref": "#/definitions/PaymentType"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/paymenttype/{id}": {
+      "get": {
+        "description": "Получение типа платежа по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "PaymentType"
+        ],
+        "operationId": "PaymentTypeGETByID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор города",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель города",
+            "schema": {
+              "$ref": "#/definitions/PaymentType"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление типа платежа по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "PaymentType"
+        ],
+        "operationId": "PaymentTypeDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор типа платежа",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/paymenttypes/count": {
+      "get": {
+        "description": "Получение количества типов платежей",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "PaymentType"
+        ],
+        "operationId": "PaymentTypeCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством типов платежей",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/point": {
+      "put": {
+        "description": "Изменение торговой точки",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Point"
+        ],
+        "operationId": "PointPUT",
+        "parameters": [
+          {
+            "description": "JSON для изменения модели торговой точки",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Point"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON ответ на изменение торговой точки",
+            "schema": {
+              "$ref": "#/definitions/Point"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание торговой точки",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Point"
+        ],
+        "operationId": "PointPOST",
+        "parameters": [
+          {
+            "description": "JSON для создания торговой точки",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Point"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель торговой точки",
+            "schema": {
+              "$ref": "#/definitions/Point"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/point/{id}": {
+      "get": {
+        "description": "Получение торговой точки по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Point"
+        ],
+        "operationId": "PointGETByID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор торговой точки",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель торговой точки",
+            "schema": {
+              "$ref": "#/definitions/Point"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление торговой точки по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Point"
+        ],
+        "operationId": "PointDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор торговой точки",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/point/{id}/authorize": {
+      "get": {
+        "description": "Получение информации по клиенту OAuth связанному с торговой точкой",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Point"
+        ],
+        "operationId": "PointGetOauthClient",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор торговой точки",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель клиента в OAuth",
+            "schema": {
+              "$ref": "#/definitions/OAuth2Client"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/points": {
+      "get": {
+        "description": "Получение списка городов",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Point"
+        ],
+        "operationId": "PointGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          },
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор компании",
+            "name": "companyid",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив городов",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Point"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/points/count": {
+      "get": {
+        "description": "Получение количества торговых точек",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Point"
+        ],
+        "operationId": "PointCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством торговых точек",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/product": {
+      "get": {
+        "description": "Получение списка товаров",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Product"
+        ],
+        "operationId": "ProductGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив товаров",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Product"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Изменение товара",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Product"
+        ],
+        "operationId": "ProductPUT",
+        "parameters": [
+          {
+            "description": "JSON для изменения модели товара",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON ответ на изменение товара",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание товара",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Product"
+        ],
+        "operationId": "ProductPOST",
+        "parameters": [
+          {
+            "description": "JSON для создания товара",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель товара",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/product/{id}": {
+      "get": {
+        "description": "Получение товара по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Product"
+        ],
+        "operationId": "ProductGETByID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор товара",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель товара",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление товара по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Product"
+        ],
+        "operationId": "ProductDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор товара",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/productaction": {
+      "get": {
+        "description": "Получение записей журнала движения товаров",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ProductAction"
+        ],
+        "operationId": "ProductActionGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив записей журнала движения товаров",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductAction"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Изменение записи журнала движения товаров",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ProductAction"
+        ],
+        "operationId": "ProductActionPUT",
+        "parameters": [
+          {
+            "description": "JSON для изменения модели записи журнала движения товаров",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProductAction"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON ответ на изменение записи журнала движения товаров",
+            "schema": {
+              "$ref": "#/definitions/ProductAction"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание записи журнала движения товаров",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ProductAction"
+        ],
+        "operationId": "ProductActionPOST",
+        "parameters": [
+          {
+            "description": "JSON для создания записи журнала движения товаров",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProductAction"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель записи журнала движения товаров",
+            "schema": {
+              "$ref": "#/definitions/ProductAction"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/productaction/{id}": {
+      "get": {
+        "description": "Получение записи журнала движения товаров по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ProductAction"
+        ],
+        "operationId": "ProductActionGETByID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор записи журнала движения товаров",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель записи журнала движения товаров",
+            "schema": {
+              "$ref": "#/definitions/ProductAction"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление записи журнала движения товаров по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ProductAction"
+        ],
+        "operationId": "ProductActionDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор записи журнала движения товаров",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/productactiondetail": {
+      "get": {
+        "description": "Получение получение детализации по записи журнала движения товаров",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ProductActionDetail"
+        ],
+        "operationId": "ProductActionDetailGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          },
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор записи в журнале движения товаров",
+            "name": "productActionID",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив детализации журнала движения товаров",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductActionDetail"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание записи детализации журнала движения товаров",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ProductActionDetail"
+        ],
+        "operationId": "ProductActionDetailPOST",
+        "parameters": [
+          {
+            "description": "JSON для создания записи детализации журнала движения товаров",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProductActionDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель записи детализации журнала движения товаров",
+            "schema": {
+              "$ref": "#/definitions/ProductActionDetail"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/productactiondetail/{id}": {
+      "get": {
+        "description": "Получение детализации журнала движения товаров по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ProductActionDetail"
+        ],
+        "operationId": "ProductActionDetailGETByID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор детализации журнала движения товаров",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель детализации журнала движения товаров",
+            "schema": {
+              "$ref": "#/definitions/ProductActionDetail"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление записи детализации журнала движения товаров по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ProductActionDetail"
+        ],
+        "operationId": "ProductActionDetailDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор записи детализации журнала движения товаров",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/productactiondetails": {
+      "post": {
+        "description": "Создание списка записей детализации журнала движения товаров",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ProductActionDetail"
+        ],
+        "operationId": "ProductActionDetailsPOST",
+        "parameters": [
+          {
+            "description": "JSON для создания списка записей детализации журнала движения товаров",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductActionDetail"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON ответ",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductActionDetail"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/productactiondetails/count": {
+      "get": {
+        "description": "Получение количества записей детализации журнала движения товаров",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ProductActionDetail"
+        ],
+        "operationId": "ProductActionDetailCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством записей детализации журнала движения товаров",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/productactions/count": {
+      "get": {
+        "description": "Получение количества записей журнала движения товаров",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ProductAction"
+        ],
+        "operationId": "ProductActionCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством записей журнала движения товаров",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/products/count": {
+      "get": {
+        "description": "Получение количества товаров",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Product"
+        ],
+        "operationId": "ProductCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством товаров",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/productstock": {
+      "get": {
+        "description": "Получение списка остатков и актуальных цен",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ProductStock"
+        ],
+        "operationId": "ProductStockGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив остатков и актуальных цен",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductStock"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Изменение остатков и актуальных цен",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ProductStock"
+        ],
+        "operationId": "ProductStockPUT",
+        "parameters": [
+          {
+            "description": "JSON для изменения модели остатков и актуальных цен",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProductStock"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON ответ на изменение остатков и актуальных цен",
+            "schema": {
+              "$ref": "#/definitions/ProductStock"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание остатков и актуальных цен",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ProductStock"
+        ],
+        "operationId": "ProductStockPOST",
+        "parameters": [
+          {
+            "description": "JSON для создания остатков и актуальных цен",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProductStock"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель остатков и актуальных цен",
+            "schema": {
+              "$ref": "#/definitions/ProductStock"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/productstock/{id}": {
+      "delete": {
+        "description": "Удаление остатков и актуальных цен по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ProductStock"
+        ],
+        "operationId": "ProductStockDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор записи остатков и актуальных цен",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/productstock/{pointID}": {
+      "get": {
+        "description": "Получение остатков и актуальных цен по идентификатору товара",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ProductStock"
+        ],
+        "operationId": "ProductStockGETByPointID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор товара",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель остатков и актуальных цен",
+            "schema": {
+              "$ref": "#/definitions/ProductStock"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/productstocks/count": {
+      "get": {
+        "description": "Получение количества остатков и актуальных цен",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "ProductStock"
+        ],
+        "operationId": "ProductStockCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством остатков и актуальных цен",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/receipt": {
+      "get": {
+        "description": "Получение списка чеков",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Receipt"
+        ],
+        "operationId": "ReceiptGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив чеков",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Receipt"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Изменение чека",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Receipt"
+        ],
+        "operationId": "ReceiptPUT",
+        "parameters": [
+          {
+            "description": "JSON для изменения модели чека",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Receipt"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON ответ на изменение чека",
+            "schema": {
+              "$ref": "#/definitions/Receipt"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание чека",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Receipt"
+        ],
+        "operationId": "ReceiptPOST",
+        "parameters": [
+          {
+            "description": "JSON для создания чека",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Receipt"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель чека",
+            "schema": {
+              "$ref": "#/definitions/Receipt"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/receipt/{id}": {
+      "get": {
+        "description": "Получение чека по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Receipt"
+        ],
+        "operationId": "ReceiptGETByID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор чека",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель чека",
+            "schema": {
+              "$ref": "#/definitions/Receipt"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление чека по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Receipt"
+        ],
+        "operationId": "ReceiptDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор чека",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/receipts/count": {
+      "get": {
+        "description": "Получение количества чеков",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Receipt"
+        ],
+        "operationId": "ReceiptCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством городов",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/role": {
+      "get": {
+        "description": "Получение списка ролей",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Role"
+        ],
+        "operationId": "RoleGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "мнемоника роли",
+            "name": "shortname",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив ролей",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Role"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Изменение роли",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Role"
+        ],
+        "operationId": "RolePUT",
+        "parameters": [
+          {
+            "description": "JSON для изменения модели роли",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Role"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON ответ на изменение роли",
+            "schema": {
+              "$ref": "#/definitions/Role"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание роли",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Role"
+        ],
+        "operationId": "RolePOST",
+        "parameters": [
+          {
+            "description": "JSON для создания роли",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Role"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель роли",
+            "schema": {
+              "$ref": "#/definitions/Role"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/role/{id}": {
+      "get": {
+        "description": "Получение роли по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Role"
+        ],
+        "operationId": "RoleGETByID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор роли",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель роли",
+            "schema": {
+              "$ref": "#/definitions/Role"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление роли по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Role"
+        ],
+        "operationId": "RoleDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор роли",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/roles/count": {
+      "get": {
+        "description": "Получение количества ролей",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Role"
+        ],
+        "operationId": "RoleCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством ролей",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/staff": {
+      "get": {
+        "description": "Получение списка персонала",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Staff"
+        ],
+        "operationId": "StaffGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив персонала",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Staff"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Изменение города",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Staff"
+        ],
+        "operationId": "StaffPUT",
+        "parameters": [
+          {
+            "description": "JSON для изменения модели персонала",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Staff"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON ответ на изменение персонала",
+            "schema": {
+              "$ref": "#/definitions/Staff"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание персонала",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Staff"
+        ],
+        "operationId": "StaffPOST",
+        "parameters": [
+          {
+            "description": "JSON для создания персонала",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Staff"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель персонала",
+            "schema": {
+              "$ref": "#/definitions/Staff"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/staff/{id}": {
+      "get": {
+        "description": "Получение города по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Staff"
+        ],
+        "operationId": "StaffGETByID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор персонала",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель персонала",
+            "schema": {
+              "$ref": "#/definitions/Staff"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление персонала по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Staff"
+        ],
+        "operationId": "StaffDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор персонала",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/staffpoint": {
+      "get": {
+        "description": "Получение списка связок персонала и торговой точки",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "StaffPoint"
+        ],
+        "operationId": "StaffPointGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив связок персонала и торговой точки",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/StaffPoint"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Изменение связки персонала и торговой точки",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "StaffPoint"
+        ],
+        "operationId": "StaffPointPUT",
+        "parameters": [
+          {
+            "description": "JSON для изменения модели связки персонала и торговой точки",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StaffPoint"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON ответ на изменение связки персонала и торговой точки",
+            "schema": {
+              "$ref": "#/definitions/StaffPoint"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание связки персонала и торговой точки",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "StaffPoint"
+        ],
+        "operationId": "StaffPointPOST",
+        "parameters": [
+          {
+            "description": "JSON для создания связки персонала и торговой точки",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StaffPoint"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель связки персонала и торговой точки",
+            "schema": {
+              "$ref": "#/definitions/StaffPoint"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/staffpoint/{id}": {
+      "get": {
+        "description": "Получение связки персонала и торговой точки по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "StaffPoint"
+        ],
+        "operationId": "StaffPointGETByID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор связки персонала и торговой точки",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель связки персонала и торговой точки",
+            "schema": {
+              "$ref": "#/definitions/StaffPoint"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление связки персонала и торговой точки по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "StaffPoint"
+        ],
+        "operationId": "StaffPointDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор связки персонала и торговой точки",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/staffpoints/count": {
+      "get": {
+        "description": "Получение количества связок персонала и торговой точки",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "StaffPoint"
+        ],
+        "operationId": "StaffPointCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством связок персонала и торговой точки",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/staffs/count": {
+      "get": {
+        "description": "Получение количества персонала",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Staff"
+        ],
+        "operationId": "StaffCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством персонала",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/supplier": {
+      "get": {
+        "description": "Получение списка поставщиков",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Supplier"
+        ],
+        "operationId": "SupplierGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив поставщиков",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Supplier"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание поставщика",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Supplier"
+        ],
+        "operationId": "SupplierPOST",
+        "parameters": [
+          {
+            "description": "JSON для создания поставщика",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Supplier"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель поставщика",
+            "schema": {
+              "$ref": "#/definitions/Supplier"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/supplier/{id}": {
+      "get": {
+        "description": "Получение поставщика по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Supplier"
+        ],
+        "operationId": "SupplierGETByID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор поставщика",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель поставщика",
+            "schema": {
+              "$ref": "#/definitions/Supplier"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление поставщика по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Supplier"
+        ],
+        "operationId": "SupplierDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор поставщика",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/suppliers/count": {
+      "get": {
+        "description": "Получение количества поставщиков",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Supplier"
+        ],
+        "operationId": "SupplierCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством поставщиков",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/tax": {
+      "get": {
+        "description": "Получение списка налогов",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Tax"
+        ],
+        "operationId": "TaxGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив налогов",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Tax"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Изменение налога",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Tax"
+        ],
+        "operationId": "TaxPUT",
+        "parameters": [
+          {
+            "description": "JSON для изменения модели налога",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Tax"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON ответ на изменение налога",
+            "schema": {
+              "$ref": "#/definitions/Tax"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание налога",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Tax"
+        ],
+        "operationId": "TaxPOST",
+        "parameters": [
+          {
+            "description": "JSON для создания налога",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Tax"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель налога",
+            "schema": {
+              "$ref": "#/definitions/Tax"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/tax/{id}": {
+      "get": {
+        "description": "Получение налога по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Tax"
+        ],
+        "operationId": "TaxGETByID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор налога",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель налога",
+            "schema": {
+              "$ref": "#/definitions/Tax"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление налога по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Tax"
+        ],
+        "operationId": "TaxDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор налога",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/taxs/count": {
+      "get": {
+        "description": "Получение количества налогов",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Tax"
+        ],
+        "operationId": "TaxCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством налогов",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/worksession": {
+      "get": {
+        "description": "Получение списка рабочих смен",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "WorkSession"
+        ],
+        "operationId": "WorkSessionGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив рабочих смен",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/WorkSession"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Изменение рабочей смены",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "WorkSession"
+        ],
+        "operationId": "WorkSessionPUT",
+        "parameters": [
+          {
+            "description": "JSON для изменения модели рабочей смены",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WorkSession"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON ответ на изменение рабочей смены",
+            "schema": {
+              "$ref": "#/definitions/WorkSession"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Создание рабочей смены",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "WorkSession"
+        ],
+        "operationId": "WorkSessionPOST",
+        "parameters": [
+          {
+            "description": "JSON для создания рабочей смены",
+            "name": "bodyjson",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WorkSession"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON созданная модель рабочей смены",
+            "schema": {
+              "$ref": "#/definitions/WorkSession"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/worksession/{id}": {
+      "get": {
+        "description": "Получение рабочей смены по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "WorkSession"
+        ],
+        "operationId": "WorkSessionGETByID",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор рабочей смены",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON модель рабочей смены",
+            "schema": {
+              "$ref": "#/definitions/WorkSession"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Удаление рабочей смены по ID",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "WorkSession"
+        ],
+        "operationId": "WorkSessionDELETE",
+        "parameters": [
+          {
+            "type": "string \u003cuuid4\u003e",
+            "description": "идентификатор рабочей смены",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/worksessions/count": {
+      "get": {
+        "description": "Получение количества рабочих смен",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "WorkSession"
+        ],
+        "operationId": "WorkSessionCount",
+        "responses": {
+          "200": {
+            "description": "JSON с количеством рабочих смен",
+            "schema": {
+              "$ref": "#/definitions/Count"
+            }
+          },
+          "500": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/сategory": {
+      "get": {
+        "description": "Получение списка категорий",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Category"
+        ],
+        "operationId": "CategoryGET",
+        "parameters": [
+          {
+            "type": "int",
+            "description": "номер страницы пагинатора",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "int",
+            "description": "количество записей на странице",
+            "name": "size",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON массив городов",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Category"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON ответ об ошибке",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ActionType": {
+      "description": "ActionType - список типов действий для журнала движения товаров",
+      "type": "object",
+      "properties": {
+        "ID": {
+          "description": "идентификатор записи",
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Name": {
+          "description": "название типа действия",
+          "type": "string"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    },
+    "Category": {
+      "description": "Category категории товаров",
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "ParentID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Staff": {
+          "$ref": "#/definitions/Staff"
+        },
+        "StaffID": {
+          "type": "string",
+          "format": "uuid4"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    },
+    "City": {
+      "description": "City справочник городов",
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Name": {
+          "type": "string"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    },
+    "Company": {
+      "description": "Company компании",
+      "type": "object",
+      "properties": {
+        "Address": {
+          "type": "string"
+        },
+        "Bin": {
+          "type": "string"
+        },
+        "Contact": {
+          "type": "string"
+        },
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "Staff": {
+          "$ref": "#/definitions/Staff"
+        },
+        "StaffID": {
+          "type": "string",
+          "format": "uuid4"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    },
+    "Count": {
+      "description": "modelRowsCount структура для количества записей под swagger",
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Count"
+        }
+      },
+      "x-go-name": "modelRowsCount",
+      "x-go-package": "fba/model"
+    },
+    "Customer": {
+      "description": "Customer клиенты компаний",
+      "type": "object",
+      "properties": {
+        "Address": {
+          "type": "string"
+        },
+        "Company": {
+          "$ref": "#/definitions/Company"
+        },
+        "CompanyID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Contact": {
+          "type": "string"
+        },
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Iin": {
+          "type": "string"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "Staff": {
+          "$ref": "#/definitions/Staff"
+        },
+        "StaffID": {
+          "type": "string",
+          "format": "uuid4"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    },
+    "Device": {
+      "description": "Device устройства продаж",
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "Point": {
+          "$ref": "#/definitions/Point"
+        },
+        "PointID": {
+          "type": "string",
+          "format": "uuid4"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    },
+    "Discount": {
+      "description": "Discount список скидок",
+      "type": "object",
+      "properties": {
+        "DiscountType": {
+          "$ref": "#/definitions/DiscountType"
+        },
+        "DiscountTypeID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Enddate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "Staff": {
+          "$ref": "#/definitions/Staff"
+        },
+        "StaffID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Startdate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "Value": {
+          "type": "number",
+          "format": "double"
+        },
+        "Valuepercent": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    },
+    "DiscountType": {
+      "description": "DiscountType типы скидок",
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "ShortName": {
+          "type": "string"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    },
+    "Error": {
+      "description": "Error Ошибка",
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "x-go-name": "Error"
+        }
+      },
+      "x-go-package": "fba/model"
+    },
+    "Inventory": {
+      "description": "Inventory журнал инвентаризаций",
+      "type": "object",
+      "properties": {
+        "Company": {
+          "$ref": "#/definitions/Company"
+        },
+        "CompanyID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Enddate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "Point": {
+          "$ref": "#/definitions/Point"
+        },
+        "PointID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Staff": {
+          "$ref": "#/definitions/Staff"
+        },
+        "StaffID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Startdate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    },
+    "InventoryDetail": {
+      "description": "InventoryDetail детализация журнала инвентаризаций",
+      "type": "object",
+      "properties": {
+        "Checkdate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "Count": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Inventory": {
+          "$ref": "#/definitions/Inventory"
+        },
+        "InventoryID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Product": {
+          "$ref": "#/definitions/Product"
+        },
+        "ProductID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Staff": {
+          "$ref": "#/definitions/Staff"
+        },
+        "StaffID": {
+          "type": "string",
+          "format": "uuid4"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    },
+    "OAuth2Client": {
+      "description": "Client oauth2 client",
+      "type": "object",
+      "properties": {
+        "CreatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "DeletedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "Domain": {
+          "type": "string"
+        },
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Secret": {
+          "type": "string"
+        },
+        "UpdatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "UserID": {
+          "type": "string",
+          "format": "uuid4"
+        }
+      },
+      "x-go-name": "Client",
+      "x-go-package": "fba/http"
+    },
+    "PaymentType": {
+      "description": "PaymentType типы платежей",
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "ShortName": {
+          "type": "string"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    },
+    "Point": {
+      "description": "Point точки продаж",
+      "type": "object",
+      "properties": {
+        "Address": {
+          "type": "string"
+        },
+        "City": {
+          "$ref": "#/definitions/City"
+        },
+        "CityID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Company": {
+          "$ref": "#/definitions/Company"
+        },
+        "CompanyID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "Staff": {
+          "$ref": "#/definitions/Staff"
+        },
+        "StaffID": {
+          "type": "string",
+          "format": "uuid4"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    },
+    "Product": {
+      "description": "Product продукты",
+      "type": "object",
+      "properties": {
+        "Barcode": {
+          "type": "string"
+        },
+        "Category": {
+          "$ref": "#/definitions/Category"
+        },
+        "CategoryID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "Staff": {
+          "$ref": "#/definitions/Staff"
+        },
+        "StaffID": {
+          "type": "string",
+          "format": "uuid4"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    },
+    "ProductAction": {
+      "description": "ProductAction Журнал движения товаров",
+      "type": "object",
+      "properties": {
+        "ActionDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "Amount": {
+          "type": "number",
+          "format": "double"
+        },
+        "Count": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Point": {
+          "$ref": "#/definitions/Point"
+        },
+        "PointID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Staff": {
+          "$ref": "#/definitions/Staff"
+        },
+        "StaffID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "WorkSession": {
+          "$ref": "#/definitions/WorkSession"
+        },
+        "WorkSessionID": {
+          "type": "string",
+          "format": "uuid4"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    },
+    "ProductActionDetail": {
+      "description": "ProductActionDetail Детализация по операциям",
+      "type": "object",
+      "properties": {
+        "ActionType": {
+          "$ref": "#/definitions/ActionType"
+        },
+        "ActionTypeID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Count": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Partnumber": {
+          "type": "string"
+        },
+        "PaymentType": {
+          "$ref": "#/definitions/PaymentType"
+        },
+        "PaymentTypeID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Pricebuy": {
+          "type": "number",
+          "format": "double"
+        },
+        "Pricesell": {
+          "type": "number",
+          "format": "double"
+        },
+        "Product": {
+          "$ref": "#/definitions/Product"
+        },
+        "ProductAction": {
+          "$ref": "#/definitions/ProductAction"
+        },
+        "ProductActionID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "ProductID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Reference": {
+          "type": "string"
+        },
+        "Supplier": {
+          "$ref": "#/definitions/Supplier"
+        },
+        "SupplierID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Tax": {
+          "$ref": "#/definitions/Tax"
+        },
+        "TaxID": {
+          "type": "string",
+          "format": "uuid4"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    },
+    "ProductStock": {
+      "description": "ProductStock остатки",
+      "type": "object",
+      "properties": {
+        "Count": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Point": {
+          "$ref": "#/definitions/Point"
+        },
+        "PointID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "PriceSell": {
+          "type": "number",
+          "format": "double"
+        },
+        "Product": {
+          "$ref": "#/definitions/Product"
+        },
+        "ProductID": {
+          "type": "string",
+          "format": "uuid4"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    },
+    "Receipt": {
+      "description": "Receipt чек",
+      "type": "object",
+      "properties": {
+        "Checkdate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "Content": {
+          "type": "string"
+        },
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Number": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "ProductAction": {
+          "$ref": "#/definitions/ProductAction"
+        },
+        "ProductActionID": {
+          "type": "string",
+          "format": "uuid4"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    },
+    "Role": {
+      "description": "Role права пользователей(staff)",
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Name": {
+          "type": "string"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    },
+    "Staff": {
+      "description": "Staff пользователь",
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "ParentID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Role": {
+          "$ref": "#/definitions/Role"
+        },
+        "RoleID": {
+          "type": "string",
+          "format": "uuid4"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    },
+    "StaffPoint": {
+      "description": "StaffPoint привязка пользователя к точке продаж",
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Point": {
+          "$ref": "#/definitions/Point"
+        },
+        "PointID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Staff": {
+          "$ref": "#/definitions/Staff"
+        },
+        "StaffID": {
+          "type": "string",
+          "format": "uuid4"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    },
+    "Supplier": {
+      "description": "Supplier поставщики",
+      "type": "object",
+      "properties": {
+        "Address": {
+          "type": "string"
+        },
+        "Bin": {
+          "type": "string"
+        },
+        "Contact": {
+          "type": "string"
+        },
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "Staff": {
+          "$ref": "#/definitions/Staff"
+        },
+        "StaffID": {
+          "type": "string",
+          "format": "uuid4"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    },
+    "Tax": {
+      "description": "Tax налоги",
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "ShortName": {
+          "type": "string"
+        },
+        "ValidFrom": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "Value": {
+          "type": "number",
+          "format": "float"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    },
+    "WorkSession": {
+      "description": "WorkSession смена",
+      "type": "object",
+      "properties": {
+        "Endamount": {
+          "type": "number",
+          "format": "double"
+        },
+        "Enddate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "ID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Isactive": {
+          "type": "boolean"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "Point": {
+          "$ref": "#/definitions/Point"
+        },
+        "PointID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Staff": {
+          "$ref": "#/definitions/Staff"
+        },
+        "StaffID": {
+          "type": "string",
+          "format": "uuid4"
+        },
+        "Startamount": {
+          "type": "number",
+          "format": "double"
+        },
+        "Startdate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "x-go-package": "fba/dbmodel"
+    }
+  },
+  "security": [
+    {
+      "api_key": []
+    }
+  ]
+}

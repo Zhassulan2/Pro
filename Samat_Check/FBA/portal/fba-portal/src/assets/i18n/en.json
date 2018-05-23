@@ -1,0 +1,242 @@
+{
+  "ALERTS":{
+    "PHONECODE":"Verification code has been sent to your mobile",
+    "PASSWORDERR":"Password doesn't match password rules",
+    "USERERR":"Error occurred during new user registration",
+    "LOGINERR":"Error occurred during log-in",
+    "AUTHORIZATION":"You need to log-in",
+    "PERMISSIONROUTE":"This part is only for registered users",
+    "PERMISSIONROLE":"Permission denied due to account role",
+    "RECEIPTPRODUCT":"This product already in list",
+    "RECEIPTSEND":"Quantity and price of product can't be less than 0",
+    "RECEIPTERR":"Error occurred during acceptance processing",
+    "RELOCATIONPOINT":"Sending and accepting points must be different",
+    "RELOCATIONPRODUCT":"This product already in list",
+    "RELOCATIONSEND":"Quantity of products for relocation can't be more than in stock or less than 0",
+    "RELOCATIONERR":"Error occurred during products relocation processing",
+    "STAFFPOINTERR":"Please select point first",
+    "STAFFPOINTUSERERR":"Selected user are already related to this point",
+    "SEARCHNOTFOUND":"Nothing found by filled parameters",
+    "REFUSESEND":"Quantity of refusing products can't be more than in stock or less than 0",
+    "FILEFORMATERR":"File must be in 'text/csv' format only",
+    "INVENTORYSEND":"Quantity product can't be less than 0",
+    "NODATAFOUND":"No data found"
+  },
+  "HOME": {
+    "DICTIONARIES": "Dictionaries",
+    "PRODUCTS": "Products",
+    "MAIN": "Main",
+    "STAFF": "Staff"
+  },
+  "BUTTONS": {
+    "REJECT": "Cancel",
+    "APPROVE": "Send",
+    "ADD": "Add",
+    "RETURN": "Return",
+    "SIGN_IN": "Sign in",
+    "SIGN_OUT": "Sign out",
+    "REGISTRATION": "Sign up",
+    "CHECK": "Check",
+    "REGISTRATIONUSER": "Sign up",
+    "UPLOAD": "Upload file",
+    "INVENTORYEND": "Inventory close"
+  },
+  "PFL": {
+    "WELCOME": "Welcome"
+  },
+  "REGISTRATION": {
+    "TITLE": "Registration",
+    "PHONE": "Phone",
+    "NAME": "Your name",
+    "CODE": "Send validation code",
+    "VALIDATION": "Validation code",
+    "PASS": "Password",
+    "PASSINF": "Must be 8-20 characters long"
+  },
+  "POINTS": {
+    "TITLE": "Points",
+    "ID": "ID",
+    "NAME": "Name",
+    "ADDRESS": "Address",
+    "CITY": "Location city",
+    "COMPANY": "Company",
+    "SELECTED": "Selected point",
+    "INF": "Point information",
+    "ADD": "New point"
+  },
+  "CITY": {
+    "TITLE": "Cities",
+    "ID": "ID",
+    "NAME": "Name",
+    "SELECTED": "Selected city",
+    "INF": "City information",
+    "ADD": "New city"
+  },
+  "PAYMENTTYPE": {
+    "TITLE": "Payment types",
+    "ID": "ID",
+    "NAME": "Name",
+    "SELECTED": "Selected payment type",
+    "INF": "Payment type information",
+    "ADD": "New payment type"
+  },
+  "TAX": {
+    "TITLE": "Tax",
+    "ID": "ID",
+    "NAME": "Name",
+    "VALUE": "Value",
+    "VALID": "Date when tax become using",
+    "SELECTED": "Selected tax",
+    "INF": "Tax information",
+    "ADD": "New tax"
+  },
+  "ACTIONTYPE": {
+    "TITLE": "Action type",
+    "ID": "ID",
+    "NAME": "Name",
+    "SELECTED": "Selected action type",
+    "INF": "Action type information",
+    "ADD": "New action type"
+  },
+  "CATEGORY": {
+    "TITLE": "Category",
+    "ID": "ID",
+    "NAME": "Name",
+    "SHORT": "Short Name",
+    "SELECTED": "Selected category",
+    "INF": "Category information",
+    "ADD": "New category"
+  },
+  "STAFF": {
+    "TITLE": "List of employees",
+    "ID": "ID",
+    "NAME": "Name",
+    "ROLE": "Role",
+    "SELECTED": "Selected employee",
+    "INF": "Employee information",
+    "ADD": "New employee"
+  },
+  "PRODUCTS": {
+    "TITLE": "Products list",
+    "ID": "ID",
+    "NAME": "Name",
+    "BARCODE": "Barcode",
+    "CATEGORY": "Category",
+    "SELECTED": "Selected product",
+    "INF": "Product information",
+    "ADD": "New product"
+  },
+  "COMPANIES": {
+    "TITLE": "Companies",
+    "ID": "ID",
+    "NAME": "Name",
+    "BIN": "BIN",
+    "ADDRESS": "Address",
+    "CONTACT": "Contact",
+    "SELECTED": "Selected company",
+    "INF": "Company iformation",
+    "ADD": "New company"
+  },
+  "SUPPLIER": {
+    "TITLE": "Suppliers",
+    "ID": "ID",
+    "NAME": "Name",
+    "BIN": "BIN",
+    "ADDRESS": "Address",
+    "CONTACT": "Contact",
+    "SELECTED": "Selected supplier",
+    "INF": "Supplier info",
+    "ADD": "New supplier"
+  },
+  "RECEIPT": {
+    "TITLE": "Products acceptance",
+    "ACTION": "Action",
+    "EXTRAFEE": "Extra charge settings",
+    "MANUAL": "Fixed price for sell",
+    "FIX": "Fixed",
+    "PERCENT": "Percent",
+    "PRICING": "Pricing",
+    "AVGPRICE": "Average price by product",
+    "LASTPRICE": "Last price by product"
+  },
+  "PRODUCTACTION": {
+    "TITLE": "Products movements log",
+    "COUNT": "Quantity",
+    "AMOUNT": "Total price",
+    "ACTIONDATE": "Action date"
+  },
+  "PRODUCTACTIONDETAIL": {
+    "TITLE": "Products movements log - detalization",
+    "COUNT": "Quantity",
+    "PRICEBUY": "Price for buy",
+    "PRICESELL": "Price for sell",
+    "REFERENCE": "Extra code",
+    "PARTNUMBER": "Batch number"
+  },
+  "RELOCATION": {
+    "TITLE": "Products relocation",
+    "INFO": "Sending information",
+    "POINTA": "Sending point",
+    "POINTB": "Acceptance point",
+    "INSTOCK": "products count on stock "
+  },
+  "REFUSE": {
+    "TITLE": "Products refusing",
+    "ACTION": "Action",
+    "INFO": "Information about refuse",
+    "INSTOCK": "products count on stock "
+  },
+  "PRODUCTSTOCK": {
+    "TITLE": "Products on stock",
+    "COUNT": "Quantity",
+    "PRICESELL": "Price for sell"
+  },
+  "DISCOUNT": {
+    "TITLE": "Discounts",
+    "NAME": "Name",
+    "TYPE": "Type",
+    "START": "Start date",
+    "END": "End date",
+    "VALUE": "Fixed value",
+    "PERCENT": "Value in percent",
+    "SELECTED": "Selected discount",
+    "INF": "Discount information",
+    "ADD": "New discount"
+  },
+  "STAFFPOINT": {
+    "TITLE": "Employees to points relations"
+  },
+  "DEVICE": {
+    "TITLE": "Working stations",
+    "NAME": "Name",
+    "SELECTED": "Selected work station",
+    "INF": "Work station information",
+    "ADD": "New work station"
+  },
+  "IMPORT": {
+    "TITLE": "Import data",
+    "COUNT": "Quantity"
+  },
+  "INVENTORY": {
+    "TITLE": "Inventory",
+    "NAME": "Inventory name",
+    "START": "Inventory start date",
+    "END": "Inventory end date",
+    "SELECTED": "Selected inventory",
+    "INF": "Inventory info",
+    "ADD": "Start new inventory"
+  },
+  "INVENTORYDETAIL": {
+    "TITLE": "Inventory details",
+    "COUNT": "Quantity"
+  },
+  "REMAINDER": {
+    "TITLE": "Remainder report"
+  },
+  "INCOMSALES": {
+    "TITLE": "Incom Sales report",
+    "START": "Start date",
+    "END": "End date",
+    "COSTS": "Income"
+  }
+}

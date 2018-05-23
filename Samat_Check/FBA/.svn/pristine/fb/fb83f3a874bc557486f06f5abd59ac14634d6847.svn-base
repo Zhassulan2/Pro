@@ -1,0 +1,82 @@
+package db
+
+import "fba/dbmodel"
+import "fba/model"
+import "fmt"
+import "github.com/go-openapi/strfmt"
+
+//ProductActionCreate create ProductAction
+func (dbm *DBManager) ProductActionCreate(productaction dbModel.ProductAction, ti model.TokenInfo) (productactionRet dbModel.ProductAction, err error) {
+
+	uuid, err := ti.GetUserID()
+	if err != nil {
+		return
+	}
+
+	staff, err := dbm.StaffGetByUserID(uuid)
+	if err != nil {
+		return
+	}
+
+	productaction.Staff = staff
+
+	if dbm.DB.NewRecord(&productaction) {
+		err = dbm.DB.Create(&productaction).Error
+		return productaction, err
+	}
+	return productaction, fmt.Errorf("%s", "запись уже существует")
+}
+
+//ProductActionUpdate update ProductAction
+func (dbm *DBManager) ProductActionUpdate(productaction dbModel.ProductAction) error {
+	return dbm.DB.Save(&productaction).Error
+}
+
+//ProductActionDelete delete ProductAction
+func (dbm *DBManager) ProductActionDelete(productaction dbModel.ProductAction) error {
+	return dbm.DB.Delete(&productaction).Error
+}
+
+//ProductActionGet get ProductAction
+func (dbm *DBManager) ProductActionGet(size, page int) (productactions []dbModel.ProductAction, err error) {
+	dbm.DB.Limit(size).Offset((page - 1) * size).Find(&productactions)
+	for i := 0; i < len(productactions); i++ {
+		productactions[i].Point, _ = dbm.PointGetByID(productactions[i].PointID)
+		productactions[i].Staff, _ = dbm.StaffGetByID(productactions[i].StaffID)
+		if productactions[i].WorkSessionID != nil {
+			webSes, _ := dbm.WorkSessionGetByID(*productactions[i].WorkSessionID)
+			productactions[i].WorkSession = &webSes
+		}
+	}
+	return
+}
+
+//ProductActionGetByShortName get by id ProductAction
+/*func (dbm *DBManager) ProductActionGetByShortName(shortName string) (productaction dbModel.ProductAction, err error) {
+	err = dbm.DB.Where("short_name = ?", shortName).First(&productaction).Error
+	productaction.Point, _ = dbm.PointGetByID(productaction.PointID)
+	productaction.Staff, _ = dbm.StaffGetByID(productaction.StaffID)
+	if productaction.WorkSessionID != nil {
+		webSes, _ := dbm.WorkSessionGetByID(*productaction.WorkSessionID)
+		productaction.WorkSession = &webSes
+	}
+	return
+}*/
+
+//ProductActionGetByID get by id ProductAction
+func (dbm *DBManager) ProductActionGetByID(id strfmt.UUID4) (productaction dbModel.ProductAction, err error) {
+	err = dbm.DB.Where("id = ?", id).First(&productaction).Error
+	productaction.Point, _ = dbm.PointGetByID(productaction.PointID)
+	productaction.Staff, _ = dbm.StaffGetByID(productaction.StaffID)
+	if productaction.WorkSessionID != nil {
+		webSes, _ := dbm.WorkSessionGetByID(*productaction.WorkSessionID)
+		productaction.WorkSession = &webSes
+	}
+	return
+}
+
+//ProductActionCount get count ProductAction
+func (dbm *DBManager) ProductActionCount() (count int, err error) {
+	err = dbm.DB.Model(&dbModel.ProductAction{}).Count(&count).Error
+	return
+}

@@ -1,0 +1,64 @@
+package http
+
+import (
+	"fba/db"
+	"fba/model"
+	"io/ioutil"
+	h "net/http"
+	"strings"
+
+	"github.com/gin-gonic/gin"
+	//	"github.com/parkhomchik/fba/db"
+)
+
+//HttpManager для описания всех http методов
+type HttpManager struct {
+	Manager          db.DBManager
+	SearchParameters []model.ConfigParameter
+}
+
+//Send отправка запросов
+func (hm *HttpManager) Send(method, url, auth string) (body []byte, status int, err error) {
+	req, err := h.NewRequest(method, url, nil)
+	req.Header.Add("Authorization", auth)
+	cl := h.Client{}
+	resp, err := cl.Do(req)
+	status = resp.StatusCode
+	if status == 200 {
+		body, err = ioutil.ReadAll(resp.Body)
+	}
+	return
+}
+
+//Params парсинг параметров
+func (hm *HttpManager) Params(c *gin.Context) map[string][]string {
+	return c.Request.URL.Query()
+	//var params []model.Parameter
+	//for i, p := range c.Request.URL.Query() {
+	//	fmt.Println(i, p)
+	//params = append(params, model.Parameter{Name:p.})
+	//}
+
+	//return model.Parameters{Params: params}
+}
+
+func (hm *HttpManager) ParseQuery(query string) (params []model.Parameter, err error) {
+	//var params []model.Parameters
+	for query != "" {
+		key := query
+		if i := strings.IndexAny(key, "&;"); i >= 0 {
+			key, query = key[:i], key[i+1:]
+		} else {
+			query = ""
+		}
+		if key == "" {
+			continue
+		}
+		value := ""
+		if i := strings.Index(key, "="); i >= 0 {
+			key, value = key[:i], key[i+1:]
+		}
+		params = append(params, model.Parameter{Name: key, Value: value})
+	}
+	return
+}

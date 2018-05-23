@@ -1,0 +1,61 @@
+.btn {
+    background: #9d2550;
+    color: #fff;
+}
+
+.btn:hover {
+    background: #bd3f68;
+    color: #fff;
+}
+
+.btn:active {
+    background: #9d2550;
+    color: #fff;
+}
+
+.selected-button{
+    border: 2px solid #01bac6;
+}
+
+a {
+    color: #797979;
+    text-transform: uppercase;
+    border-bottom: 4px solid #f8f9fa;
+}
+
+a.active {
+    color: #9d2550;
+    border-bottom: 4px solid #9d2550;
+}
+
+a:hover {
+    color: #9d2550;
+    border-bottom: 4px solid #9d2550;
+}
+
+.page-item.active .page-link {
+    background: #9d2550;
+    border-color: #9d2550;
+}
+
+.card {
+    box-shadow: 2px 3px 4px grey;
+}
+
+.hidden-info {
+    color: grey;
+    font-size: small;
+    padding: 0rem;
+}
+
+.theme-green .bs-datepicker-body table td span.selected {
+    background-color: #9d2550;
+}
+
+.theme-green .bs-datepicker-head {
+    background-color: #9d2550;
+}
+
+.theme-green .bs-datepicker-body table td.week span {
+    color: #9d2550;
+}

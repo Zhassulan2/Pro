@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/test</property>
+        <property name="hibernate.connection.password">postgres</property>
+        <property name="hibernate.connection.username">postgres</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+        <property name="show_sql">false</property>
+        <!--<property name="hbm2ddl.auto">create</property>-->
+        <mapping class="sync.dto.Applications"></mapping>
+        <mapping class="sync.dto.Attribute"></mapping>
+        <mapping class="sync.dto.Attributeinstance"></mapping>
+        <mapping class="sync.dto.Attributeset"></mapping>
+        <mapping class="sync.dto.Attributesetinstance"></mapping>
+        <mapping class="sync.dto.Attributeuse"></mapping>
+        <mapping class="sync.dto.Attributevalue"></mapping>
+        <mapping class="sync.dto.Categories"></mapping>
+        <mapping class="sync.dto.Closedcash"></mapping>
+        <mapping class="sync.dto.Customers"></mapping>
+        <mapping class="sync.dto.Floors"></mapping>
+        <mapping class="sync.dto.Locations"></mapping>
+        <mapping class="sync.dto.Payments"></mapping>
+        <mapping class="sync.dto.People"></mapping>
+        <mapping class="sync.dto.Places"></mapping>
+        <mapping class="sync.dto.Products"></mapping>
+        <mapping class="sync.dto.Products_Cat"></mapping>
+        <mapping class="sync.dto.Products_Com"></mapping>
+        <mapping class="sync.dto.Receipts"></mapping>
+        <mapping class="sync.dto.Reservation_Customers"></mapping>
+        <mapping class="sync.dto.Reservations"></mapping>
+        <mapping class="sync.dto.Resources"></mapping>
+        <mapping class="sync.dto.Roles"></mapping>
+        <mapping class="sync.dto.Sharedtickets"></mapping>
+        <mapping class="sync.dto.Stockcurrent"></mapping>
+        <mapping class="sync.dto.Stockdiary"></mapping>
+        <mapping class="sync.dto.Stocklevel"></mapping>
+        <mapping class="sync.dto.Taxcategories"></mapping>
+        <mapping class="sync.dto.Taxcustcategories"></mapping>
+        <mapping class="sync.dto.Taxes"></mapping>
+        <mapping class="sync.dto.Taxlines"></mapping>
+        <mapping class="sync.dto.Thirdparties"></mapping>
+        <mapping class="sync.dto.Ticketlines"></mapping>
+        <mapping class="sync.dto.Tickets"></mapping>
+        <mapping class="sync.dto.Syncdeletedrecords"></mapping>
+        <mapping class="sync.dto.Teambonusconfighosts"></mapping>
+        <mapping class="sync.dto.Teambonussession"></mapping>
+        <mapping class="sync.dto.Teambonussessionmoney"></mapping>
+        <mapping class="sync.dto.Teambonussessionperson"></mapping>
+    </session-factory>
+</hibernate-configuration>

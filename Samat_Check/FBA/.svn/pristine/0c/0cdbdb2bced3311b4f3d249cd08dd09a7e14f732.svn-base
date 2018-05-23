@@ -1,0 +1,9 @@
+{
+	"host": "localhost",
+	"port": 5432,
+	"dbname": "fbaportal2",  
+	"user": "postgres",
+	"password": "altmode#2",
+    "oauth": "http://localhost:9096/oauth2/check",
+    "httpPort": 8080
+}

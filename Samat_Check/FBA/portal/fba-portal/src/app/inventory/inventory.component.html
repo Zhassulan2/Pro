@@ -1,0 +1,392 @@
+<div class="row" *ngIf="!inventoryInWork">
+  <div class="col">
+    <div class="card mb-3">
+      <div class="card-header">
+        <div class="d-flex">
+          <div class="mr-auto p-2"><h4>{{ 'INVENTORY.TITLE' | translate }}</h4></div>        
+          <div class="p-2">
+            <button type="button" class="btn" data-toggle="modal" data-target="#newInventory">
+              <span octicon="diff-added"></span>
+            </button>
+          </div>
+          <div class="p-2">
+            <button type="button" class="btn" (click)=refreshInventory()>
+              <span octicon="sync"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="form-row">
+          <div *ngIf="inventoriesScope" class="form-group col-12">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>
+                    {{ 'INVENTORY.NAME' | translate }}
+                  </th>
+                  <th>
+                    {{ 'INVENTORY.START' | translate }}
+                  </th>
+                  <th>
+                    {{ 'INVENTORY.END' | translate }}
+                  </th>
+                  <th>
+                    {{ 'COMPANIES.NAME' | translate }}
+                  </th>
+                  <th>
+                    {{ 'POINTS.NAME' | translate }}
+                  </th>
+                  <th>
+                  </th>
+                </tr>
+              </thead>
+              <tr *ngFor="let inventory of inventories" (click)="onSelect(inventory)">
+                <td>
+                  <span *ngIf="inventory==selectedInventory">--></span>
+                  {{inventory.Name}}
+                </td>
+                <td>
+                  {{inventory.Startdate | date:'dd-MM-yyyy'}}
+                </td>
+                <td>
+                  {{inventory.Enddate | date:'dd-MM-yyyy'}}
+                </td>
+                <td *ngIf="inventory.Company">
+                  {{inventory.Company.Name}}
+                </td>
+                <td *ngIf="inventory.Point">
+                  {{inventory.Point.Name}}
+                </td>
+                <td>
+                  <div class="d-flex">
+                    <div class="p-2">
+                      <button 
+                        *ngIf="inventory==selectedInventory && !selectedInventory.Enddate" 
+                        class="btn" 
+                        data-toggle="modal" 
+                        data-target="#currentInventory" 
+                        (click)="getPoints(selectedInventory.CompanyID)">
+                        <span octicon="pencil"></span>
+                      </button>
+                    </div>
+                    <div class="p-2">
+                      <button *ngIf="inventory==selectedInventory" class="btn" (click)="showDetails();">
+                        <span octicon="clippy"></span>
+                      </button>
+                    </div>
+                    <div class="p-2">
+                      <button *ngIf="inventory==selectedInventory && !selectedInventory.Enddate" type="button" class="btn" (click)=deleteInventory()>
+                        <span octicon="trashcan"></span>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </table>
+            <nav *ngIf="paginationInventories">
+              <ul class="pagination justify-content-center">
+                <li *ngIf="currentPage>1" class="page-item">
+                  <a class="page-link" (click)="getInventories(currentPage-1)">
+                    <</a>
+                </li>
+                <li *ngFor="let inventoryPage of inventoryPages" [class.active]="inventoryPage == currentPage" (click)="getInventories(inventoryPage)" class="page-item">
+                  <a class="page-link">{{inventoryPage}}</a>
+                </li>
+                <li *ngIf="currentPage<inventoryPages.length" class="page-item">
+                  <a class="page-link" (click)="getInventories(currentPage+1)">></a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="inventoryInWork && !inventoryInWork.Enddate" class="row">
+  <div class="col">
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="form-row">
+          <div class="col">
+            <div class="d-flex">
+              <div class="p-2 input-group">
+                <input type="text" class="form-control" placeholder="{{ 'PRODUCTS.NAME' | translate }}" aria-describedby="basic-addon2" #searchName>
+              </div>
+              <div class="p-2 input-group">
+                <input type="text" class="form-control" placeholder="{{ 'PRODUCTS.BARCODE' | translate }}" aria-describedby="basic-addon2" #searchBarcode>
+              </div>
+              <div class="p-2">
+                <button type="button" class="btn" (click)="getProducts(1, searchName.value, searchBarcode.value); searchName.value = searchBarcode.value = '';;">
+                  <span octicon="search"></span>
+                </button>
+              </div>
+              <div class="p-2">
+                <button type="button" class="btn" (click)="refreshProduct(); searchName.value = searchBarcode.value = ''">
+                  <span octicon="sync"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div *ngIf="productsScope" class="form-group col-12">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>
+                    {{ 'PRODUCTS.NAME' | translate }}
+                  </th>
+                  <th>
+                    {{ 'PRODUCTS.BARCODE' | translate }}
+                  </th>
+                  <th>
+                    {{ 'PRODUCTS.CATEGORY' | translate }}
+                  </th>
+                  <!--th>
+                  </th-->
+                </tr>
+              </thead>
+              <tr *ngFor="let product of products" (click)="onSelectProduct(product)">
+                <td>
+                  <span *ngIf="product==selectedProduct">--></span>
+                  {{product.Name}}
+                </td>
+                <td>
+                  {{product.Barcode}}
+                </td>
+                <td>
+                  {{product.Category.Name}}
+                </td>
+                <!--td>
+                  <button *ngIf="product==selectedProduct" class="btn" (click)="addProduct(product)">
+                    <span octicon="file-symlink-file"></span>
+                  </button>
+                </td-->
+              </tr>
+            </table>
+            <nav *ngIf="paginationProducts">
+              <ul class="pagination justify-content-center">
+                <li *ngIf="currentPageProduct>1" class="page-item">
+                  <a class="page-link" (click)="getProducts(currentPageProduct-1)">
+                    <</a>
+                </li>
+                <li *ngFor="let productPage of productPages" [class.active]="productPage == currentPageProduct" (click)="getProducts(productPage)"
+                  class="page-item">
+                  <a class="page-link">{{productPage}}</a>
+                </li>
+                <li *ngIf="currentPageProduct<productPages.length" class="page-item">
+                  <a class="page-link" (click)="getProducts(currentPageProduct+1)">></a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="inventoryDetail && !inventoryInWork.Enddate" class="col-3">
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="row">
+          <div class="col">
+            <form #newInventoryDetailForm="ngForm">
+              <div class="form-group">
+                <span>{{ 'PRODUCTS.SELECTED' | translate }}: {{inventoryDetail.Product.Name}}</span>
+              </div>
+              <div class="form-group">
+                <label>{{ 'INVENTORYDETAIL.COUNT' | translate }}</label>
+                <input 
+                  name="count" 
+                  type="number"
+                  class="form-control"
+                  [class.is-invalid]="count.invalid && (count.dirty || count.touched)"
+                  required 
+                  [(ngModel)]="inventoryDetail.Count" 
+                  #count="ngModel" >
+              </div>
+              <button type="button" class="btn" [disabled]="newInventoryDetailForm.invalid" (click)="sendInventoryDetail()">{{ 'BUTTONS.ADD' | translate }}</button>
+              <button type="button" class="btn" (click)="backToProducts()">{{ 'BUTTONS.REJECT' | translate }}</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="inventoryInWork" class="row">
+  <div class="col">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>
+            {{ 'PRODUCTS.NAME' | translate }}
+          </th>
+          <th>
+            {{ 'INVENTORYDETAIL.COUNT' | translate }}
+          </th>
+          <th>
+          </th>
+        </tr>
+      </thead>
+      <tr *ngFor="let i of inventoryDetails">
+        <td><span *ngIf="i.Product">{{i.Product.Name}}</span></td>
+        <td>{{i.Count}}</td>
+        <td>
+          <button *ngIf="!inventoryInWork.Enddate" type="button" class="btn" (click)=deleteScopeMember(i)>
+            <span octicon="trashcan"></span>
+          </button>
+        </td>
+      </tr>
+    </table>
+    <nav *ngIf="paginationInvDet">
+      <ul class="pagination justify-content-center">
+        <li *ngIf="currentPageInvDet>1" class="page-item">
+          <a class="page-link" (click)="getInventoryDetails(currentPageInvDet-1)">
+            <</a>
+        </li>
+        <li *ngFor="let inventoryDetailsPage of inventoryDetailsPages" [class.active]="inventoryDetailsPage == currentPageInvDet" (click)="getInventoryDetails(inventoryDetailsPage)"
+          class="page-item">
+          <a class="page-link">{{inventoryDetailsPage}}</a>
+        </li>
+        <li *ngIf="currentPageInvDet<inventoryDetailsPages.length" class="page-item">
+          <a class="page-link" (click)="getInventoryDetails(currentPageInvDet+1)">></a>
+        </li>
+      </ul>
+    </nav>
+    <button *ngIf="inventoryDetails.length > 0 && !inventoryInWork.Enddate" type="button" class="btn" (click)="endInventory()">
+      {{ 'BUTTONS.INVENTORYEND' | translate }}
+    </button>
+    
+    <button type="button" class="btn" (click)="inventoryInWork = null">
+      {{ 'BUTTONS.RETURN' | translate }}
+    </button>
+  </div>
+</div>
+
+<!-- Modals -->
+<div id="newInventory" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'INVENTORY.ADD' | translate }}</h5>
+      </div>
+      <div class="modal-body">
+        <form #newInventoryForm="ngForm">
+          <div class="form-group">
+            <input 
+              placeholder="{{ 'INVENTORY.NAME' | translate }}" 
+              class="form-control" 
+              name="name" 
+              [class.is-invalid]="name.invalid && (name.dirty || name.touched)"
+              required 
+              minlength="2"
+              [(ngModel)]="newName" 
+              #name="ngModel">
+          </div>
+          <div class="form-group">
+            <input 
+              class="form-control" 
+              placeholder="{{ 'INVENTORY.START' | translate }}" 
+              bsDatepicker 
+              [(ngModel)]="newStartDate" 
+              name="start"
+              required 
+              [class.is-invalid]="start.invalid && (start.dirty || start.touched)"
+              #start="ngModel">
+          </div>
+          <!--div class="form-group">
+            <input 
+              class="form-control" 
+              placeholder="{{ 'INVENTORY.END' | translate }}" 
+              bsDatepicker 
+              [(ngModel)]="newEndDate" 
+              name="end"
+              required 
+              [class.is-invalid]="end.invalid && (end.dirty || end.touched)"
+              #end="ngModel">
+          </div-->
+          <div class="form-group">
+            <select 
+              class="custom-select" 
+              name="company" 
+              [class.is-invalid]="company.invalid && (company.dirty || company.touched)"
+              required 
+              (change)="getPoints(newCompanyID)"
+              [(ngModel)]="newCompanyID" 
+              #company="ngModel">
+              <option value="" disabled selected>{{ 'COMPANIES.NAME' | translate }}</option>
+              <option *ngFor="let company of companies" value="{{company.ID}}">{{company.Name}}</option>
+            </select>
+          </div>
+          <div class="form-group" *ngIf="newCompanyID">
+            <select 
+              class="custom-select my-1 mr-sm-2" 
+              name="point" 
+              [class.is-invalid]="point.invalid && (point.dirty || point.touched)"
+              required 
+              [(ngModel)]="newPointID" 
+              #point="ngModel">
+              <option value="" disabled selected>{{ 'POINTS.NAME' | translate }}</option>
+              <option *ngFor="let point of points" value="{{point.ID}}">{{point.Name}}</option>
+            </select>
+          </div>
+          <button type="button" class="btn" (click)="newInventoryForm.resetForm({})" data-dismiss="modal">{{ 'BUTTONS.REJECT' | translate }}</button>
+          <button type="button" class="btn" [disabled]="newInventoryForm.invalid" (click)="createInventory();" data-dismiss="modal">{{ 'BUTTONS.APPROVE' | translate }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="selectedInventory" id="currentInventory" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'INVENTORY.INF' | translate }}</h5>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <span>{{ 'INVENTORY.SELECTED' | translate }}: {{selectedInventory.Name}}
+          </span>
+        </div>
+        <div class="form-group">
+          <label>{{ 'INVENTORY.NAME' | translate }}</label>
+          <input class="form-control" [(ngModel)]="selectedInventory.Name">
+        </div>
+        <div class="form-group">
+          <label>{{ 'INVENTORY.START' | translate }}</label>
+          <input 
+            class="form-control" 
+            bsDatepicker 
+            [(ngModel)]="putStart">
+        <!--div class="form-group">
+          <label>{{ 'INVENTORY.END' | translate }}</label>
+          <input 
+            class="form-control" 
+            bsDatepicker 
+            [(ngModel)]="putEnd">
+        </div-->
+        <div class="form-group">
+          <label>{{ 'COMPANIES.NAME' | translate }}</label>
+          <select class="custom-select" [(ngModel)]="selectedInventory.CompanyID">
+            <option *ngFor="let company of companies" value="{{company.ID}}">{{company.Name}}</option>
+          </select>
+        </div> 
+        <div class="form-group">
+          <label>{{ 'POINTS.NAME' | translate }}</label>
+          <select class="custom-select" [(ngModel)]="selectedInventory.PointID">
+            <option *ngFor="let point of points" value="{{point.ID}}">{{point.Name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'BUTTONS.REJECT' | translate }}</button>
+        <button type="button" class="btn btn-primary" (click)=updateInventory() data-dismiss="modal">{{ 'BUTTONS.APPROVE' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>

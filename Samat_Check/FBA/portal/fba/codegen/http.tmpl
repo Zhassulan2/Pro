@@ -1,0 +1,87 @@
+package http
+
+import (
+	"strconv"
+
+	"fba/dbmodel"
+	"github.com/go-openapi/strfmt"
+
+	"github.com/gin-gonic/gin"
+)
+
+func (http *HttpManager) {{.Name}}GET(c *gin.Context) {
+	page, err := strconv.Atoi(c.DefaultQuery("page", "0"))
+	size, err := strconv.Atoi(c.DefaultQuery("size", "10"))
+	{{.Name}}s, err := http.Manager.{{.Name}}Get(size, page)
+	if err != nil {
+		c.JSON(400, err)
+	}
+	c.JSON(200, {{.Name}}s)
+}
+
+func (http *HttpManager) {{.Name}}GETByID(c *gin.Context) {
+	id := strfmt.UUID4(c.Param("id"))
+	if err != nil {
+		c.JSON(400, err)
+		return
+	}
+	{{.Name}}s, err := http.Manager.{{.Name}}GetById(id)
+	if err != nil {
+		c.JSON(400, err)
+	}
+	c.JSON(200, {{.Name}}s)
+}
+
+func (http *HttpManager) {{.Name}}POST(c *gin.Context) {
+	var {{.Name}} dbModel.{{.Name}}
+	if c.Bind(&{{.Name}}) != nil {
+		c.JSON(400, "problem decoding body")
+		return
+	}
+	{{.Name}}, err := http.Manager.{{.Name}}Create({{.Name}})
+	if err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, {{.Name}})
+	return
+}
+
+func (http *HttpManager) {{.Name}}PUT(c *gin.Context) {
+	var {{.Name}} dbModel.{{.Name}}
+	if c.Bind(&{{.Name}}) != nil {
+		c.JSON(400, "problem decoding body")
+		return
+	}
+	if err := http.Manager.{{.Name}}Update({{.Name}}); err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, {{.Name}})
+	return
+}
+
+func (http *HttpManager) {{.Name}}DELETE(c *gin.Context) {
+	id := strfmt.UUID4(c.Param("id"))
+	if err != nil {
+		c.JSON(400, err)
+		return
+	}
+
+	{{.Name}}, err := http.Manager.{{.Name}}GetById(id)
+
+	if err := http.Manager.{{.Name}}Delete({{.Name}}); err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, "")
+	return
+}
+
+func (http *HttpManager) {{.Name}}Count(c *gin.Context) {
+	count, err := http.Manager.{{.Name}}Count()
+	if err != nil {
+		c.JSON(500, err)
+	}
+	c.JSON(200, count)
+}

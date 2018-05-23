@@ -1,0 +1,225 @@
+package http
+
+import (
+	"strconv"
+
+	"fba/dbmodel"
+
+	"github.com/go-openapi/strfmt"
+
+	"github.com/gin-gonic/gin"
+)
+
+// swagger:operation GET /staff Staff StaffGET
+// Получение списка персонала
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: page
+//   in: query
+//   description: номер страницы пагинатора
+//   required: false
+//   type: int
+// - name: size
+//   in: query
+//   description: количество записей на странице
+//   required: false
+//   type: int
+// responses:
+//   '200':
+//     description: JSON массив персонала
+//     schema:
+//       type: array
+//       items:
+//         "$ref": "#/definitions/Staff"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) StaffGET(c *gin.Context) {
+	page, err := strconv.Atoi(c.DefaultQuery("page", "0"))
+	size, err := strconv.Atoi(c.DefaultQuery("size", "10"))
+	Staffs, err := http.Manager.StaffGet(size, page)
+	if err != nil {
+		c.JSON(400, err)
+	}
+	c.JSON(200, Staffs)
+}
+
+// swagger:operation GET /staff/{id} Staff StaffGETByID
+// Получение города по ID
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: id
+//   in: path
+//   description: идентификатор персонала
+//   required: true
+//   type: string <uuid4>
+// responses:
+//   '200':
+//     description: JSON модель персонала
+//     schema:
+//         "$ref": "#/definitions/Staff"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) StaffGETByID(c *gin.Context) {
+	id := strfmt.UUID4(c.Param("id"))
+	Staffs, err := http.Manager.StaffGetByID(id)
+	if err != nil {
+		c.JSON(400, err)
+	}
+	c.JSON(200, Staffs)
+}
+
+// swagger:operation POST /staff Staff StaffPOST
+// Создание персонала
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: bodyjson
+//   in: body
+//   description: JSON для создания персонала
+//   required: true
+//   schema:
+//     "$ref": "#/definitions/Staff"
+// responses:
+//   '200':
+//     description: JSON созданная модель персонала
+//     schema:
+//         "$ref": "#/definitions/Staff"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) StaffPOST(c *gin.Context) {
+
+	var Staff dbModel.Staff
+	if c.Bind(&Staff) != nil {
+		c.JSON(400, "problem decoding body")
+		return
+	}
+	Staff, err := http.Manager.StaffCreate(Staff)
+	if err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, Staff)
+	return
+}
+
+// swagger:operation PUT /staff Staff StaffPUT
+// Изменение города
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: bodyjson
+//   in: body
+//   description: JSON для изменения модели персонала
+//   required: true
+//   schema:
+//     "$ref": "#/definitions/Staff"
+// responses:
+//   '200':
+//     description: JSON ответ на изменение персонала
+//     schema:
+//         "$ref": "#/definitions/Staff"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) StaffPUT(c *gin.Context) {
+	var Staff dbModel.Staff
+	if c.Bind(&Staff) != nil {
+		c.JSON(400, "problem decoding body")
+		return
+	}
+	if err := http.Manager.StaffUpdate(Staff); err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, Staff)
+	return
+}
+
+// swagger:operation DELETE /staff/{id} Staff StaffDELETE
+// Удаление персонала по ID
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: id
+//   in: path
+//   description: идентификатор персонала
+//   required: true
+//   type: string <uuid4>
+// responses:
+//   '200':
+//     description: Успешное удаление
+//     schema:
+//         type: string
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) StaffDELETE(c *gin.Context) {
+	id := strfmt.UUID4(c.Param("id"))
+
+	Staff, err := http.Manager.StaffGetByID(id)
+	if err != nil {
+		c.JSON(400, err)
+	}
+
+	if err := http.Manager.StaffDelete(Staff); err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, "")
+	return
+}
+
+// swagger:operation GET /staffs/count Staff StaffCount
+// Получение количества персонала
+//
+// ---
+// produces:
+// - application/json
+// responses:
+//   '200':
+//     description: JSON с количеством персонала
+//     schema:
+//         "$ref": "#/definitions/Count"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) StaffCount(c *gin.Context) {
+	count, err := http.Manager.StaffCount()
+	if err != nil {
+		c.JSON(500, err)
+	}
+	c.JSON(200, count)
+}

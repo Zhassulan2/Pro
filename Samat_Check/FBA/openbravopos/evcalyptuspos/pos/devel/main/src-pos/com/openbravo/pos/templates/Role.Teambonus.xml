@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+   ==> DO NOT CHANGE THIS TEXT <==
+This role is for teambonus settings only.  
+Do not assign users to this role.
+Bonus as share of sales represents the team bonus allocation from each sale.
+Bonus Sales plan represents the Teamplan for the session (day).
+Team bonus coefficient is not used here.
+=====================
+
+   ==> НЕ ИЗМЕНЯЙТЕ ДАННЫЙ ТЕКСТ <==
+Данная роль существует только для установок Командного бонуса.
+Не присваивайте пользователям данную роль.
+Бонус от продаж представляет собой долю начисляемого командного бонуса от каждой продажи.
+План продаж для бонуса представляет собой командный план для сессии (дня).
+Коэффициент командного бонуса здесь не используется.
+
+ -->
+<permissions>
+ </permissions>
+ 

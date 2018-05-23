@@ -1,0 +1,42 @@
+package db
+
+import "fba/dbmodel"
+import "fmt"
+import "github.com/go-openapi/strfmt"
+
+//{{.Name}}Create create {{.Name}}
+func (dbm *DBManager) {{.Name}}Create({{.Name | ToLower}} dbModel.{{.Name}}) ({{.Name | ToLower}}Ret dbModel.{{.Name}}, err error) {
+	if dbm.DB.NewRecord(&{{.Name | ToLower}}) {
+		err = dbm.DB.Create(&{{.Name | ToLower}}).Error
+		return {{.Name | ToLower}}, err
+	}
+	return {{.Name | ToLower}}, fmt.Errorf("%s", "запись уже существует")
+}
+
+//{{.Name}}Update update {{.Name}}
+func (dbm *DBManager) {{.Name}}Update({{ .Name | ToLower }} dbModel.{{.Name}}) error {
+	return dbm.DB.Save(&{{.Name | ToLower}}).Error
+}
+
+//{{.Name}}Delete delete {{.Name}}
+func (dbm *DBManager) {{.Name}}Delete({{ .Name | ToLower }} dbModel.{{.Name}}) error {
+	return dbm.DB.Delete(&{{ .Name | ToLower }}).Error
+}
+
+//{{.Name}}Get get {{.Name}}
+func (dbm *DBManager) {{.Name}}Get(size, page int) ({{ .Name | ToLower }}s []dbModel.{{.Name}}, err error) {
+	dbm.DB.Limit(size).Order("id asc").Offset((page - 1) * size).Find(&{{.Name | ToLower}}s)
+	return
+}
+
+//{{.Name}}GetById get by id {{.Name}}
+func (dbm *DBManager) {{.Name}}GetById(id strfmt.UUID4) ({{ .Name | ToLower }} dbModel.{{.Name}}, err error) {
+	err = dbm.DB.Find(&{{ .Name | ToLower }}, id).Error
+	return
+}
+
+//{{.Name}}Count get count {{.Name}}
+func (dbm *DBManager) {{.Name}}Count() (count int, err error) {
+	err = dbm.DB.Model(&dbModel.{{.Name}}{}).Count(&count).Error
+	return
+}

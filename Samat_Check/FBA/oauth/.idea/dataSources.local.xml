@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="postgres@localhost" uuid="83b50bee-d3f0-4fe6-8d89-4d0d0737e37c">
+      <database-info product="PostgreSQL" version="9.6.6" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.2.2">
+        <identifier-quote-string>&quot;</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="lower" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>user</user-name>
+      <introspection-schemas>oauth_db:*|postgres:public</introspection-schemas>
+    </data-source>
+    <data-source name="oauth@FBAdbuv01.fortebank.com" uuid="ad3fe4da-a875-4800-bf38-437c711bcb88">
+      <database-info product="PostgreSQL" version="9.2.23" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.2.2">
+        <identifier-quote-string>&quot;</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="lower" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>postgres</user-name>
+      <introspection-schemas>oauth:public</introspection-schemas>
+    </data-source>
+    <data-source name="oauth" uuid="886f14a7-f42e-4abb-af68-8a9fdaf2c31a">
+      <database-info product="PostgreSQL" version="9.6.6" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.2.2">
+        <identifier-quote-string>&quot;</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="lower" quoted-identifiers="exact" />
+      <user-name>user</user-name>
+      <introspection-schemas>oauth:public</introspection-schemas>
+    </data-source>
+  </component>
+</project>

@@ -1,0 +1,166 @@
+package db
+
+import (
+	"../dbmodel"
+	"fmt"
+
+	"github.com/jinzhu/gorm"
+	"github.com/go-openapi/strfmt"
+)
+
+//ProductActionDetailCreate create ProductActionDetail
+func (dbm *DBManager) ProductActionDetailCreate(productActionDetail dbModel.ProductActionDetail) (productactiondetailRet dbModel.ProductActionDetail, err error) {
+	tx := dbm.DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if tx.Error != nil {
+		return
+	}
+
+	productactiondetailRet, err = dbm.productActionDetailCreate(tx, productActionDetail)
+	if err != nil {
+		tx.Rollback()
+		return productactiondetailRet, err
+	}
+
+	err = tx.Commit().Error
+	return
+}
+
+func (dbm *DBManager) ProductActionDetailsCreate(productActionDetails []dbModel.ProductActionDetail) (productactiondetailsRet []dbModel.ProductActionDetail, err error) {
+	tx := dbm.DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if tx.Error != nil {
+		return
+	}
+
+	for _, p := range productActionDetails {
+		rp, err := dbm.productActionDetailCreate(tx, p)
+		if err != nil {
+			tx.Rollback()
+			return productactiondetailsRet, err
+		}
+		productactiondetailsRet = append(productactiondetailsRet, rp)
+	}
+	err = tx.Commit().Error
+	return
+}
+
+func (dbm *DBManager) productActionDetailCreate(tx *gorm.DB, productActionDetail dbModel.ProductActionDetail) (productactiondetailRet dbModel.ProductActionDetail, err error) {
+
+	var productAction dbModel.ProductAction
+	tx.Where("id = ?", productActionDetail.ProductActionID).First(&productAction)
+	productAction.Count = productAction.Count + productActionDetail.Count
+	productAction.Amount = productAction.Amount + (productActionDetail.Pricesell * float64(productActionDetail.Count))
+	if err = tx.Save(&productAction).Error; err != nil {
+		return
+	}
+	var productStock dbModel.ProductStock
+	var productStockCount int
+	tx.Where("product_id = ?", productActionDetail.ProductID).Where("point_id = ?", productAction.PointID).First(&productStock).Count(&productStockCount)
+	if productStockCount > 0 {
+		productStock.Count = productStock.Count + productActionDetail.Count
+		productStock.PriceSell = productActionDetail.Pricesell
+	} else {
+		productStock.ProductID = productActionDetail.ProductID
+		productStock.PointID = productAction.PointID
+		productStock.Count = productActionDetail.Count
+		productStock.PriceSell = productActionDetail.Pricesell
+	}
+
+	if err = tx.Save(&productStock).Error; err != nil {
+		//tx.Rollback()
+		return
+	}
+
+	if tx.NewRecord(&productActionDetail) {
+		fmt.Println("NEW RECORD TRUE")
+		if err = tx.Create(&productActionDetail).Error; err != nil {
+			//tx.Rollback()
+			return productActionDetail, err
+		}
+	} else {
+		fmt.Println("NEW RECORD FALSE")
+		return productActionDetail, fmt.Errorf("%s", "запись уже существует")
+	}
+	//err = tx.Commit().Error
+
+	productactiondetailRet, _ = dbm.ProductActionDetailGetByID(productActionDetail.ID)
+	return
+}
+
+//ProductActionDetailUpdate update ProductActionDetail
+func (dbm *DBManager) ProductActionDetailUpdate(productactiondetail dbModel.ProductActionDetail) error {
+	return dbm.DB.Save(&productactiondetail).Error
+}
+
+//ProductActionDetailDelete delete ProductActionDetail
+func (dbm *DBManager) ProductActionDetailDelete(productactiondetail dbModel.ProductActionDetail) error {
+	return dbm.DB.Delete(&productactiondetail).Error
+}
+
+//ProductActionDetailGet get ProductActionDetail
+func (dbm *DBManager) ProductActionDetailGet(size, page int) (productactiondetails []dbModel.ProductActionDetail, err error) {
+	dbm.DB.Limit(size).Order("id asc").Offset((page - 1) * size).Find(&productactiondetails)
+	for i := 0; i < len(productactiondetails); i++ {
+		productactiondetails[i].ActionType, _ = dbm.ActionTypeGetByID(productactiondetails[i].ActionTypeID)
+		productactiondetails[i].PaymentType, _ = dbm.PaymentTypeGetByID(productactiondetails[i].PaymentTypeID)
+		productactiondetails[i].Product, _ = dbm.ProductGetByID(productactiondetails[i].ProductID)
+		productactiondetails[i].ProductAction, _ = dbm.ProductActionGetByID(productactiondetails[i].ProductActionID)
+
+		if productactiondetails[i].SupplierID != nil {
+			supplier, _ := dbm.SupplierGetByID(*productactiondetails[i].SupplierID)
+			productactiondetails[i].Supplier = &supplier
+		}
+
+		productactiondetails[i].Tax, _ = dbm.TaxGetById(productactiondetails[i].TaxID)
+	}
+	return
+}
+
+//ProductActionDetailGetByID get by id ProductActionDetail
+func (dbm *DBManager) ProductActionDetailGetByID(id strfmt.UUID4) (productactiondetail dbModel.ProductActionDetail, err error) {
+	err = dbm.DB.Where("id = ?", id).First(&productactiondetail).Error
+	productactiondetail.ActionType, _ = dbm.ActionTypeGetByID(productactiondetail.ActionTypeID)
+	productactiondetail.PaymentType, _ = dbm.PaymentTypeGetByID(productactiondetail.PaymentTypeID)
+	productactiondetail.Product, _ = dbm.ProductGetByID(productactiondetail.ProductID)
+	productactiondetail.ProductAction, _ = dbm.ProductActionGetByID(productactiondetail.ProductActionID)
+	if productactiondetail.SupplierID != nil {
+		supplier, _ := dbm.SupplierGetByID(*productactiondetail.SupplierID)
+		productactiondetail.Supplier = &supplier
+	}
+	productactiondetail.Tax, _ = dbm.TaxGetById(productactiondetail.TaxID)
+	return
+}
+
+//ProductActionDetailGetByProductAction find by ProductActionID
+func (dbm *DBManager) ProductActionDetailGetByProductAction(productActionID strfmt.UUID4, size, page int) (productactiondetails []dbModel.ProductActionDetail, err error) {
+	dbm.DB.Where("product_action_id = ?", productActionID).Limit(size).Offset((page - 1) * size).Find(&productactiondetails)
+	for i := 0; i < len(productactiondetails); i++ {
+		productactiondetails[i].ActionType, _ = dbm.ActionTypeGetByID(productactiondetails[i].ActionTypeID)
+		productactiondetails[i].PaymentType, _ = dbm.PaymentTypeGetByID(productactiondetails[i].PaymentTypeID)
+		productactiondetails[i].Product, _ = dbm.ProductGetByID(productactiondetails[i].ProductID)
+		productactiondetails[i].ProductAction, _ = dbm.ProductActionGetByID(productactiondetails[i].ProductActionID)
+		if productactiondetails[i].SupplierID != nil {
+			supplier, _ := dbm.SupplierGetByID(*productactiondetails[i].SupplierID)
+			productactiondetails[i].Supplier = &supplier
+		}
+		productactiondetails[i].Tax, _ = dbm.TaxGetById(productactiondetails[i].TaxID)
+	}
+	return
+}
+
+//ProductActionDetailCount get count ProductActionDetail
+func (dbm *DBManager) ProductActionDetailCount() (count int, err error) {
+	err = dbm.DB.Model(&dbModel.ProductActionDetail{}).Count(&count).Error
+	return
+}

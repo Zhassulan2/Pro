@@ -1,0 +1,151 @@
+<div class="card mb-3">
+  <div class="card-header">
+    <div class="d-flex">
+      <div class="mr-auto p-2"><h4>{{ 'REMAINDER.TITLE' | translate }}</h4></div>        
+    </div>
+  </div>
+  <div class="card-body">
+    <div *ngIf="remainderResultNull" class="alert alert-warning" role="alert">
+        {{ 'ALERTS.NODATAFOUND' | translate }}
+    </div>
+    <div *ngIf="remainderResult" class="form-group">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>
+              {{ 'POINTS.NAME' | translate }}
+            </th>
+            <th>
+              {{ 'PRODUCTS.NAME' | translate }}
+            </th>
+            <th>
+              {{ 'PRODUCTSTOCK.COUNT' | translate }}
+            </th>
+            <th>
+              {{ 'PRODUCTSTOCK.PRICESELL' | translate }}
+            </th>
+          </tr>
+        </thead>
+        <tr *ngFor="let i of remainderResult">
+          <td>
+            {{i.PointName}}
+          </td>
+          <td>
+            {{i.ProductName}}
+          </td>
+          <td>
+            {{i.Count}}
+          </td>
+          <td>
+            {{i.PriceSell}}
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-header">
+    <div class="d-flex">
+      <div class="mr-auto p-2"><h4>{{ 'INCOMSALES.TITLE' | translate }}</h4></div>        
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-3 border-right">
+        <form #reportIncomeSalesForm="ngForm">
+          <div class="form-group">
+            <select 
+              class="custom-select" 
+              name="company" 
+              [class.is-invalid]="company.invalid && (company.dirty || company.touched)"
+              required 
+              [(ngModel)]="repISCompany" 
+              #company="ngModel">
+              <option value="" disabled selected>{{ 'COMPANIES.NAME' | translate }}</option>
+              <option *ngFor="let company of companies" value="{{company.ID}}">{{company.Name}}</option>
+            </select>
+          </div>
+          <!--div class="form-group" *ngIf="repISCompany">
+            <select 
+              class="custom-select" 
+              name="point" 
+              [class.is-invalid]="point.invalid && (point.dirty || point.touched)"
+              required 
+              [(ngModel)]="repISPoint" 
+              #point="ngModel">
+              <option value="" disabled selected>{{ 'POINTS.NAME' | translate }}</option>
+              <option *ngFor="let point of points" value="{{point.ID}}">{{point.Name}}</option>
+            </select>
+          </div-->
+          <div class="form-group">
+            <input 
+              class="form-control" 
+              placeholder="{{ 'INCOMSALES.START' | translate }}" 
+              bsDatepicker 
+              [(ngModel)]="repISStartDate" 
+              name="start"
+              required 
+              [class.is-invalid]="start.invalid && (start.dirty || start.touched)"
+              #start="ngModel">
+          </div>
+          <div class="form-group">
+            <input 
+              class="form-control" 
+              placeholder="{{ 'INCOMSALES.END' | translate }}" 
+              bsDatepicker 
+              [(ngModel)]="repISEndDate" 
+              name="end"
+              required 
+              [class.is-invalid]="end.invalid && (end.dirty || end.touched)"
+              #end="ngModel">
+          </div>
+          <button type="button" class="btn" [disabled]="reportIncomeSalesForm.invalid" (click)="getIncomeSalesReport();">{{ 'BUTTONS.APPROVE' | translate }}</button>
+        </form>
+      </div>
+      <div class="col-9">
+        <div *ngIf="incomeSalesResultNull" class="alert alert-warning" role="alert">
+            {{ 'ALERTS.NODATAFOUND' | translate }}
+        </div>
+        <div *ngIf="incomeSalesResult" class="form-group">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>
+                  {{ 'POINTS.NAME' | translate }}
+                </th>
+                <th>
+                  {{ 'PRODUCTSTOCK.PRICESELL' | translate }}
+                </th>
+                <th>
+                  {{ 'INCOMSALES.COSTS' | translate }}
+                </th>
+              </tr>
+            </thead>
+            <tr *ngFor="let i of incomeSalesResult">
+              <td>
+                {{i.PointName}}
+              </td>
+              <td>
+                {{i.PriceSell}}
+              </td>
+              <td>
+                {{i.Costs}}
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="incomeSalesResult">
+      <div class="col-12">
+        <div [chart]="chartIncomeSales"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--
+<div [chart]="chart2"></div>
+-->
+

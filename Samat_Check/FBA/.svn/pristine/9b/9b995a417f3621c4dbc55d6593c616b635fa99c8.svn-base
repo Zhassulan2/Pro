@@ -1,0 +1,240 @@
+package http
+
+import (
+	"strconv"
+
+	"fba/dbmodel"
+
+	"github.com/go-openapi/strfmt"
+
+	"github.com/gin-gonic/gin"
+)
+
+// swagger:operation GET /role Role RoleGET
+// Получение списка ролей
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: page
+//   in: query
+//   description: номер страницы пагинатора
+//   required: false
+//   type: int
+// - name: size
+//   in: query
+//   description: количество записей на странице
+//   required: false
+//   type: int
+// - name: shortname
+//   in: query
+//   description: мнемоника роли
+//   required: false
+//   type: string
+// responses:
+//   '200':
+//     description: JSON массив ролей
+//     schema:
+//       type: array
+//       items:
+//         "$ref": "#/definitions/Role"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) RoleGET(c *gin.Context) {
+	page, err := strconv.Atoi(c.DefaultQuery("page", "0"))
+	size, err := strconv.Atoi(c.DefaultQuery("size", "10"))
+
+	shortName := c.Query("shortname")
+	if shortName != "" {
+		role, err := http.Manager.RoleGetByShortName(shortName)
+		if err != nil {
+			c.JSON(400, err)
+		}
+		c.JSON(200, role)
+		return
+	}
+
+	Roles, err := http.Manager.RoleGet(size, page)
+	if err != nil {
+		c.JSON(400, err)
+	}
+	c.JSON(200, Roles)
+}
+
+// swagger:operation GET /role/{id} Role RoleGETByID
+// Получение роли по ID
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: id
+//   in: path
+//   description: идентификатор роли
+//   required: true
+//   type: string <uuid4>
+// responses:
+//   '200':
+//     description: JSON модель роли
+//     schema:
+//         "$ref": "#/definitions/Role"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) RoleGETByID(c *gin.Context) {
+	id := strfmt.UUID4(c.Param("id"))
+	Roles, err := http.Manager.RoleGetByID(id)
+	if err != nil {
+		c.JSON(400, err)
+	}
+	c.JSON(200, Roles)
+}
+
+// swagger:operation POST /role Role RolePOST
+// Создание роли
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: bodyjson
+//   in: body
+//   description: JSON для создания роли
+//   required: true
+//   schema:
+//     "$ref": "#/definitions/Role"
+// responses:
+//   '200':
+//     description: JSON созданная модель роли
+//     schema:
+//         "$ref": "#/definitions/Role"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) RolePOST(c *gin.Context) {
+	var Role dbModel.Role
+	if c.Bind(&Role) != nil {
+		c.JSON(400, "problem decoding body")
+		return
+	}
+	Role, err := http.Manager.RoleCreate(Role)
+	if err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, Role)
+	return
+}
+
+// swagger:operation PUT /role Role RolePUT
+// Изменение роли
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: bodyjson
+//   in: body
+//   description: JSON для изменения модели роли
+//   required: true
+//   schema:
+//     "$ref": "#/definitions/Role"
+// responses:
+//   '200':
+//     description: JSON ответ на изменение роли
+//     schema:
+//         "$ref": "#/definitions/Role"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) RolePUT(c *gin.Context) {
+	var Role dbModel.Role
+	if c.Bind(&Role) != nil {
+		c.JSON(400, "problem decoding body")
+		return
+	}
+	if err := http.Manager.RoleUpdate(Role); err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, Role)
+	return
+}
+
+// swagger:operation DELETE /role/{id} Role RoleDELETE
+// Удаление роли по ID
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: id
+//   in: path
+//   description: идентификатор роли
+//   required: true
+//   type: string <uuid4>
+// responses:
+//   '200':
+//     description: Успешное удаление
+//     schema:
+//         type: string
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) RoleDELETE(c *gin.Context) {
+	id := strfmt.UUID4(c.Param("id"))
+
+	Role, err := http.Manager.RoleGetByID(id)
+	if err != nil {
+		c.JSON(400, err)
+	}
+
+	if err := http.Manager.RoleDelete(Role); err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, "")
+	return
+}
+
+// swagger:operation GET /roles/count Role RoleCount
+// Получение количества ролей
+//
+// ---
+// produces:
+// - application/json
+// responses:
+//   '200':
+//     description: JSON с количеством ролей
+//     schema:
+//         "$ref": "#/definitions/Count"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) RoleCount(c *gin.Context) {
+	count, err := http.Manager.RoleCount()
+	if err != nil {
+		c.JSON(500, err)
+	}
+	c.JSON(200, count)
+}

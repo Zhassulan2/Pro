@@ -1,0 +1,75 @@
+[
+	{
+		"controller": "*",
+		"name": "shortname",
+		"dbname": "short_name",
+		"operation": "=",
+		"single": true,
+		"ignore": false
+	},
+	{
+		"controller": "*",
+		"name": "name",
+		"dbname": "name",
+		"operation": "LIKE",
+		"single": false,
+		"ignore": false
+	},
+	{
+		"controller": "*",
+		"name": "id",
+		"dbname": "id",
+		"operation": "=",
+		"single": true,
+		"ignore": false
+	}
+	,
+	{
+		"controller": "*",
+		"name": "page",
+		"dbname": "",
+		"operation": "",
+		"single": false,
+		"ignore": true
+	},
+	{
+		"controller": "*",
+		"name": "size",
+		"dbname": "",
+		"operation": "",
+		"single": false,
+		"ignore": true
+	},
+	{
+		"controller": "ProductStock",
+		"name": "productid",
+		"dbname": "product_id",
+		"operation": "=",
+		"single": false,
+		"ignore": false
+	},
+	{
+		"controller": "ProductStock",
+		"name": "pointid",
+		"dbname": "point_id",
+		"operation": "=",
+		"single": false,
+		"ignore": false
+	},
+	{
+		"controller": "ProductStock",
+		"name": "productname",
+		"dbname": "",
+		"operation": "",
+		"single": true,
+		"ignore": true
+	},
+	{
+		"controller": "ProductStock",
+		"name": "productbarcode",
+		"dbname": "",
+		"operation": "",
+		"single": true,
+		"ignore": true
+	}
+]

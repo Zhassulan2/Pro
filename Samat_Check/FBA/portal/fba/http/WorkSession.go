@@ -1,0 +1,224 @@
+package http
+
+import (
+	"strconv"
+
+	"../dbmodel"
+
+	"github.com/go-openapi/strfmt"
+
+	"github.com/gin-gonic/gin"
+)
+
+// swagger:operation GET /worksession WorkSession WorkSessionGET
+// Получение списка рабочих смен
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: page
+//   in: query
+//   description: номер страницы пагинатора
+//   required: false
+//   type: int
+// - name: size
+//   in: query
+//   description: количество записей на странице
+//   required: false
+//   type: int
+// responses:
+//   '200':
+//     description: JSON массив рабочих смен
+//     schema:
+//       type: array
+//       items:
+//         "$ref": "#/definitions/WorkSession"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) WorkSessionGET(c *gin.Context) {
+	page, err := strconv.Atoi(c.DefaultQuery("page", "0"))
+	size, err := strconv.Atoi(c.DefaultQuery("size", "10"))
+	WorkSessions, err := http.Manager.WorkSessionGet(size, page)
+	if err != nil {
+		c.JSON(400, err)
+	}
+	c.JSON(200, WorkSessions)
+}
+
+// swagger:operation GET /worksession/{id} WorkSession WorkSessionGETByID
+// Получение рабочей смены по ID
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: id
+//   in: path
+//   description: идентификатор рабочей смены
+//   required: true
+//   type: string <uuid4>
+// responses:
+//   '200':
+//     description: JSON модель рабочей смены
+//     schema:
+//         "$ref": "#/definitions/WorkSession"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) WorkSessionGETByID(c *gin.Context) {
+	id := strfmt.UUID4(c.Param("id"))
+	WorkSessions, err := http.Manager.WorkSessionGetByID(id)
+	if err != nil {
+		c.JSON(400, err)
+	}
+	c.JSON(200, WorkSessions)
+}
+
+// swagger:operation POST /worksession WorkSession WorkSessionPOST
+// Создание рабочей смены
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: bodyjson
+//   in: body
+//   description: JSON для создания рабочей смены
+//   required: true
+//   schema:
+//     "$ref": "#/definitions/WorkSession"
+// responses:
+//   '200':
+//     description: JSON созданная модель рабочей смены
+//     schema:
+//         "$ref": "#/definitions/WorkSession"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) WorkSessionPOST(c *gin.Context) {
+	var WorkSession dbModel.WorkSession
+	if c.Bind(&WorkSession) != nil {
+		c.JSON(400, "problem decoding body")
+		return
+	}
+	WorkSession, err := http.Manager.WorkSessionCreate(WorkSession)
+	if err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, WorkSession)
+	return
+}
+
+// swagger:operation PUT /worksession WorkSession WorkSessionPUT
+// Изменение рабочей смены
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: bodyjson
+//   in: body
+//   description: JSON для изменения модели рабочей смены
+//   required: true
+//   schema:
+//     "$ref": "#/definitions/WorkSession"
+// responses:
+//   '200':
+//     description: JSON ответ на изменение рабочей смены
+//     schema:
+//         "$ref": "#/definitions/WorkSession"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) WorkSessionPUT(c *gin.Context) {
+	var WorkSession dbModel.WorkSession
+	if c.Bind(&WorkSession) != nil {
+		c.JSON(400, "problem decoding body")
+		return
+	}
+	if err := http.Manager.WorkSessionUpdate(WorkSession); err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, WorkSession)
+	return
+}
+
+// swagger:operation DELETE /worksession/{id} WorkSession WorkSessionDELETE
+// Удаление рабочей смены по ID
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: id
+//   in: path
+//   description: идентификатор рабочей смены
+//   required: true
+//   type: string <uuid4>
+// responses:
+//   '200':
+//     description: Успешное удаление
+//     schema:
+//         type: string
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) WorkSessionDELETE(c *gin.Context) {
+	id := strfmt.UUID4(c.Param("id"))
+
+	WorkSession, err := http.Manager.WorkSessionGetByID(id)
+	if err != nil {
+		c.JSON(400, err)
+	}
+
+	if err := http.Manager.WorkSessionDelete(WorkSession); err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, "")
+	return
+}
+
+// swagger:operation GET /worksessions/count WorkSession WorkSessionCount
+// Получение количества рабочих смен
+//
+// ---
+// produces:
+// - application/json
+// responses:
+//   '200':
+//     description: JSON с количеством рабочих смен
+//     schema:
+//         "$ref": "#/definitions/Count"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) WorkSessionCount(c *gin.Context) {
+	count, err := http.Manager.WorkSessionCount()
+	if err != nil {
+		c.JSON(500, err)
+	}
+	c.JSON(200, count)
+}

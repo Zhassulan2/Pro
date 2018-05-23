@@ -1,0 +1,352 @@
+package http
+
+import (
+	"encoding/json"
+	"strconv"
+	"time"
+
+	"../dbmodel"
+	"../model"
+
+	"github.com/go-openapi/strfmt"
+
+	"github.com/gin-gonic/gin"
+)
+
+// swagger:operation GET /points Point PointGET
+// Получение списка городов
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: page
+//   in: query
+//   description: номер страницы пагинатора
+//   required: false
+//   type: int
+// - name: size
+//   in: query
+//   description: количество записей на странице
+//   required: false
+//   type: int
+// - name: companyid
+//   in: query
+//   description: идентификатор компании
+//   required: false
+//   type: string <uuid4>
+// responses:
+//   '200':
+//     description: JSON массив городов
+//     schema:
+//       type: array
+//       items:
+//         "$ref": "#/definitions/Point"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) PointGET(c *gin.Context) {
+	page, err := strconv.Atoi(c.DefaultQuery("page", "0"))
+	size, err := strconv.Atoi(c.DefaultQuery("size", "10"))
+
+	companyID, is := c.GetQuery("companyid")
+	var Points []dbModel.Point
+	if is {
+		companyUUID := strfmt.UUID4(companyID)
+		Points, err = http.Manager.PointGetByCompany(companyUUID, size, page)
+	} else {
+		Points, err = http.Manager.PointGet(size, page)
+	}
+	if err != nil {
+		c.JSON(400, err)
+	}
+	c.JSON(200, Points)
+}
+
+/*
+func (http *HttpManager) PointGETByCompany(c *gin.Context) {
+	page, err := strconv.Atoi(c.DefaultQuery("page", "0"))
+	size, err := strconv.Atoi(c.DefaultQuery("size", "10"))
+	companyID := strfmt.UUID4(c.Query("companyid"))
+	Points, err := http.Manager.PointGetByCompany(companyID, size, page)
+	if err != nil {
+		c.JSON(400, err)
+	}
+	c.JSON(200, Points)
+}*/
+
+// swagger:operation GET /point/{id} Point PointGETByID
+// Получение торговой точки по ID
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: id
+//   in: path
+//   description: идентификатор торговой точки
+//   required: true
+//   type: string <uuid4>
+// responses:
+//   '200':
+//     description: JSON модель торговой точки
+//     schema:
+//         "$ref": "#/definitions/Point"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) PointGETByID(c *gin.Context) {
+	id := strfmt.UUID4(c.Param("id"))
+	point, err := http.Manager.PointGetByID(id)
+	if err != nil {
+		c.JSON(400, err)
+	}
+	c.JSON(200, point)
+}
+
+// swagger:operation POST /point Point PointPOST
+// Создание торговой точки
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: bodyjson
+//   in: body
+//   description: JSON для создания торговой точки
+//   required: true
+//   schema:
+//     "$ref": "#/definitions/Point"
+// responses:
+//   '200':
+//     description: JSON созданная модель торговой точки
+//     schema:
+//         "$ref": "#/definitions/Point"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) PointPOST(c *gin.Context) {
+	ti := c.MustGet("TokenInfo").(model.TokenInfo)
+	var Point dbModel.Point
+	if c.Bind(&Point) != nil {
+		c.JSON(400, "problem decoding body")
+		return
+	}
+	Point, err := http.Manager.PointCreate(Point, ti)
+	if err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, Point)
+	return
+}
+
+// swagger:operation PUT /point Point PointPUT
+// Изменение торговой точки
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: bodyjson
+//   in: body
+//   description: JSON для изменения модели торговой точки
+//   required: true
+//   schema:
+//     "$ref": "#/definitions/Point"
+// responses:
+//   '200':
+//     description: JSON ответ на изменение торговой точки
+//     schema:
+//         "$ref": "#/definitions/Point"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) PointPUT(c *gin.Context) {
+	var Point dbModel.Point
+	if c.Bind(&Point) != nil {
+		c.JSON(400, "problem decoding body")
+		return
+	}
+	if err := http.Manager.PointUpdate(Point); err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, Point)
+	return
+}
+
+// swagger:operation DELETE /point/{id} Point PointDELETE
+// Удаление торговой точки по ID
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: id
+//   in: path
+//   description: идентификатор торговой точки
+//   required: true
+//   type: string <uuid4>
+// responses:
+//   '200':
+//     description: Успешное удаление
+//     schema:
+//         type: string
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) PointDELETE(c *gin.Context) {
+	id := strfmt.UUID4(c.Param("id"))
+
+	Point, err := http.Manager.PointGetByID(id)
+	if err != nil {
+		c.JSON(400, err)
+	}
+
+	if err := http.Manager.PointDelete(Point); err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, "")
+	return
+}
+
+// swagger:operation GET /points/count Point PointCount
+// Получение количества торговых точек
+//
+// ---
+// produces:
+// - application/json
+// responses:
+//   '200':
+//     description: JSON с количеством торговых точек
+//     schema:
+//         "$ref": "#/definitions/Count"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) PointCount(c *gin.Context) {
+	count, err := http.Manager.PointCount()
+	if err != nil {
+		c.JSON(500, err)
+	}
+	c.JSON(200, count)
+}
+
+//Client oauth2 client
+// swagger:model OAuth2Client
+type Client struct {
+	ID        strfmt.UUID4
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time
+	Secret    string
+	Domain    string
+	UserID    strfmt.UUID4
+}
+
+//PointCreateOauthClient добавить авторизацию для точки
+func (http *HttpManager) PointCreateOauthClient(pid strfmt.UUID4, ti model.TokenInfo) (client Client, err error) {
+	point, err := http.Manager.PointGetByID(pid)
+
+	body, status, err := http.Send("POST", "http://localhost:9096/connect/registrationclient", ti.Token)
+	if err != nil {
+		return
+	}
+	if status == 200 {
+		err = json.Unmarshal(body, &client)
+		point.ClientID = &client.ID
+
+		if err = http.Manager.PointUpdate(point); err != nil {
+			return
+		}
+	}
+	return
+}
+
+// swagger:operation GET /point/{id}/authorize Point PointGetOauthClient
+// Получение информации по клиенту OAuth связанному с торговой точкой
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: id
+//   in: path
+//   description: идентификатор торговой точки
+//   required: true
+//   type: string <uuid4>
+// responses:
+//   '200':
+//     description: JSON модель клиента в OAuth
+//     schema:
+//         "$ref": "#/definitions/OAuth2Client"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) PointGetOauthClient(c *gin.Context) {
+	pid := strfmt.UUID4(c.Param("id"))
+
+	ti := c.MustGet("TokenInfo").(model.TokenInfo)
+	point, err := http.Manager.PointGetByID(pid)
+	if err != nil {
+		c.JSON(400, err)
+		return
+	}
+	client := Client{}
+
+	if point.ClientID == nil {
+		client, err = http.PointCreateOauthClient(pid, ti)
+		if err != nil {
+			c.JSON(500, err)
+			return
+		}
+		c.JSON(200, client)
+		return
+	}
+
+	body, _, err := http.Send("GET", "http://localhost:9096/connect/clientinfo/"+point.ClientID.String(), c.Request.Header.Get("Authorization"))
+	if err != nil {
+		c.JSON(400, err)
+		return
+	}
+	err = json.Unmarshal(body, &client)
+	if err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, client)
+}
+
+//PointCount get count points
+/*func (http *HttpManager) PointCount(c *gin.Context) {
+	count, err := http.Manager.PointCount()
+	if err != nil {
+		c.JSON(400, err)
+	}
+	c.JSON(200, count)
+}*/

@@ -1,0 +1,176 @@
+<div class="card mb-3">
+  <div class="card-header">
+    <div class="d-flex">
+      <div class="mr-auto p-2"><h4>{{ 'SUPPLIER.TITLE' | translate }}</h4></div>        
+      <div class="p-2" *ngIf="check.checkPermissionOnRoute('supplier-write')">
+        <button type="button" class="btn" data-toggle="modal" data-target="#newSupplier">
+          <span octicon="diff-added"></span>
+        </button>
+      </div>
+      <div class="p-2" *ngIf="check.checkPermissionOnRoute('supplier-write')">
+        <button type="button" class="btn" (click)=deleteSupplier()>
+          <span octicon="trashcan"></span>
+        </button>
+      </div>
+      <div class="p-2">
+        <button type="button" class="btn" (click)=refreshSupplier()>
+          <span octicon="sync"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="form-row">
+      <div *ngIf="suppliersScope" class="form-group col-12">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>
+                {{ 'SUPPLIER.NAME' | translate }}
+              </th>
+              <th>
+                {{ 'SUPPLIER.BIN' | translate }}
+              </th>
+              <th>
+                {{ 'SUPPLIER.ADDRESS' | translate }}
+              </th>
+              <th>
+                {{ 'SUPPLIER.CONTACT' | translate }}
+              </th>
+              <th>
+              </th>
+            </tr>
+          </thead>
+          <tr *ngFor="let supplier of suppliers" (click)="onSelect(supplier)">
+            <td>
+              <span *ngIf="supplier==selectedSupplier">--></span>
+              {{supplier.Name}}
+            </td>
+            <td>
+              {{supplier.Bin}}
+            </td>
+            <td>
+              {{supplier.Address}}
+            </td>
+            <td>
+              {{supplier.Contact}}
+            </td>
+            <td>
+              <button *ngIf="((supplier==selectedSupplier) && check.checkPermissionOnRoute('supplier-write'))" class="btn" data-toggle="modal" data-target="#currentSupplier">
+                <span octicon="pencil"></span>
+              </button>
+            </td>
+          </tr>
+        </table>
+        <nav *ngIf="paginationSuppliers">
+          <ul class="pagination justify-content-center">
+            <li *ngIf="currentPage>1" class="page-item">
+              <a class="page-link" (click)="getSuppliers(currentPage-1)">
+                <</a>
+            </li>
+            <li *ngFor="let supplierPage of supplierPages" [class.active]="supplierPage == currentPage" (click)="getSuppliers(supplierPage)" class="page-item">
+              <a class="page-link">{{supplierPage}}</a>
+            </li>
+            <li *ngIf="currentPage<supplierPages.length" class="page-item">
+              <a class="page-link" (click)="getSuppliers(currentPage+1)">></a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modals -->
+<div id="newSupplier" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'SUPPLIER.ADD' | translate }}</h5>
+      </div>
+      <div class="modal-body">
+        <form #newSupplierForm="ngForm">
+          <div class="form-group">
+            <input 
+              placeholder="{{ 'SUPPLIER.NAME' | translate }}" 
+              class="form-control" 
+              name="name" 
+              [class.is-invalid]="name.invalid && (name.dirty || name.touched)"
+              required 
+              minlength="2"
+              [(ngModel)]="newName" 
+              #name="ngModel">
+          </div>
+          <div class="form-group">
+            <input 
+              placeholder="{{ 'SUPPLIER.ADDRESS' | translate }}" 
+              class="form-control" 
+              name="address" 
+              [class.is-invalid]="address.invalid && (address.dirty || address.touched)"
+              required 
+              minlength="2"
+              [(ngModel)]="newAddress" 
+              #address="ngModel">
+          </div>
+          <div class="form-group">
+            <input 
+              placeholder="{{ 'SUPPLIER.BIN' | translate }}" 
+              class="form-control" 
+              name="bin" 
+              [class.is-invalid]="bin.invalid && (bin.dirty || bin.touched)"
+              required 
+              minlength="12"
+              maxlength="12"
+              [(ngModel)]="newBIN" 
+              #bin="ngModel">
+          </div>
+          <div class="form-group">
+            <input 
+              placeholder="{{ 'SUPPLIER.CONTACT' | translate }}" 
+              class="form-control" 
+              name="contact" 
+              [(ngModel)]="newContact" 
+              #contact="ngModel">
+          </div>
+          <button type="button" class="btn" (click)="newSupplierForm.resetForm({})"  data-dismiss="modal">{{ 'BUTTONS.REJECT' | translate }}</button>
+          <button type="button" class="btn" [disabled]="newSupplierForm.invalid" (click)="createSupplier();" data-dismiss="modal">{{ 'BUTTONS.APPROVE' | translate }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="selectedSupplier" id="currentSupplier" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'SUPPLIER.INF' | translate }}</h5>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <span>{{ 'SUPPLIER.SELECTED' | translate }}: {{selectedSupplier.Name}}
+          </span>
+        </div>
+        <div class="form-group">
+          <label>{{ 'SUPPLIER.NAME' | translate }}</label>
+          <input class="form-control" [(ngModel)]="selectedSupplier.Name">
+        </div>
+        <div class="form-group">
+          <label>{{ 'SUPPLIER.BIN' | translate }}</label>
+          <input class="form-control" [(ngModel)]="selectedSupplier.Bin">
+        </div>
+        <div class="form-group">
+          <label>{{ 'SUPPLIER.ADDRESS' | translate }}</label>
+          <input class="form-control" [(ngModel)]="selectedSupplier.Address">
+        </div>
+        <div class="form-group">
+          <label>{{ 'SUPPLIER.CONTACT' | translate }}</label>
+          <input class="form-control" [(ngModel)]="selectedSupplier.Contact">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'BUTTONS.REJECT' | translate }}</button>
+        <button type="button" class="btn btn-primary" (click)=updateSupplier() data-dismiss="modal">{{ 'BUTTONS.APPROVE' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>

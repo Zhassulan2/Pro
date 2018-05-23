@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Built-By: Unios
+Build-Jdk: 1.8.0_121
+Created-By: Maven Integration for Eclipse
+mode: development
+package: org.mortbay
+implementation-version: 6.1.12
+url: http://jetty.mortbay.org
+

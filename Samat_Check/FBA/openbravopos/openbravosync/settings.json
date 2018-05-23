@@ -1,0 +1,19 @@
+{
+	"port": 8080,
+	"dataBases": [{
+		"key": "F5C0510EE7D44F1CA2F169A9E39167F9",
+		"Host": "localhost",
+		"Port": "5432",
+		"DBName": "obpclient",
+		"User": "postgres",
+		"Password": "parkhom4ik",
+		"SetTables": ["Closedcash", "Receipts", "Payments", "Applications", "Attribute", "Attributeinstance",
+            "Attributeset", "Attributesetinstance", "Attributeuse", "Attributevalue", "Categories",
+            "Customers", "Floors", "Locations", "Roles", "People", "Places", "Taxcategories", "Products",
+            "Products_Cat", "Products_Com", "Reservation_Customers", "Reservations", "Resources",
+            "Sharedtickets", "Stockdiary", "Stocklevel", "Taxcustcategories",
+            "Taxes", "Taxlines", "Thirdparties", "Tickets", "Ticketlines",
+            "Teambonusconfighosts", "Teambonussession", "Teambonussessionmoney", "Teambonussessionperson"],
+		"GetTables": ["Stockcurrent"]
+	}]
+}

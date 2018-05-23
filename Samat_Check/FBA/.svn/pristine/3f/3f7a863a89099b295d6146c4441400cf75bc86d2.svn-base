@@ -1,0 +1,3 @@
+<div *ngFor="let alert of alertScope.alerts">
+  <alert [type]="alert.type"  dismissible="true" dismissOnTimeout="5000">{{ alert.msg | translate}}</alert>
+</div>

@@ -1,0 +1,183 @@
+<div class="card mb-3">
+  <div class="card-header">
+    <div class="d-flex">        
+      <div class="p-2 input-group">
+        <input type="text" class="form-control" placeholder="{{ 'PRODUCTS.NAME' | translate }}" aria-describedby="basic-addon2" #searchName>
+      </div>
+      <div class="p-2 input-group">
+        <input type="text" class="form-control" placeholder="{{ 'PRODUCTS.BARCODE' | translate }}" aria-describedby="basic-addon2" #searchBarcode>
+      </div>
+      <div class="p-2">
+        <button type="button" class="btn" (click)="getProducts(1, searchName.value, searchBarcode.value); searchName.value = searchBarcode.value = '';">
+          <span octicon="search"></span>
+        </button>
+      </div>
+      <div class="p-2">
+        <button type="button" class="btn" data-toggle="modal" data-target="#newProduct">
+          <span octicon="diff-added"></span>
+        </button>
+      </div>
+      <div class="p-2">
+        <button type="button" class="btn" (click)=deleteProduct()>
+          <span octicon="trashcan"></span>
+        </button>
+      </div>
+      <div class="p-2">
+        <button type="button" class="btn" (click)="refreshProduct(); searchName.value = searchBarcode.value = ''">
+          <span octicon="sync"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="form-row">
+      <div *ngIf="productsScope" class="form-group col-12">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>
+                {{ 'PRODUCTS.NAME' | translate }}
+              </th>
+              <th>
+                {{ 'PRODUCTS.BARCODE' | translate }}
+              </th>
+              <th>
+                {{ 'PRODUCTS.CATEGORY' | translate }}
+              </th>
+              <th>
+              </th>
+            </tr>
+          </thead>
+          <tr *ngFor="let product of products" (click)="onSelect(product)">
+            <td>
+              <span *ngIf="product==selectedProduct">--></span>
+              {{product.Name}}
+            </td>
+            <td>
+              {{product.Barcode}}
+            </td>
+            <td *ngIf="product.Category">
+              {{product.Category.Name}}
+            </td>
+            <td>
+              <button *ngIf="product==selectedProduct" class="btn" data-toggle="modal" data-target="#currentProduct">
+                <span octicon="pencil"></span>
+              </button>
+            </td>
+          </tr>
+        </table>
+        <nav *ngIf="paginationProducts">
+          <ul class="pagination justify-content-center">
+            <li *ngIf="currentPage>1" class="page-item">
+              <a class="page-link" (click)="getProducts(currentPage-1)">
+                <</a>
+            </li>
+            <li *ngFor="let productPage of productPages" [class.active]="productPage == currentPage" (click)="getProducts(productPage)" class="page-item">
+              <a class="page-link">{{productPage}}</a>
+            </li>
+            <li *ngIf="currentPage<productPages.length" class="page-item">
+              <a class="page-link" (click)="getProducts(currentPage+1)">></a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modals -->
+<div id="newProduct" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'PRODUCTS.ADD' | translate }}</h5>
+      </div>
+      <div class="modal-body">
+        <form #newProductForm="ngForm">
+          <div class="form-row">
+            <div class="form-group col-6">
+              <input 
+                placeholder="{{ 'PRODUCTS.NAME' | translate }}" 
+                class="form-control" 
+                name="name" 
+                [class.is-invalid]="name.invalid && (name.dirty || name.touched)"
+                required 
+                minlength="2"
+                [(ngModel)]="newName" 
+                #name="ngModel">
+            </div>
+            <div class="form-group col-6">
+              <input 
+                placeholder="{{ 'PRODUCTS.BARCODE' | translate }}" 
+                class="form-control" 
+                name="barcode" 
+                [class.is-invalid]="barcode.invalid && (barcode.dirty || barcode.touched)"
+                required 
+                minlength="2"
+                [(ngModel)]="newBarcode" 
+                #barcode="ngModel">
+            </div>
+            <div class="form-group col-6">
+              <select 
+                class="custom-select my-1 mr-sm-2" 
+                name="category" 
+                [class.is-invalid]="category.invalid && (category.dirty || category.touched)"
+                required 
+                [(ngModel)]="newCategory" 
+                #category="ngModel">
+                <option value="" disabled selected>{{ 'CATEGORY.NAME' | translate }}</option>
+                <option *ngFor="let category of categories" value="{{category.ID}}">{{category.Name}}</option>
+              </select>
+            </div>
+          </div>
+          <button type="button" class="btn" (click)="newProductForm.resetForm({})"  data-dismiss="modal">{{ 'BUTTONS.REJECT' | translate }}</button>
+          <button type="button" [disabled]="newProductForm.invalid" class="btn" (click)="createProduct();" data-dismiss="modal">{{ 'BUTTONS.APPROVE' | translate }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="selectedProduct" id="currentProduct" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'PRODUCTS.INF' | translate }}</h5>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <span>{{ 'PRODUCTS.SELECTED' | translate }}: {{selectedProduct.Name}}</span>
+        </div>
+        <div class="form-group">
+          <label>{{ 'PRODUCTS.NAME' | translate }}</label>
+          <input class="form-control" [(ngModel)]="selectedProduct.Name">
+        </div>
+        <div class="form-group">
+          <label>{{ 'PRODUCTS.BARCODE' | translate }}</label>
+          <input class="form-control" [(ngModel)]="selectedProduct.Barcode">
+        </div>
+        <div class="form-group">
+          <label>{{ 'PRODUCTS.CATEGORY' | translate }}</label>
+          <select class="custom-select my-1 mr-sm-2" [(ngModel)]="selectedProduct.CategoryID">
+            <option *ngFor="let category of categories" value="{{category.ID}}">{{category.Name}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Secret</label>
+          <div class="input-group"> 
+            <div class="input-group-prepend">
+              <button class="btn" type="button" (click)=getClientSecret()>
+                <span octicon="key"></span>
+              </button>
+            </div> 
+            <input [(ngModel)]="clientSecret" type="text" class="form-control">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'BUTTONS.REJECT' | translate }}</button>
+        <button type="button" class="btn btn-primary" (click)=updateProduct() data-dismiss="modal">{{ 'BUTTONS.APPROVE' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>

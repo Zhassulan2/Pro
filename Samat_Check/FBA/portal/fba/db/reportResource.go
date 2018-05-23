@@ -1,0 +1,75 @@
+package db
+
+import (
+	"../model"
+
+	"github.com/go-openapi/strfmt"
+)
+
+//ReportRemainder отчет по остаткам
+func (dbm *DBManager) ReportRemainder(ti model.TokenInfo) (remainders []model.Remainder, err error) {
+	uuid, err := ti.GetUserID()
+	if err != nil {
+		return
+	}
+
+	staff, err := dbm.StaffGetByUserID(uuid)
+	if err != nil {
+		return
+	}
+
+	query := `select p."name" as PointName, pr."name" as ProductName, ps.count as Count, ps.price_sell as PriceSell from productstock ps
+	left join point p on p.id = ps.point_id
+	left join product pr on pr.id = ps.product_id
+	where point_id in (select id from point where staff_id = ?)
+	order by p."name", pr."name"`
+
+	rows, err := dbm.DB.Raw(query, staff.ID).Rows()
+	defer rows.Close()
+	for rows.Next() {
+		var remainder model.Remainder
+		var pointName, productName string
+		var count int64
+		var priceSell float64
+
+		rows.Scan(&pointName, &productName, &count, &priceSell)
+		remainder.PointName = pointName
+		remainder.ProductName = productName
+		remainder.Count = count
+		remainder.PriceSell = priceSell
+
+		remainders = append(remainders, remainder)
+	}
+
+	return
+}
+
+//ReportIncomeSales отчет по остаткам
+func (dbm *DBManager) ReportIncomeSales(startDate string, endDate string, companyID strfmt.UUID4 /*, ti model.TokenInfo*/) (incomeSales []model.IncomeSales, err error) {
+	actionType, err := dbm.ActionTypeGetByShortName("sale")
+
+	query := `select p."name" as PointName, sum(prad.pricesell) as PriceSell, SUM(prad.pricesell-prad.pricebuy) as Costs
+	from productactiondetail prad
+		left join productaction pa on prad.product_action_id = pa.id  
+		left join point p on p.id = pa.point_id
+		left join company c on c.id = p.company_id
+	where pa.action_date between ? and ?
+	and c.id = ?
+	and prad.action_type_id = ?
+	group by pa.action_date, p."name"`
+
+	rows, err := dbm.DB.Raw(query, startDate, endDate, companyID, actionType.ID).Rows()
+	defer rows.Close()
+	for rows.Next() {
+		var incomeSale model.IncomeSales
+		var pointName string
+		var priceSell, costs float64
+
+		rows.Scan(&pointName, &priceSell, &costs)
+		incomeSale.PointName = pointName
+		incomeSale.PriceSell = priceSell
+		incomeSale.Costs = costs
+		incomeSales = append(incomeSales, incomeSale)
+	}
+	return
+}

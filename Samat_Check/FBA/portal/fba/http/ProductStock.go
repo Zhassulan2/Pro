@@ -1,0 +1,321 @@
+package http
+
+import (
+	"strconv"
+
+	"../dbmodel"
+	"../model"
+
+	"github.com/go-openapi/strfmt"
+
+	"github.com/gin-gonic/gin"
+)
+
+// swagger:operation GET /productstock ProductStock ProductStockGET
+// Получение списка остатков и актуальных цен
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: page
+//   in: query
+//   description: номер страницы пагинатора
+//   required: false
+//   type: int
+// - name: size
+//   in: query
+//   description: количество записей на странице
+//   required: false
+//   type: int
+// responses:
+//   '200':
+//     description: JSON массив остатков и актуальных цен
+//     schema:
+//       type: array
+//       items:
+//         "$ref": "#/definitions/ProductStock"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) ProductStockGET(c *gin.Context) {
+	page, err := strconv.Atoi(c.DefaultQuery("page", "0"))
+	size, err := strconv.Atoi(c.DefaultQuery("size", "10"))
+
+	params, err := http.ParseQuery(c.Request.URL.RawQuery)
+
+	//иногда бывает так что нужно искать по вложенным таблицам и тогда нам придеться готовить эти данные туту...
+
+	productName, isProductName := c.GetQuery("productname")
+	if isProductName {
+		var product dbModel.Product
+		http.Manager.DB.Where("name = ?", productName).First(&product)
+		params = append(params, model.Parameter{Name: "productid", Value: product.ID.String(), DBName: "product_id", Operation: "="})
+	}
+
+	productBarcode, isProductBarcode := c.GetQuery("productbarcode")
+	if isProductBarcode {
+		var product dbModel.Product
+		http.Manager.DB.Where("barcode = ?", productBarcode).First(&product)
+		params = append(params, model.Parameter{Name: "productid", Value: product.ID.String(), DBName: "product_id", Operation: "="})
+	}
+
+	var parameters model.Parameters
+	parameters.Params = params
+	parameters.Controller = "ProductStock"
+	parameters.Config = http.SearchParameters
+
+	//метод может вернуть массив или одну запись
+	_, single := parameters.ToQuery()
+	if single {
+		ProductStock, err := http.Manager.ProductStockSingleGet(size, page, parameters)
+		if err != nil {
+			c.JSON(400, err)
+		}
+		c.JSON(200, ProductStock)
+		return
+	}
+	ProductStocks, err := http.Manager.ProductStockGet(size, page, parameters)
+	if err != nil {
+		c.JSON(400, err)
+	}
+	c.JSON(200, ProductStocks)
+	return
+
+	/*
+		ProductStocks, err := http.Manager.ProductStockGet(size, page)
+		if err != nil {
+			c.JSON(400, err)
+		}
+		c.JSON(200, ProductStocks)*/
+}
+
+// swagger:operation GET /productstock/{pointID} ProductStock ProductStockSearchGET
+// Получение остатков и актуальных цен по идентификатору товара
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: id
+//   in: path
+//   description: идентификатор товара
+//   required: true
+//   type: string <uuid4>
+// responses:
+//   '200':
+//     description: JSON модель остатков и актуальных цен
+//     schema:
+//         "$ref": "#/definitions/ProductStock"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) ProductStockSearchGET(c *gin.Context) {
+	/*
+		-	определяем владельца
+	*/
+	ti := c.MustGet("TokenInfo").(model.TokenInfo)
+	uid, err := ti.GetUserID()
+	staff, err := http.Manager.StaffGetByUserID(uid)
+	var staffID strfmt.UUID4
+	if staff.ParentID != nil {
+		staffID = *staff.ParentID
+	} else {
+		staffID = staff.ID
+	}
+
+	/*
+		-	Обработаем параметры
+	*/
+	page, err := strconv.Atoi(c.DefaultQuery("page", "0"))
+	size, err := strconv.Atoi(c.DefaultQuery("size", "10"))
+	pointID := strfmt.UUID4(c.Param("pointID"))
+	if err != nil {
+		c.JSON(400, err)
+		return
+	}
+
+	//var parameters model.Parameters
+	//var params []model.Parameter
+	//parameters.Controller = "ProductStock"
+	//parameters.Config = http.SearchParameters
+
+	productName, _ := c.GetQuery("productname")
+	/*if isProductName {
+		var product dbModel.Product
+		http.Manager.DB.Where("name = ?", productName).First(&product)
+		//params = append(params, model.Parameter{Name: "productid", Value: product.ID.String(), DBName: "product_id", Operation: "="})
+	}*/
+
+	productBarcode, _ := c.GetQuery("productbarcode")
+	/*if isProductBarcode {
+		var product dbModel.Product
+		http.Manager.DB.Where("barcode = ?", productBarcode).First(&product)
+		params = append(params, model.Parameter{Name: "productid", Value: product.ID.String(), DBName: "product_id", Operation: "="})
+	}*/
+
+	point, err := http.Manager.PointGetByID(pointID)
+
+	if err != nil {
+		c.JSON(400, err)
+		return
+	}
+
+	if point.StaffID != staffID {
+		c.JSON(401, "нет доступа к точке!")
+		return
+	}
+
+	ProductStocks, err := http.Manager.ProductStockSearchGet(pointID, size, page, productName, productBarcode)
+	if err != nil {
+		c.JSON(400, err)
+	}
+	c.JSON(200, ProductStocks)
+}
+
+// swagger:operation POST /productstock ProductStock ProductStockPOST
+// Создание остатков и актуальных цен
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: bodyjson
+//   in: body
+//   description: JSON для создания остатков и актуальных цен
+//   required: true
+//   schema:
+//     "$ref": "#/definitions/ProductStock"
+// responses:
+//   '200':
+//     description: JSON созданная модель остатков и актуальных цен
+//     schema:
+//         "$ref": "#/definitions/ProductStock"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) ProductStockPOST(c *gin.Context) {
+	var ProductStock dbModel.ProductStock
+	if c.Bind(&ProductStock) != nil {
+		c.JSON(400, "problem decoding body")
+		return
+	}
+	ProductStock, err := http.Manager.ProductStockCreate(ProductStock)
+	if err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, ProductStock)
+	return
+}
+
+// swagger:operation PUT /productstock ProductStock ProductStockPUT
+// Изменение остатков и актуальных цен
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: bodyjson
+//   in: body
+//   description: JSON для изменения модели остатков и актуальных цен
+//   required: true
+//   schema:
+//     "$ref": "#/definitions/ProductStock"
+// responses:
+//   '200':
+//     description: JSON ответ на изменение остатков и актуальных цен
+//     schema:
+//         "$ref": "#/definitions/ProductStock"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) ProductStockPUT(c *gin.Context) {
+	var ProductStock dbModel.ProductStock
+	if c.Bind(&ProductStock) != nil {
+		c.JSON(400, "problem decoding body")
+		return
+	}
+	if err := http.Manager.ProductStockUpdate(ProductStock); err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, ProductStock)
+	return
+}
+
+// swagger:operation DELETE /productstock/{id} ProductStock ProductStockDELETE
+// Удаление остатков и актуальных цен по ID
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: id
+//   in: path
+//   description: идентификатор записи остатков и актуальных цен
+//   required: true
+//   type: string <uuid4>
+// responses:
+//   '200':
+//     description: Успешное удаление
+//     schema:
+//         type: string
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) ProductStockDELETE(c *gin.Context) {
+	id := strfmt.UUID4(c.Param("id"))
+
+	ProductStock, err := http.Manager.ProductStockGetByID(id)
+	if err != nil {
+		c.JSON(400, err)
+	}
+
+	if err := http.Manager.ProductStockDelete(ProductStock); err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, "")
+	return
+}
+
+// swagger:operation GET /productstocks/count ProductStock ProductStockCount
+// Получение количества остатков и актуальных цен
+//
+// ---
+// produces:
+// - application/json
+// responses:
+//   '200':
+//     description: JSON с количеством остатков и актуальных цен
+//     schema:
+//         "$ref": "#/definitions/Count"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) ProductStockCount(c *gin.Context) {
+	count, err := http.Manager.ProductStockCount()
+	if err != nil {
+		c.JSON(500, err)
+	}
+	c.JSON(200, count)
+}

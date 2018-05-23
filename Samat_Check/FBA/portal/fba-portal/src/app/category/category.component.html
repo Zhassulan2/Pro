@@ -1,0 +1,140 @@
+<div class="card mb-3">
+  <div class="card-header">
+    <div class="d-flex">
+      <div class="mr-auto p-2"><h4>{{ 'CATEGORY.TITLE' | translate }}</h4></div>        
+      <div class="p-2" *ngIf="check.checkPermissionOnRoute('category-write')">
+        <button type="button" class="btn" data-toggle="modal" data-target="#newCategory">
+          <span octicon="diff-added"></span>
+        </button>
+      </div>
+      <div class="p-2" *ngIf="check.checkPermissionOnRoute('category-write')">
+        <button type="button" class="btn" (click)=deleteCategory()>
+          <span octicon="trashcan"></span>
+        </button>
+      </div>
+      <div class="p-2">
+        <button type="button" class="btn" (click)=refreshCategory()>
+          <span octicon="sync"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="form-row">
+      <div *ngIf="categoriesScope" class="form-group col-12">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>
+                {{ 'CATEGORY.NAME' | translate }}
+              </th>
+              <th>
+                {{ 'CATEGORY.SHORT' | translate }}
+              </th>
+              <th>
+              </th>
+            </tr>
+          </thead>
+          <tr *ngFor="let category of categories" (click)="onSelect(category)">
+            <td>
+              <span *ngIf="category==selectedCategory">--></span>
+              {{category.Name}}
+            </td>
+            <td>
+              {{category.ShortName}}
+            </td>
+            <td>
+              <button *ngIf="((category==selectedCategory) && check.checkPermissionOnRoute('category-write'))" class="btn" data-toggle="modal" data-target="#currentCategory">
+                <span octicon="pencil"></span>
+              </button>
+            </td>
+          </tr>
+        </table>
+        <nav *ngIf="paginationCategories">
+          <ul class="pagination justify-content-center">
+            <li *ngIf="currentPage>1" class="page-item">
+              <a class="page-link" (click)="getCategories(currentPage-1)">
+                <</a>
+            </li>
+            <li *ngFor="let categoryPage of categoryPages" [class.active]="categoryPage == currentPage" (click)="getCategories(categoryPage)" class="page-item">
+              <a class="page-link">{{categoryPage}}</a>
+            </li>
+            <li *ngIf="currentPage<categoryPages.length" class="page-item">
+              <a class="page-link" (click)="getCategories(currentPage+1)">></a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modals -->
+<div id="newCategory" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'CATEGORY.ADD' | translate }}</h5>
+      </div>
+      <div class="modal-body">
+        <form #newCategoryForm="ngForm">
+          <div class="form-group">
+            <input 
+              placeholder="{{ 'CATEGORY.NAME' | translate }}"
+              name="name" 
+              class="form-control" 
+              [class.is-invalid]="name.invalid && (name.dirty || name.touched)"
+              required 
+              minlength="2"
+              [(ngModel)]="newName" 
+              #name="ngModel">
+          </div>
+          <div class="form-group">
+            <input 
+              placeholder="{{ 'CATEGORY.SHORT' | translate }}"
+              name="short" 
+              class="form-control" 
+              [class.is-invalid]="short.invalid && (short.dirty || short.touched)"
+              required 
+              minlength="2"
+              [(ngModel)]="newShort" 
+              #short="ngModel">
+          </div>
+          <div class="form-group">
+            <button type="button" class="btn" (click)="newCategoryForm.resetForm({})"  data-dismiss="modal">{{ 'BUTTONS.REJECT' | translate }}</button>
+            <button [disabled]="newCategoryForm.invalid" type="button" class="btn" (click)="createCategory();" data-dismiss="modal">{{ 'BUTTONS.APPROVE' | translate }}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="selectedCategory" id="currentCategory" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'CATEGORY.INF' | translate }}</h5>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <span>{{ 'CATEGORY.SELECTED' | translate }}: {{selectedCategory.Name}}
+          </span>
+        </div>
+        <div class="form-group">
+          <label>{{ 'CATEGORY.NAME' | translate }}</label>
+          <input class="form-control" [(ngModel)]="selectedCategory.Name">
+        </div>
+        <div class="form-group">
+          <label>{{ 'CATEGORY.SHORT' | translate }}</label>
+          <input class="form-control" [(ngModel)]="selectedCategory.ShortName">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'BUTTONS.REJECT' | translate }}</button>
+        <button type="button" class="btn btn-primary" (click)=updateCategory() data-dismiss="modal">{{ 'BUTTONS.APPROVE' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>

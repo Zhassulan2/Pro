@@ -1,0 +1,154 @@
+<div class="row">
+  <div class="col-3">
+    <div class="card mb-3">
+      <div class="card-header">
+        <div class="d-flex">        
+          <div class="mr-auto p-2"><h4>{{ 'POINTS.TITLE' | translate }}</h4></div>    
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group col-12">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>
+                    {{ 'POINTS.NAME' | translate }}
+                  </th>
+                </tr>
+              </thead>
+              <tr *ngFor="let point of points" (click)="onSelectPoint(point)">
+                <td>
+                  <span *ngIf="point==selectedPoint">--></span>
+                  {{ point.Name }} ({{ point.Address }})
+                </td>
+              </tr>
+            </table>
+            <nav *ngIf="paginationPoints">
+              <ul class="pagination justify-content-center">
+                <li *ngIf="currentPagePoint>1" class="page-item">
+                  <a class="page-link" (click)="getPoints(currentPagePoint-1)">
+                    <</a>
+                </li>
+                <li *ngFor="let pointPage of pointPages" [class.active]="pointPage == currentPagePoint" (click)="getPoints(pointPage)" class="page-item">
+                  <a class="page-link">{{pointPage}}</a>
+                </li>
+                <li *ngIf="currentPagePoint<pointPages.length" class="page-item">
+                  <a class="page-link" (click)="getPoints(currentPagePoint+1)">></a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="card mb-3">
+      <div class="card-header">
+        <div class="d-flex">
+          <div class="mr-auto p-2"><h4>{{ 'STAFFPOINT.TITLE' | translate }}</h4></div>        
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group col-12">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>
+                    {{ 'POINTS.NAME' | translate }}
+                  </th>
+                  <th>
+                    {{ 'STAFF.NAME' | translate }}
+                  </th>
+                  <th>
+                  </th>
+                </tr>
+              </thead>
+              <tr *ngFor="let staffPoint of staffPoints" (click)="onSelectSP(staffPoint)">
+                <td>
+                  <span *ngIf="staffPoint==selectedSP">--></span>
+                  {{staffPoint.Point.Name}}
+                </td>
+                <td>
+                  {{staffPoint.Staff.Name}}
+                </td>
+                <td>
+                  <button *ngIf="staffPoint==selectedSP" class="btn" (click)="deletePointStaff()">
+                    <span octicon="diff-removed"></span>
+                  </button>
+                </td>
+              </tr>
+            </table>
+            <nav *ngIf="paginationSP">
+              <ul class="pagination justify-content-center">
+                <li *ngIf="currentPageSP>1" class="page-item">
+                  <a class="page-link" (click)="getStaffPoints(currentPageSP-1)">
+                    <</a>
+                </li>
+                <li *ngFor="let spPage of spPages" [class.active]="spPage == currentPageSP" (click)="getStaffPoints(spPage)" class="page-item">
+                  <a class="page-link">{{staffPage}}</a>
+                </li>
+                <li *ngIf="currentPageSP<spPages.length" class="page-item">
+                  <a class="page-link" (click)="getStaffPoints(currentPageSP+1)">></a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-3">
+    <div class="card mb-3">
+      <div class="card-header">
+        <div class="d-flex">
+          <div class="mr-auto p-2"><h4>{{ 'STAFF.TITLE' | translate }}</h4></div>        
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group col-12">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>
+                    {{ 'STAFF.NAME' | translate }}
+                  </th>
+                  <th>
+                  </th>
+                </tr>
+              </thead>
+              <tr *ngFor="let staff of staffs" (click)="onSelectStaff(staff)">
+                <td>
+                  <span *ngIf="staff==selectedStaff">--></span>
+                  {{staff.Name}}
+                </td>
+                <td>
+                  <button *ngIf="staff==selectedStaff" class="btn" (click)="addStaffPoint()">
+                    <span octicon="diff-added"></span>
+                  </button>
+                </td>
+              </tr>
+            </table>
+            <nav *ngIf="paginationStaffs">
+              <ul class="pagination justify-content-center">
+                <li *ngIf="currentPageStaff>1" class="page-item">
+                  <a class="page-link" (click)="getStaffs(currentPageStaff-1)">
+                    <</a>
+                </li>
+                <li *ngFor="let staffPage of staffPages" [class.active]="staffPage == currentPageStaff" (click)="getStaffs(staffPage)" class="page-item">
+                  <a class="page-link">{{staffPage}}</a>
+                </li>
+                <li *ngIf="currentPageStaff<staffPages.length" class="page-item">
+                  <a class="page-link" (click)="getStaffs(currentPageStaff+1)">></a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

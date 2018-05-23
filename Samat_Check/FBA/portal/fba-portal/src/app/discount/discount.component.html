@@ -1,0 +1,229 @@
+<div class="card mb-3">
+    <div class="card-header">
+      <div class="d-flex">
+        <div class="mr-auto p-2"><h4>{{ 'DISCOUNT.TITLE' | translate }}</h4></div>        
+        <div class="p-2">
+          <button type="button" class="btn" data-toggle="modal" data-target="#newDiscount">
+            <span octicon="diff-added"></span>
+          </button>
+        </div>
+        <div class="p-2">
+          <button type="button" class="btn" (click)=deleteDiscount()>
+            <span octicon="trashcan"></span>
+          </button>
+        </div>
+        <div class="p-2">
+          <button type="button" class="btn" (click)=refreshDiscount()>
+            <span octicon="sync"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="form-row">
+        <div *ngIf="discountsScope" class="form-group col-12">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>
+                  {{ 'DISCOUNT.NAME' | translate }}
+                </th>
+                <th>
+                  {{ 'DISCOUNT.TYPE' | translate }}
+                </th>
+                <th>
+                  {{ 'DISCOUNT.START' | translate }}
+                </th>
+                <th>
+                  {{ 'DISCOUNT.END' | translate }}
+                </th>
+                <th>
+                  {{ 'DISCOUNT.VALUE' | translate }}
+                </th>
+                <th>
+                  {{ 'DISCOUNT.PERCENT' | translate }}
+                </th>
+                <th>
+                </th>
+              </tr>
+            </thead>
+            <tr *ngFor="let discount of discounts" (click)="onSelect(discount)">
+              <td>
+                <span *ngIf="discount==selectedDiscount">--></span>
+                {{discount.Name}}
+              </td>
+              <td>
+                <span *ngIf="discount.DiscountType">{{discount.DiscountType.Name}}</span>
+              </td>
+              <td>
+                {{discount.Startdate | date:'dd-MM-yyyy'}}
+              </td>
+              <td>
+                {{discount.Enddate | date:'dd-MM-yyyy'}}
+              </td>
+              <td>
+                {{discount.Value}}
+              </td>
+              <td>
+                {{discount.Valuepercent}}%
+              </td>
+              <td>
+                <button *ngIf="discount==selectedDiscount" class="btn" data-toggle="modal" data-target="#currentDiscount">
+                  <span octicon="pencil"></span>
+                </button>
+              </td>
+            </tr>
+          </table>
+          <nav *ngIf="paginationDiscounts">
+            <ul class="pagination justify-content-center">
+              <li *ngIf="currentPage>1" class="page-item">
+                <a class="page-link" (click)="getDiscounts(currentPage-1)">
+                  <</a>
+              </li>
+              <li *ngFor="let discountPage of discountPages" [class.active]="discountPage == currentPage" (click)="getDiscounts(discountPage)" class="page-item">
+                <a class="page-link">{{discountPage}}</a>
+              </li>
+              <li *ngIf="currentPage<discountPages.length" class="page-item">
+                <a class="page-link" (click)="getDiscounts(currentPage+1)">></a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modals -->
+  <div id="newDiscount" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'DISCOUNT.ADD' | translate }}</h5>
+        </div>
+        <div class="modal-body">
+          <form #newDiscountForm="ngForm">
+            <div class="form-group">
+              <input 
+                placeholder="{{ 'DISCOUNT.NAME' | translate }}" 
+                class="form-control" 
+                name="name" 
+                [class.is-invalid]="name.invalid && (name.dirty || name.touched)"
+                required 
+                minlength="2"
+                [(ngModel)]="newName" 
+                #name="ngModel">
+            </div>
+            <div class="form-group">
+              <input 
+                class="form-control" 
+                placeholder="{{ 'DISCOUNT.START' | translate }}" 
+                bsDatepicker 
+                [(ngModel)]="newStartDate" 
+                name="start"
+                required 
+                [class.is-invalid]="start.invalid && (start.dirty || start.touched)"
+                #start="ngModel">
+            </div>
+            <div class="form-group">
+              <input 
+                class="form-control" 
+                placeholder="{{ 'DISCOUNT.END' | translate }}" 
+                bsDatepicker 
+                [(ngModel)]="newEndDate" 
+                name="end"
+                required 
+                [class.is-invalid]="end.invalid && (end.dirty || end.touched)"
+                #end="ngModel">
+            </div>
+            <div class="form-group">
+              <input 
+                type="number"
+                placeholder="{{ 'DISCOUNT.VALUE' | translate }}" 
+                class="form-control" 
+                name="val" 
+                [class.is-invalid]="val.invalid && (val.dirty || val.touched)"
+                required 
+                [(ngModel)]="newValue" 
+                #val="ngModel">
+            </div>
+            <div class="form-group">
+              <input 
+                type="number"
+                placeholder="{{ 'DISCOUNT.PERCENT' | translate }}" 
+                class="form-control" 
+                name="percent" 
+                [class.is-invalid]="percent.invalid && (percent.dirty || percent.touched)"
+                required 
+                [(ngModel)]="newValuepercent" 
+                #percent="ngModel">
+            </div>
+            <div class="form-group">
+              <select 
+                class="custom-select" 
+                name="discountType" 
+                [class.is-invalid]="discountType.invalid && (discountType.dirty || discountType.touched)"
+                required 
+                [(ngModel)]="newDiscountTypeID" 
+                #discountType="ngModel">
+                <option value="" disabled selected>{{ 'DISCOUNT.TYPE' | translate }}</option>
+                <option *ngFor="let discountType of discountTypes" value="{{discountType.ID}}">{{discountType.Name}}</option>
+              </select>
+            </div>
+            <button type="button" class="btn" (click)="newDiscountForm.resetForm({})" data-dismiss="modal">{{ 'BUTTONS.REJECT' | translate }}</button>
+            <button type="button" class="btn" [disabled]="newDiscountForm.invalid" (click)="createDiscount();" data-dismiss="modal">{{ 'BUTTONS.APPROVE' | translate }}</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="selectedDiscount" id="currentDiscount" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'DISCOUNT.INF' | translate }}</h5>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <span>{{ 'DISCOUNT.SELECTED' | translate }}: {{selectedDiscount.Name}}
+            </span>
+          </div>
+          <div class="form-group">
+            <label>{{ 'DISCOUNT.NAME' | translate }}</label>
+            <input class="form-control" [(ngModel)]="selectedDiscount.Name">
+          </div>
+          <div class="form-group">
+            <label>{{ 'DISCOUNT.START' | translate }}</label>
+            <input 
+              class="form-control" 
+              bsDatepicker 
+              [(ngModel)]="putStart">
+          <div class="form-group">
+            <label>{{ 'DISCOUNT.END' | translate }}</label>
+            <input 
+              class="form-control" 
+              bsDatepicker 
+              [(ngModel)]="putEnd">
+          </div>
+          <div class="form-group">
+            <label>{{ 'DISCOUNT.VALUE' | translate }}</label>
+            <input type="number" class="form-control" [(ngModel)]="selectedDiscount.Value">
+          </div>
+          <div class="form-group">
+            <label>{{ 'DISCOUNT.PERCENT' | translate }}</label>
+            <input type="number" class="form-control" [(ngModel)]="selectedDiscount.Valuepercent">
+          </div>
+          <div class="form-group">
+            <label>{{ 'DISCOUNT.TYPE' | translate }}</label>
+            <select class="custom-select" [(ngModel)]="selectedDiscount.DiscountTypeID">
+              <option *ngFor="let discountType of discountTypes" value="{{discountType.ID}}">{{discountType.Name}}</option>
+            </select>
+          </div> 
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'BUTTONS.REJECT' | translate }}</button>
+          <button type="button" class="btn btn-primary" (click)=updateDiscount() data-dismiss="modal">{{ 'BUTTONS.APPROVE' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

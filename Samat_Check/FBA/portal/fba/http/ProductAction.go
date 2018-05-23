@@ -1,0 +1,238 @@
+package http
+
+import (
+	"strconv"
+
+	"../dbmodel"
+	"../model"
+
+	"github.com/go-openapi/strfmt"
+
+	"github.com/gin-gonic/gin"
+)
+
+// swagger:operation GET /productaction ProductAction ProductActionGET
+// Получение записей журнала движения товаров
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: page
+//   in: query
+//   description: номер страницы пагинатора
+//   required: false
+//   type: int
+// - name: size
+//   in: query
+//   description: количество записей на странице
+//   required: false
+//   type: int
+// responses:
+//   '200':
+//     description: JSON массив записей журнала движения товаров
+//     schema:
+//       type: array
+//       items:
+//         "$ref": "#/definitions/ProductAction"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) ProductActionGET(c *gin.Context) {
+	page, err := strconv.Atoi(c.DefaultQuery("page", "0"))
+	size, err := strconv.Atoi(c.DefaultQuery("size", "10"))
+
+	/*shortName := c.Query("shortname")
+	if shortName != "" {
+		ProductAction, err := http.Manager.ProductActionGetByShortName(shortName)
+		if err != nil {
+			c.JSON(400, err)
+		}
+		c.JSON(200, ProductAction)
+		return
+	}*/
+
+	ProductActions, err := http.Manager.ProductActionGet(size, page)
+	if err != nil {
+		c.JSON(400, err)
+	}
+	c.JSON(200, ProductActions)
+}
+
+// swagger:operation GET /productaction/{id} ProductAction ProductActionGETByID
+// Получение записи журнала движения товаров по ID
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: id
+//   in: path
+//   description: идентификатор записи журнала движения товаров
+//   required: true
+//   type: string <uuid4>
+// responses:
+//   '200':
+//     description: JSON модель записи журнала движения товаров
+//     schema:
+//         "$ref": "#/definitions/ProductAction"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) ProductActionGETByID(c *gin.Context) {
+	id := strfmt.UUID4(c.Param("id"))
+
+	ProductActions, err := http.Manager.ProductActionGetByID(id)
+	if err != nil {
+		c.JSON(400, err)
+	}
+	c.JSON(200, ProductActions)
+}
+
+// swagger:operation POST /productaction ProductAction ProductActionPOST
+// Создание записи журнала движения товаров
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: bodyjson
+//   in: body
+//   description: JSON для создания записи журнала движения товаров
+//   required: true
+//   schema:
+//     "$ref": "#/definitions/ProductAction"
+// responses:
+//   '200':
+//     description: JSON созданная модель записи журнала движения товаров
+//     schema:
+//         "$ref": "#/definitions/ProductAction"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) ProductActionPOST(c *gin.Context) {
+	ti := c.MustGet("TokenInfo").(model.TokenInfo)
+	var ProductAction dbModel.ProductAction
+	if c.Bind(&ProductAction) != nil {
+		c.JSON(400, "problem decoding body")
+		return
+	}
+	ProductAction, err := http.Manager.ProductActionCreate(ProductAction, ti)
+	if err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, ProductAction)
+	return
+}
+
+// swagger:operation PUT /productaction ProductAction ProductActionPUT
+// Изменение записи журнала движения товаров
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: bodyjson
+//   in: body
+//   description: JSON для изменения модели записи журнала движения товаров
+//   required: true
+//   schema:
+//     "$ref": "#/definitions/ProductAction"
+// responses:
+//   '200':
+//     description: JSON ответ на изменение записи журнала движения товаров
+//     schema:
+//         "$ref": "#/definitions/ProductAction"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) ProductActionPUT(c *gin.Context) {
+	var ProductAction dbModel.ProductAction
+	if c.Bind(&ProductAction) != nil {
+		c.JSON(400, "problem decoding body")
+		return
+	}
+	if err := http.Manager.ProductActionUpdate(ProductAction); err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, ProductAction)
+	return
+}
+
+// swagger:operation DELETE /productaction/{id} ProductAction ProductActionDELETE
+// Удаление записи журнала движения товаров по ID
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: id
+//   in: path
+//   description: идентификатор записи журнала движения товаров
+//   required: true
+//   type: string <uuid4>
+// responses:
+//   '200':
+//     description: Успешное удаление
+//     schema:
+//         type: string
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) ProductActionDELETE(c *gin.Context) {
+	id := strfmt.UUID4(c.Param("id"))
+
+	ProductAction, err := http.Manager.ProductActionGetByID(id)
+	if err != nil {
+		c.JSON(400, err)
+	}
+
+	if err := http.Manager.ProductActionDelete(ProductAction); err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, "")
+	return
+}
+
+// swagger:operation GET /productactions/count ProductAction ProductActionCount
+// Получение количества записей журнала движения товаров
+//
+// ---
+// produces:
+// - application/json
+// responses:
+//   '200':
+//     description: JSON с количеством записей журнала движения товаров
+//     schema:
+//         "$ref": "#/definitions/Count"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) ProductActionCount(c *gin.Context) {
+	count, err := http.Manager.ProductActionCount()
+	if err != nil {
+		c.JSON(500, err)
+	}
+	c.JSON(200, count)
+}

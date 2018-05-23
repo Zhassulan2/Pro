@@ -1,0 +1,24 @@
+
+report = new com.openbravo.pos.reports.PanelReportBean();
+
+report.setTitleKey("Menu.TeamBonusTotal");
+report.setReport("/com/openbravo/reports/teambonustotal");
+report.setResourceBundle("com/openbravo/reports/teambonustotal_messages");
+
+report.setSentence(
+    "SELECT PEOPLE.NAME AS NAME, SUM(TEAMBONUSSESSION.TEAMBONUSSALES) SUMSALES, SUM(TEAMBONUSSESSIONPERSON.TEAMBONUSFORPERSON) AS SUMBONUS FROM PEOPLE, TEAMBONUSSESSION, TEAMBONUSSESSIONPERSON " +
+    "WHERE PEOPLE.ID = TEAMBONUSSESSIONPERSON.PERSON AND TEAMBONUSSESSION.ID = TEAMBONUSSESSIONPERSON.TBS_ID " + 
+    "AND ?(QBF_FILTER) " +
+    "GROUP BY PEOPLE.NAME" 
+);
+
+report.addParameter("TEAMBONUSSESSION.DATEEND");
+report.addParameter("TEAMBONUSSESSION.DATEEND");
+report.addQBFFilter(new com.openbravo.pos.reports.JParamsDatesInterval());
+
+report.addField("NAME", com.openbravo.data.loader.Datas.STRING);
+report.addField("SUMSALES", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("SUMBONUS", com.openbravo.data.loader.Datas.DOUBLE);
+
+
+report;

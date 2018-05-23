@@ -1,0 +1,225 @@
+package http
+
+import (
+	"strconv"
+
+	"../dbmodel"
+
+	"github.com/go-openapi/strfmt"
+
+	"github.com/gin-gonic/gin"
+)
+
+// swagger:operation GET /device Device DeviceGET
+// Получение списка устройств
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: page
+//   in: query
+//   description: номер страницы пагинатора
+//   required: false
+//   type: int
+// - name: size
+//   in: query
+//   description: количество записей на странице
+//   required: false
+//   type: int
+// responses:
+//   '200':
+//     description: JSON массив устройств
+//     schema:
+//       type: array
+//       items:
+//         "$ref": "#/definitions/Device"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) DeviceGET(c *gin.Context) {
+	page, err := strconv.Atoi(c.DefaultQuery("page", "0"))
+	size, err := strconv.Atoi(c.DefaultQuery("size", "10"))
+	Devices, err := http.Manager.DeviceGet(size, page)
+	if err != nil {
+		c.JSON(400, err)
+	}
+	c.JSON(200, Devices)
+}
+
+// swagger:operation GET /device/{id} Device DeviceGETByID
+// Получение устройства по ID
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: id
+//   in: path
+//   description: идентификатор устройства
+//   required: true
+//   type: string <uuid4>
+// responses:
+//   '200':
+//     description: JSON модель устройства
+//     schema:
+//         "$ref": "#/definitions/Device"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) DeviceGETByID(c *gin.Context) {
+	id := strfmt.UUID4(c.Param("id"))
+
+	Devices, err := http.Manager.DeviceGetByID(id)
+	if err != nil {
+		c.JSON(400, err)
+	}
+	c.JSON(200, Devices)
+}
+
+// swagger:operation POST /device Device DevicePOST
+// Создание устройства
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: bodyjson
+//   in: body
+//   description: JSON для создания устройства
+//   required: true
+//   schema:
+//     "$ref": "#/definitions/Device"
+// responses:
+//   '200':
+//     description: JSON созданная модель устройства
+//     schema:
+//         "$ref": "#/definitions/Device"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) DevicePOST(c *gin.Context) {
+	var Device dbModel.Device
+	if c.Bind(&Device) != nil {
+		c.JSON(400, "problem decoding body")
+		return
+	}
+	Device, err := http.Manager.DeviceCreate(Device)
+	if err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, Device)
+	return
+}
+
+// swagger:operation PUT /device Device DevicePUT
+// Изменение устройства
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: bodyjson
+//   in: body
+//   description: JSON для изменения модели устройства
+//   required: true
+//   schema:
+//     "$ref": "#/definitions/Device"
+// responses:
+//   '200':
+//     description: JSON ответ на изменение устройства
+//     schema:
+//         "$ref": "#/definitions/Device"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) DevicePUT(c *gin.Context) {
+	var Device dbModel.Device
+	if c.Bind(&Device) != nil {
+		c.JSON(400, "problem decoding body")
+		return
+	}
+	if err := http.Manager.DeviceUpdate(Device); err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, Device)
+	return
+}
+
+// swagger:operation DELETE /device/{id} Device DeviceDELETE
+// Удаление устройства по ID
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: id
+//   in: path
+//   description: идентификатор устройства
+//   required: true
+//   type: string <uuid4>
+// responses:
+//   '200':
+//     description: Успешное удаление
+//     schema:
+//         type: string
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) DeviceDELETE(c *gin.Context) {
+	id := strfmt.UUID4(c.Param("id"))
+
+	Device, err := http.Manager.DeviceGetByID(id)
+	if err != nil {
+		c.JSON(400, err)
+	}
+
+	if err := http.Manager.DeviceDelete(Device); err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, "")
+	return
+}
+
+// swagger:operation GET /devices/count Device DeviceCount
+// Получение количества устройств
+//
+// ---
+// produces:
+// - application/json
+// responses:
+//   '200':
+//     description: JSON с количеством устройств
+//     schema:
+//         "$ref": "#/definitions/Count"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) DeviceCount(c *gin.Context) {
+	count, err := http.Manager.DeviceCount()
+	if err != nil {
+		c.JSON(500, err)
+	}
+	c.JSON(200, count)
+}

@@ -1,0 +1,24 @@
+
+report = new com.openbravo.pos.reports.PanelReportBean();
+
+report.setTitleKey("Menu.IndivBonusTotal");
+report.setReport("/com/openbravo/reports/indivbonustotal");
+report.setResourceBundle("com/openbravo/reports/indivbonustotal_messages");
+
+report.setSentence(
+    "SELECT PEOPLE.NAME AS NAME, SUM(BONUSHISTORY.DAILYSALES) SUMSALES, SUM(BONUSHISTORY.DAILYBONUS) AS SUMBONUS FROM PEOPLE, BONUSHISTORY, CLOSEDCASH " +
+    "WHERE PEOPLE.ID = BONUSHISTORY.PERSON AND BONUSHISTORY.MONEY = CLOSEDCASH.MONEY " + 
+    "AND ?(QBF_FILTER) " +
+    "GROUP BY PEOPLE.NAME" 
+);
+
+report.addParameter("CLOSEDCASH.DATEEND");
+report.addParameter("CLOSEDCASH.DATEEND");
+report.addQBFFilter(new com.openbravo.pos.reports.JParamsDatesInterval());
+
+report.addField("NAME", com.openbravo.data.loader.Datas.STRING);
+report.addField("SUMSALES", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("SUMBONUS", com.openbravo.data.loader.Datas.DOUBLE);
+
+
+report;

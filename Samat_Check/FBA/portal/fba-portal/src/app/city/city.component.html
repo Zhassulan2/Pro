@@ -1,0 +1,105 @@
+<div class="card mb-3">
+  <div class="card-header">
+    <div class="d-flex">
+      <div class="mr-auto p-2"><h4>{{ 'CITY.TITLE' | translate }}</h4></div>        
+      <div class="p-2">
+        <button type="button" class="btn" data-toggle="modal" data-target="#newCity">
+          <span octicon="diff-added"></span>
+        </button>
+      </div>
+      <div class="p-2">
+        <button type="button" class="btn" (click)=deleteCity()>
+          <span octicon="trashcan"></span>
+        </button>
+      </div>
+      <div class="p-2">
+        <button type="button" class="btn" (click)=refreshCity()>
+          <span octicon="sync"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="form-row">
+      <div *ngIf="citiesScope" class="form-group col-md-12">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>
+                {{ 'CITY.NAME' | translate }}
+              </th>
+              <th>
+              </th>
+            </tr>
+          </thead>
+          <tr *ngFor="let city of cities" (click)="onSelect(city)">
+            <td>
+              <span *ngIf="city==selectedCity">--></span>
+              {{city.Name}}
+            </td>
+            <td>
+              <button *ngIf="city==selectedCity" class="btn" data-toggle="modal" data-target="#currentCity">
+                <span octicon="pencil"></span>
+              </button>
+            </td>
+          </tr>
+        </table>
+        <nav *ngIf="paginationCities">
+          <ul class="pagination justify-content-center">
+            <li *ngIf="currentPage>1" class="page-item">
+              <a class="page-link" (click)="getCities(currentPage-1)">
+                <</a>
+            </li>
+            <li *ngFor="let cityPage of cityPages" [class.active]="cityPage == currentPage" (click)="getCities(cityPage)" class="page-item">
+              <a class="page-link">{{cityPage}}</a>
+            </li>
+            <li *ngIf="currentPage<cityPages.length" class="page-item">
+              <a class="page-link" (click)="getCities(currentPage+1)">></a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modals -->
+<div id="newCity" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'CITY.ADD' | translate }}</h5>
+      </div>
+      <div class="modal-body">
+        <input placeholder="{{ 'CITY.NAME' | translate }}" class="form-control" #name>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="name.value = ''"  data-dismiss="modal">Отмена</button>
+        <button type="button" class="btn btn-primary" (click)="createCity(name.value); name.value = '';" data-dismiss="modal">Ок</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="selectedCity" id="currentCity" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'CITY.INF' | translate }}</h5>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <span>{{ 'CITY.SELECTED' | translate }}: {{selectedCity.Name}}
+          </span>
+        </div>
+        <div class="form-group">
+          <label>{{ 'CITY.NAME' | translate }}</label>
+          <input class="form-control" [(ngModel)]="selectedCity.Name">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'BUTTONS.REJECT' | translate }}</button>
+        <button type="button" class="btn btn-primary" (click)=updateCity() data-dismiss="modal">{{ 'BUTTONS.APPROVE' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>

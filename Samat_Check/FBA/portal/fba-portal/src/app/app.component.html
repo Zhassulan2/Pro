@@ -1,0 +1,67 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom border-secondary pb-0 pt-0">
+  <img class="navbar-brand" src="./assets/images/logo.png" width="10%">
+  <div class="collapse navbar-collapse justify-content-end">
+    <ul class="navbar-nav mr-3">
+      <li class="nav-item mr-1">
+        <a class="nav-link" [routerLinkActive]="['active']" routerLink="/main-page">{{ 'HOME.MAIN' | translate }}</a>
+      </li>
+      <li class="nav-item mr-1">
+        <a class="nav-link" [routerLinkActive]="['active']" routerLink="/points">{{ 'POINTS.TITLE' | translate }}</a>
+      </li>  
+      <li class="nav-item mr-1">
+        <a class="nav-link" [routerLinkActive]="['active']" routerLink="/discount">{{ 'DISCOUNT.TITLE' | translate }}</a>
+      </li> 
+      <li class="nav-item mr-1">
+        <a class="nav-link" [routerLinkActive]="['active']" routerLink="/import-data">{{ 'IMPORT.TITLE' | translate }}</a>
+      </li> 
+      <li class="nav-item dropdown mr-1">
+        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ 'HOME.STAFF' | translate }}</a>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" routerLink="/staff">{{ 'STAFF.TITLE' | translate }}</a>
+            <a class="dropdown-item" routerLink="/staff-point">{{ 'STAFFPOINT.TITLE' | translate }}</a>
+            <a class="dropdown-item" routerLink="/device">{{ 'DEVICE.TITLE' | translate }}</a>
+          </div>
+      </li>        
+      <li class="nav-item dropdown mr-1">
+        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ 'HOME.PRODUCTS' | translate }}</a>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" routerLink="/products">{{ 'PRODUCTS.TITLE' | translate }}</a>
+            <a class="dropdown-item" routerLink="/products-receipt">{{ 'RECEIPT.TITLE' | translate }}</a>
+            <a class="dropdown-item" routerLink="/products-relocation">{{ 'RELOCATION.TITLE' | translate }}</a>
+            <a class="dropdown-item" routerLink="/product-refuse">{{ 'REFUSE.TITLE' | translate }}</a>
+            <a class="dropdown-item" routerLink="/inventory">{{ 'INVENTORY.TITLE' | translate }}</a>
+            <a class="dropdown-item" routerLink="/product-action">{{ 'PRODUCTACTION.TITLE' | translate }}</a>
+          </div>
+      </li>       
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ 'HOME.DICTIONARIES' | translate }}</a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" routerLink="/company">{{ 'COMPANIES.TITLE' | translate }}</a>
+          <a class="dropdown-item" routerLink="/supplier">{{ 'SUPPLIER.TITLE' | translate }}</a>
+          <a class="dropdown-item" routerLink="/category">{{ 'CATEGORY.TITLE' | translate }}</a>
+        </div>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <app-user-info></app-user-info>
+    </form>
+  </div>
+</nav>
+<div class="d-flex justify-content-end">        
+  <div class="p-2">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">
+          <span octicon="globe"></span>
+        </span>
+      </div>
+      <select class="custom-select" #langSelect (change)="translate.use(langSelect.value); localeService.use(langSelect.value);">
+        <option *ngFor="let lang of translate.getLangs()" [value]="lang" [selected]="lang === translate.currentLang">{{ lang }}</option>
+      </select>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <app-alert></app-alert>
+  <router-outlet></router-outlet>
+</div>

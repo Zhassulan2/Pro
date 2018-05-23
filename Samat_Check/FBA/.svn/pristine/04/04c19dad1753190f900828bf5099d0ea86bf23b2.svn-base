@@ -1,0 +1,77 @@
+package db
+
+import (
+	"errors"
+	"fba/dbmodel"
+	"fba/model"
+	"fmt"
+
+	"github.com/go-openapi/strfmt"
+)
+
+//ActionTypeCreate create ActionType
+func (dbm *DBManager) ActionTypeCreate(actiontype dbModel.ActionType) (actiontypeRet dbModel.ActionType, err error) {
+	if dbm.DB.NewRecord(&actiontype) {
+		err = dbm.DB.Create(&actiontype).Error
+		return actiontype, err
+	}
+	return actiontype, fmt.Errorf("%s", "запись уже существует")
+}
+
+//ActionTypeUpdate update ActionType
+func (dbm *DBManager) ActionTypeUpdate(actiontype dbModel.ActionType) error {
+	return dbm.DB.Save(&actiontype).Error
+}
+
+//ActionTypeDelete delete ActionType
+func (dbm *DBManager) ActionTypeDelete(actiontype dbModel.ActionType) error {
+	return dbm.DB.Delete(&actiontype).Error
+}
+
+//ActionTypeGetByID get by id ActionType
+func (dbm *DBManager) ActionTypeGetByID(id strfmt.UUID4) (actiontype dbModel.ActionType, err error) {
+	err = dbm.DB.Where("id = ?", id).First(&actiontype).Error
+	return
+}
+
+//ActionTypeGetByID get by id ActionType
+func (dbm *DBManager) ActionTypeGetByShortName(shortName string) (actiontype dbModel.ActionType, err error) {
+	err = dbm.DB.Where("short_name = ?", shortName).First(&actiontype).Error
+	return
+}
+
+//ActionTypeCount get count ActionType
+func (dbm *DBManager) ActionTypeCount() (count int, err error) {
+	err = dbm.DB.Model(&dbModel.ActionType{}).Count(&count).Error
+	return
+}
+
+//ActionTypeGet get ActionType
+func (dbm *DBManager) ActionTypeGet(size, page int, p model.Parameters) (actiontypes []dbModel.ActionType, err error) {
+	q, single := p.ToQuery()
+	if single {
+		err = errors.New("method not single")
+		return
+	}
+	if q == "" {
+		dbm.DB.Limit(size).Order("name asc").Offset((page - 1) * size).Find(&actiontypes)
+	} else {
+		dbm.DB.Where(q).Limit(size).Order("name asc").Offset((page - 1) * size).Find(&actiontypes)
+	}
+	return
+}
+
+func (dbm *DBManager) ActionTypeSingeGet(size, page int, p model.Parameters) (actiontype dbModel.ActionType, err error) {
+	q, single := p.ToQuery()
+	if !single {
+		err = errors.New("method is single")
+		return
+	}
+	if q == "" {
+		err = errors.New("no parameters")
+		return
+	}
+	err = dbm.DB.Where(q).Limit(size).Order("name asc").Offset((page - 1) * size).First(&actiontype).Error
+
+	return
+}

@@ -1,0 +1,48 @@
+package db
+
+import "fba/dbmodel"
+import "fmt"
+import "github.com/go-openapi/strfmt"
+
+//PaymentTypeCreate create PaymentType
+func (dbm *DBManager) PaymentTypeCreate(paymenttype dbModel.PaymentType) (paymenttypeRet dbModel.PaymentType, err error) {
+	if dbm.DB.NewRecord(&paymenttype) {
+		err = dbm.DB.Create(&paymenttype).Error
+		return paymenttype, err
+	}
+	return paymenttype, fmt.Errorf("%s", "запись уже существует")
+}
+
+//PaymentTypeUpdate update PaymentType
+func (dbm *DBManager) PaymentTypeUpdate(paymenttype dbModel.PaymentType) error {
+	return dbm.DB.Save(&paymenttype).Error
+}
+
+//PaymentTypeDelete delete PaymentType
+func (dbm *DBManager) PaymentTypeDelete(paymenttype dbModel.PaymentType) error {
+	return dbm.DB.Delete(&paymenttype).Error
+}
+
+//PaymentTypeGet get PaymentType
+func (dbm *DBManager) PaymentTypeGet(size, page int) (paymenttypes []dbModel.PaymentType, err error) {
+	dbm.DB.Limit(size).Order("id asc").Offset((page - 1) * size).Find(&paymenttypes)
+	return
+}
+
+//PaymentTypeGetByID get by id PaymentType
+func (dbm *DBManager) PaymentTypeGetByID(id strfmt.UUID4) (paymenttype dbModel.PaymentType, err error) {
+	err = dbm.DB.Where("id = ?", id).First(&paymenttype).Error
+	return
+}
+
+//PaymentTypeGetByID get by id PaymentType
+func (dbm *DBManager) PaymentTypeGetByShortName(shortName string) (paymenttype dbModel.PaymentType, err error) {
+	err = dbm.DB.Where("short_name = ?", shortName).First(&paymenttype).Error
+	return
+}
+
+//PaymentTypeCount get count PaymentType
+func (dbm *DBManager) PaymentTypeCount() (count int, err error) {
+	err = dbm.DB.Model(&dbModel.PaymentType{}).Count(&count).Error
+	return
+}

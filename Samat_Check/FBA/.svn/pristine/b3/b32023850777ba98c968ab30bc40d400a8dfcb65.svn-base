@@ -1,0 +1,31 @@
+
+report = new com.openbravo.pos.reports.PanelReportBean();
+
+report.setTitleKey("Menu.PersonIndivBonusDaily");
+report.setReport("/com/openbravo/reports/personindivbonusdaily");
+report.setResourceBundle("com/openbravo/reports/personindivbonusdaily_messages");
+
+report.setSentence(
+    "SELECT PEOPLE.NAME, BONUSHISTORY.DAILYSALES, BONUSHISTORY.DAILYBONUS, CLOSEDCASH.DATEEND FROM PEOPLE, BONUSHISTORY, CLOSEDCASH " +
+    "WHERE PEOPLE.ID = BONUSHISTORY.PERSON AND BONUSHISTORY.MONEY = CLOSEDCASH.MONEY " + 
+    "AND ?(QBF_FILTER) " 
+    +
+    "ORDER BY CLOSEDCASH.DATEEND" 
+    //+ ";" +
+    //"SELECT SUM(BONUSHISTORY.DAILYBONUS) AS PERSONTOTAL, PEOPLE.NAME AS NAME FROM BONUSHISTORY, PEOPLE  GROUP BY PEOPLE.NAME"
+);
+
+report.addParameter("CLOSEDCASH.DATEEND");
+report.addParameter("CLOSEDCASH.DATEEND");
+report.addQBFFilter(new com.openbravo.pos.reports.JParamsDatesInterval());
+
+report.addParameter("BONUSHISTORY.PERSON");
+report.addQBFFilter(new com.openbravo.pos.reports.JParamsCurrentUser());
+
+report.addField("NAME", com.openbravo.data.loader.Datas.STRING);
+report.addField("DAILYSALES", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("DAILYBONUS", com.openbravo.data.loader.Datas.DOUBLE);
+report.addField("DATEEND", com.openbravo.data.loader.Datas.TIMESTAMP);
+
+
+report;

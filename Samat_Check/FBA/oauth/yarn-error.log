@@ -1,0 +1,36 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add tslint typescript
+
+PATH: 
+  C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\ProgramData\Oracle\Java\javapath;C:\Oracle\11.2.0\client_1\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Sennheiser\SoftphoneSDK\;C:\Program Files\TortoiseSVN\bin;C:\Program Files\PuTTY\;C:\Go\bin;C:\Program Files\Git\cmd;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\nodejs\;C:\Users\SAkhmetzhanov\AppData\Local\Microsoft\WindowsApps;C:\Users\SAkhmetzhanov\AppData\Local\GitHubDesktop\bin;C:\Users\SAkhmetzhanov\AppData\Local\Yarn\bin;C:\Users\SAkhmetzhanov\AppData\Roaming\npm
+
+Yarn version: 
+  1.6.0
+
+Node version: 
+  8.11.2
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/tslint: tunneling socket could not be established, statusCode=405
+      at ClientRequest.onConnect (C:\Program Files (x86)\Yarn\lib\cli.js:147034:19)
+      at Object.onceWrapper (events.js:319:30)
+      at emitThree (events.js:136:13)
+      at ClientRequest.emit (events.js:217:7)
+      at Socket.socketOnData (_http_client.js:474:11)
+      at emitOne (events.js:116:13)
+      at Socket.emit (events.js:211:7)
+      at addChunk (_stream_readable.js:263:12)
+      at readableAddChunk (_stream_readable.js:250:11)
+      at Socket.Readable.push (_stream_readable.js:208:10)
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

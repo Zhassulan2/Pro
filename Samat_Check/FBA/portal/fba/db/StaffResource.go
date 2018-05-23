@@ -1,0 +1,56 @@
+package db
+
+import (
+	"../dbmodel"
+	"fmt"
+
+	"github.com/go-openapi/strfmt"
+)
+
+//StaffCreate create Staff
+func (dbm *DBManager) StaffCreate(staff dbModel.Staff) (staffRet dbModel.Staff, err error) {
+	if dbm.DB.NewRecord(&staff) {
+		err = dbm.DB.Create(&staff).Error
+		return staff, err
+	}
+	return staff, fmt.Errorf("%s", "запись уже существует")
+}
+
+//StaffUpdate update Staff
+func (dbm *DBManager) StaffUpdate(staff dbModel.Staff) error {
+	return dbm.DB.Save(&staff).Error
+}
+
+//StaffDelete delete Staff
+func (dbm *DBManager) StaffDelete(staff dbModel.Staff) error {
+	return dbm.DB.Delete(&staff).Error
+}
+
+//StaffGet get Staff
+func (dbm *DBManager) StaffGet(size, page int) (staffs []dbModel.Staff, err error) {
+	dbm.DB.Limit(size).Order("id asc").Offset((page - 1) * size).Find(&staffs)
+	for i := 0; i < len(staffs); i++ {
+		staffs[i].Role, _ = dbm.RoleGetByID(staffs[i].RoleID)
+	}
+	return
+}
+
+//StaffGetByID get by id Staff
+func (dbm *DBManager) StaffGetByID(id strfmt.UUID4) (staff dbModel.Staff, err error) {
+	err = dbm.DB.Where("id = ?", id).First(&staff).Error
+	staff.Role, err = dbm.RoleGetByID(staff.RoleID)
+	return
+}
+
+//StaffGetByUserID get by id Staff
+func (dbm *DBManager) StaffGetByUserID(id strfmt.UUID4) (staff dbModel.Staff, err error) {
+	err = dbm.DB.Where("user_id = ?", id).First(&staff).Error
+	staff.Role, err = dbm.RoleGetByID(staff.RoleID)
+	return
+}
+
+//StaffCount get count Staff
+func (dbm *DBManager) StaffCount() (count int, err error) {
+	err = dbm.DB.Model(&dbModel.Staff{}).Count(&count).Error
+	return
+}

@@ -1,0 +1,11 @@
+{
+    "DbHost": "FBAdbuv01.fortebank.com",
+	"DbUser": "postgres",
+    "DbPass": "postgres",
+    "DbName": "oauth",
+    "PortalDbHost": "FBAdbuv01.fortebank.com",
+	"PortalDbUser": "postgres",
+    "PortalDbPass": "postgres",
+    "PortalDbName": "fbaportal"
+
+}

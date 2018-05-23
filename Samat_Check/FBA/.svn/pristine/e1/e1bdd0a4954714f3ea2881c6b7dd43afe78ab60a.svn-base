@@ -1,0 +1,106 @@
+<div class="card mb-3">
+    <div class="card-header">
+      <div class="d-flex">
+        <div class="mr-auto p-2"><h4>{{ 'ACTIONTYPE.TITLE' | translate }}</h4></div>        
+        <div class="p-2">
+          <button type="button" class="btn" data-toggle="modal" data-target="#newActionType">
+            <span octicon="diff-added"></span>
+          </button>
+        </div>
+        <div class="p-2">
+          <button type="button" class="btn" (click)=deleteActionType()>
+            <span octicon="trashcan"></span>
+          </button>
+        </div>
+        <div class="p-2">
+          <button type="button" class="btn" (click)=refreshActionType()>
+            <span octicon="sync"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="form-row">
+        <div *ngIf="actionTypesScope" class="form-group col-md-12">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>
+                  {{ 'ACTIONTYPE.NAME' | translate }}
+                </th>
+                <th>
+                </th>
+              </tr>
+            </thead>
+            <tr *ngFor="let actionType of actionTypes" (click)="onSelect(actionType)">
+              <td>
+                <span *ngIf="actionType==selectedActionType">--></span>
+                {{actionType.Name}}
+              </td>
+              <td>
+                <button *ngIf="actionType==selectedActionType" class="btn" data-toggle="modal" data-target="#currentActionType">
+                  <span octicon="pencil"></span>
+                </button>
+              </td>
+            </tr>
+          </table>
+          <nav *ngIf="paginationActionTypes">
+            <ul class="pagination justify-content-center">
+              <li *ngIf="currentPage>1" class="page-item">
+                <a class="page-link" (click)="getActionTypes(currentPage-1)">
+                  <</a>
+              </li>
+              <li *ngFor="let actionTypePage of actionTypePages" [class.active]="actionTypePage == currentPage" (click)="getActionTypes(actionTypePage)" class="page-item">
+                <a class="page-link">{{actionTypePage}}</a>
+              </li>
+              <li *ngIf="currentPage<actionTypePages.length" class="page-item">
+                <a class="page-link" (click)="getActionTypes(currentPage+1)">></a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modals -->
+  <div id="newActionType" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'ACTIONTYPE.ADD' | translate }}</h5>
+        </div>
+        <div class="modal-body">
+          <input placeholder="{{ 'ACTIONTYPE.NAME' | translate }}" class="form-control" #name>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="name.value = ''"  data-dismiss="modal">Отмена</button>
+          <button type="button" class="btn btn-primary" (click)="createActionType(name.value); name.value = '';" data-dismiss="modal">Ок</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="selectedActionType" id="currentActionType" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'ACTIONTYPE.INF' | translate }}</h5>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <span>{{ 'ACTIONTYPE.SELECTED' | translate }}: {{selectedActionType.Name}}
+            </span>
+          </div>
+          <div class="form-group">
+            <label>{{ 'ACTIONTYPE.NAME' | translate }}</label>
+            <input class="form-control" [(ngModel)]="selectedActionType.Name">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'BUTTONS.REJECT' | translate }}</button>
+          <button type="button" class="btn btn-primary" (click)=updateActionType() data-dismiss="modal">{{ 'BUTTONS.APPROVE' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

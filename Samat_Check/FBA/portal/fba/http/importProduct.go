@@ -1,0 +1,55 @@
+package http
+
+import (
+	"../model"
+
+	"github.com/go-openapi/strfmt"
+
+	"github.com/gin-gonic/gin"
+)
+
+// swagger:operation GET /inventory Inventory InventoryGET
+// Получение списка инвентаризаций
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: page
+//   in: query
+//   description: номер страницы пагинатора
+//   required: false
+//   type: int
+// - name: size
+//   in: query
+//   description: количество записей на странице
+//   required: false
+//   type: int
+// responses:
+//   '200':
+//     description: JSON массив инвентаризаций
+//     schema:
+//       type: array
+//       items:
+//         "$ref": "#/definitions/Inventory"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) ImportProductPOST(c *gin.Context) {
+	ti := c.MustGet("TokenInfo").(model.TokenInfo)
+	pointID := strfmt.UUID4(c.Param("pointid"))
+	var importProducts []model.ImportProduct
+	err := c.BindJSON(&importProducts)
+	if err != nil {
+		c.JSON(400, err)
+	}
+
+	pa, err := http.Manager.ImportProduct(pointID, importProducts, ti)
+	if err != nil {
+		c.JSON(502, err.Error())
+	}
+
+	c.JSON(200, pa)
+
+}

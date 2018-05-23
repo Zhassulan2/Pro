@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Built-By: Unios
+Build-Jdk: 1.8.0_121
+mode: development
+package: org.mortbay
+Bundle-SymbolicName: org.mortbay.jetty.jetty-terracotta-sessions
+implementation-version: 6.1.12
+Created-By: Maven Integration for Eclipse
+Bundle-Name: Jetty Terracotta Sessions Implementation
+Bundle-Description: Jetty Terracotta Sessions Implementation
+Bundle-DocURL: http://docs.codehaus.org/display/JETTY/Session+Clusteri
+ ng+with+Terracotta
+Bundle-Vendor: Mortbay
+url: http://jetty.mortbay.org
+

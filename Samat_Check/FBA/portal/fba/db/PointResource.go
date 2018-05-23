@@ -1,0 +1,88 @@
+package db
+
+import "../dbmodel"
+import "../model"
+import "fmt"
+import "github.com/go-openapi/strfmt"
+
+//PointCreate create Point
+func (dbm *DBManager) PointCreate(point dbModel.Point, ti model.TokenInfo) (pointRet dbModel.Point, err error) {
+	uuid, err := ti.GetUserID()
+	if err != nil {
+		return
+	}
+
+	staff, err := dbm.StaffGetByUserID(uuid)
+	if err != nil {
+		return
+	}
+
+	point.Staff = staff
+
+	if dbm.DB.NewRecord(&point) {
+		err = dbm.DB.Create(&point).Error
+		return point, err
+	}
+	return point, fmt.Errorf("%s", "запись уже существует")
+}
+
+//PointUpdate update Point
+func (dbm *DBManager) PointUpdate(point dbModel.Point) error {
+	return dbm.DB.Save(&point).Error
+}
+
+//PointDelete delete Point
+func (dbm *DBManager) PointDelete(point dbModel.Point) error {
+	return dbm.DB.Delete(&point).Error
+}
+
+//PointGet get Point
+func (dbm *DBManager) PointGet(size, page int) (points []dbModel.Point, err error) {
+	dbm.DB.Limit(size).Order("id asc").Offset((page - 1) * size).Find(&points)
+
+	for i := 0; i < len(points); i++ {
+		if points[i].CityID != nil {
+			city, _ := dbm.CityGetByID(*points[i].CityID)
+			points[i].City = &city
+		}
+		points[i].Company, _ = dbm.CompanyGetByID(points[i].CompanyID)
+		points[i].Staff, _ = dbm.StaffGetByID(points[i].StaffID)
+	}
+
+	return
+}
+
+//func (dbm *DBManager) PointGetByCompany()
+
+//PointGetByID get by id Point
+func (dbm *DBManager) PointGetByID(id strfmt.UUID4) (point dbModel.Point, err error) {
+	err = dbm.DB.Where("id = ?", id).First(&point).Error
+	if point.CityID != nil {
+		city, _ := dbm.CityGetByID(*point.CityID)
+		point.City = &city
+	}
+	point.Company, _ = dbm.CompanyGetByID(point.CompanyID)
+	point.Staff, _ = dbm.StaffGetByID(point.StaffID)
+	return
+}
+
+//PointCount get count Point
+func (dbm *DBManager) PointCount() (count int, err error) {
+	err = dbm.DB.Model(&dbModel.Point{}).Count(&count).Error
+	return
+}
+
+func (dbm *DBManager) PointGetByCompany(companyID strfmt.UUID4, size, page int) (points []dbModel.Point, err error) {
+	dbm.DB.Where("company_id = ?", companyID).Limit(size).Order("name asc").Offset((page - 1) * size).Find(&points)
+
+	for i := 0; i < len(points); i++ {
+		if points[i].CityID != nil {
+			city, _ := dbm.CityGetByID(*points[i].CityID)
+			points[i].City = &city
+		}
+		points[i].Company, _ = dbm.CompanyGetByID(points[i].CompanyID)
+		points[i].Staff, _ = dbm.StaffGetByID(points[i].StaffID)
+	}
+
+	return
+}

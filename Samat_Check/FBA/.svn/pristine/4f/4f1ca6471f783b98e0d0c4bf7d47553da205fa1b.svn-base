@@ -1,0 +1,11 @@
+<div class="row">
+    <div class="col">
+        <app-action-type></app-action-type>
+        <app-tax></app-tax>
+        <!--app-category></app-category-->
+    </div>
+    <div class="col">
+        <app-payment-type></app-payment-type>
+        <app-city></app-city>
+    </div>
+</div>

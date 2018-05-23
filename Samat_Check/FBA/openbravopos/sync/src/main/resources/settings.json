@@ -1,0 +1,8 @@
+{
+    "url": "",
+    "dbUrl":"jdbc:postgresql://localhost/test",
+    "dbUser":"postgres",
+    "dbPassword":"postgres",
+    "restUrl": "http://localhost:8080/",
+    "key": "F5C0510EE7D44F1CA2F169A9E39167F9"
+}

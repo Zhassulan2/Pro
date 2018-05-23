@@ -1,0 +1,271 @@
+<div *ngIf="!currentProductAction" class="card-group">
+  <div class="card mb-3">
+    <div class="card-header">
+      <div class="d-flex">
+        <div class="mr-auto p-2"><h4>{{ 'COMPANIES.TITLE' | translate }}</h4></div>        
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="form-row">
+        <div class="form-group col-12">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>
+                  {{ 'COMPANIES.NAME' | translate }} - {{ 'COMPANIES.BIN' | translate }}
+                </th>
+              </tr>
+            </thead>
+            <tr *ngFor="let company of companies" (click)="onSelectCompany(company)">
+              <td>
+                <span *ngIf="company==selectedCompany">--></span>
+                {{company.Name}} - {{company.Bin}}
+              </td>
+            </tr>
+          </table>
+          <nav *ngIf="paginationCompanies">
+            <ul class="pagination justify-content-center">
+              <li *ngIf="currentPageCompany>1" class="page-item">
+                <a class="page-link" (click)="getCompanies(currentPageCompany-1)">
+                  <</a>
+              </li>
+              <li *ngFor="let companyPage of companyPages" [class.active]="companyPage == currentPageCompany" (click)="getCompanies(companyPage)" class="page-item">
+                <a class="page-link">{{companyPage}}</a>
+              </li>
+              <li *ngIf="currentPageCompany<companyPages.length" class="page-item">
+                <a class="page-link" (click)="getCompanies(currentPageCompany+1)">></a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div  *ngIf="selectedCompany" class="card mb-3">
+    <div class="card-header">
+      <div class="d-flex">        
+        <div class="mr-auto p-2"><h4>{{ 'POINTS.TITLE' | translate }}</h4></div>    
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="form-row">
+        <div class="form-group col-12">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>
+                  {{ 'POINTS.NAME' | translate }}
+                </th>
+              </tr>
+            </thead>
+            <tr *ngFor="let point of points" (click)="onSelectPoint(point)">
+              <td>
+                <span *ngIf="point==selectedPoint">--></span>
+                {{ point.Name }}
+              </td>
+            </tr>
+          </table>
+          <nav *ngIf="paginationPoints">
+            <ul class="pagination justify-content-center">
+              <li *ngIf="currentPagePoint>1" class="page-item">
+                <a class="page-link" (click)="getPoints(currentPagePoint-1)">
+                  <</a>
+              </li>
+              <li *ngFor="let pointPage of pointPages" [class.active]="pointPage == currentPagePoint" (click)="getPoints(pointPage)" class="page-item">
+                <a class="page-link">{{pointPage}}</a>
+              </li>
+              <li *ngIf="currentPagePoint<pointPages.length" class="page-item">
+                <a class="page-link" (click)="getPoints(currentPagePoint+1)">></a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card mb-3">
+    <div class="card-header">
+      <div class="d-flex">        
+        <div class="mr-auto p-2"><h4>{{ 'REFUSE.ACTION' | translate }}</h4></div>    
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="form-group">
+        <label>{{ 'ACTIONTYPE.NAME' | translate }}</label>
+        <select class="custom-select my-1 mr-sm-2" [(ngModel)]="selectedActionTypeID" disabled>
+          <option value="">...</option>
+          <option *ngFor="let actionType of actionTypes" value="{{actionType.ID}}">{{actionType.Name}}</option>
+        </select>
+      </div>
+      <button *ngIf="selectedPoint&&selectedCompany&&selectedActionTypeID" class="btn" (click)="startAction()">{{ 'BUTTONS.APPROVE' | translate }}</button>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="currentProductAction" class="row">
+    <div *ngIf="!productActionDetail" class="col">
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="form-row">
+            <div class="col">
+              <div class="d-flex">
+                <div class="p-2 input-group">
+                  <input type="text" class="form-control" placeholder="{{ 'PRODUCTS.NAME' | translate }}" aria-describedby="basic-addon2" #searchName>
+                </div>
+                <div class="p-2 input-group">
+                  <input type="text" class="form-control" placeholder="{{ 'PRODUCTS.BARCODE' | translate }}" aria-describedby="basic-addon2" #searchBarcode>
+                </div>
+                <div class="p-2">
+                  <button type="button" class="btn" (click)="getProductStock(1, searchName.value, searchBarcode.value); searchName.value = searchBarcode.value = '';">
+                    <span octicon="search"></span>
+                  </button>
+                </div>
+                <div class="p-2">
+                  <button type="button" class="btn" (click)="refreshProductStock(); searchName.value = searchBarcode.value = '';">
+                    <span octicon="sync"></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div *ngIf="productStockScope" class="form-group col-12">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>
+                      {{ 'PRODUCTS.NAME' | translate }}
+                    </th>
+                    <th>
+                      {{ 'PRODUCTS.BARCODE' | translate }}
+                    </th>
+                    <th>
+                      {{ 'PRODUCTSTOCK.COUNT' | translate }}
+                    </th>
+                    <th>
+                      {{ 'PRODUCTSTOCK.PRICESELL' | translate }}
+                    </th>
+                    <th>
+                    </th>
+                  </tr>
+                </thead>
+                <tr *ngFor="let product of productStock" (click)="onSelectProductStock(product)">
+                  <td>
+                    <span *ngIf="product==selectedProductStock">--></span>
+                    {{product.Product.Name}}
+                  </td>
+                  <td>
+                    {{product.Product.Barcode}}
+                  </td>
+                  <td>
+                    {{product.Count}}
+                  </td>
+                  <td>
+                    {{product.PriceSell}}
+                  </td>
+                  <td>
+                    <button *ngIf="product==selectedProductStock" class="btn" (click)="addProductStock()">
+                      <span octicon="file-symlink-file"></span>
+                    </button>
+                  </td>
+                </tr>
+              </table>
+              <nav *ngIf="paginationProductStock">
+                <ul class="pagination justify-content-center">
+                  <li *ngIf="currentPageProductStock>1" class="page-item">
+                    <a class="page-link" (click)="getProductStock(currentPageProductStock-1)">
+                      <</a>
+                  </li>
+                  <li *ngFor="let productStockPage of productStockPages" [class.active]="productStockPage == currentPageProductStock" (click)="getProductStock(productStockPage)"
+                    class="page-item">
+                    <a class="page-link">{{productPage}}</a>
+                  </li>
+                  <li *ngIf="currentPageProductStock<productStockPages.length" class="page-item">
+                    <a class="page-link" (click)="getProductStock(currentPageProductStock+1)">></a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="productActionDetail" class="col">
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <form #newPADForm="ngForm">
+                <div class="form-row">
+                  <div class="form-group col-3">
+                    <label>{{ 'PRODUCTS.SELECTED' | translate }}:</label>
+                    <h4>{{productActionDetail.Product.Name}}</h4>
+                  </div>
+                  <div class="form-group col-5">
+                    <label>{{ 'PRODUCTACTIONDETAIL.COUNT' | translate }} ({{ 'REFUSE.INSTOCK' | translate }} {{selectedProductStock.Count}})</label>
+                    <input 
+                      name="count" 
+                      type="number" 
+                      class="form-control"
+                      [class.is-invalid]="count.invalid && (count.dirty || count.touched)"
+                      required 
+                      [(ngModel)]="productActionDetail.Count" 
+                      #count="ngModel" >
+                  </div>
+                  <div class="form-group col-4">
+                    <label>{{ 'PRODUCTACTIONDETAIL.PRICESELL' | translate }}</label>
+                    <input 
+                      class="form-control" 
+                      type="number" 
+                      [(ngModel)]="productActionDetail.Pricesell"
+                      name="sell" 
+                      [class.is-invalid]="sell.invalid && (sell.dirty || sell.touched)"
+                      required 
+                      #sell="ngModel" >
+                  </div>
+                </div>
+                <button type="button" class="btn" [disabled]="newPADForm.invalid" (click)="sendProductStock()">{{ 'BUTTONS.ADD' | translate }}</button>
+                <button type="button" class="btn" (click)="backToProductStock()">{{ 'BUTTONS.RETURN' | translate }}</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="currentProductAction" class="row">
+    <div class="col">
+      <p>{{ 'REFUSE.TITLE' | translate }}: {{ selectedPoint.Name }}</p>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>
+              {{ 'PRODUCTS.NAME' | translate }}
+            </th>
+            <th>
+              {{ 'PRODUCTACTIONDETAIL.COUNT' | translate }}
+            </th>
+            <th>
+              {{ 'PRODUCTACTIONDETAIL.PRICESELL' | translate }}
+            </th>
+            <th>
+            </th>
+          </tr>
+        </thead>
+        <tr *ngFor="let i of refuseScope">
+          <td><span *ngIf="i.Product">{{i.Product.Name}}</span></td>
+          <td>{{i.Count}}</td>
+          <td>{{i.Pricesell}}</td>
+          <td>
+            <button type="button" class="btn" (click)=deleteScopeMember(i)>
+              <span octicon="trashcan"></span>
+            </button>
+          </td>
+        </tr>
+      </table>
+      <button *ngIf="refuseScope.length > 0" type="button" class="btn" (click)=sendRefuseScope()>
+        {{ 'BUTTONS.APPROVE' | translate }}
+      </button>
+    </div>
+  </div>

@@ -1,0 +1,90 @@
+<div class="card mb-3">
+    <div class="card-header">{{ 'REGISTRATION.TITLE' | translate }}</div>
+    <div class="card-body">
+      <form #registrationForm="ngForm">
+        <div class="form-row mb-3">
+          <div class="input-group col-7">
+            <div class="input-group-prepend">
+              <div class="input-group-text">+7</div>
+            </div>
+            <!--input 
+              [disabled]="showPassSet" 
+              type="text" 
+              class="form-control" 
+              placeholder="{{ 'REGISTRATION.PHONE' | translate }}" 
+              name="phone" 
+              [class.is-invalid]="phone.invalid && (phone.dirty || phone.touched)"
+              required 
+              minlength="10"
+              maxlength="10"
+              [(ngModel)]="userPhone" 
+              #phone="ngModel"-->
+            <input 
+              type="text" 
+              class="form-control" 
+              placeholder="{{ 'REGISTRATION.PHONE' | translate }}" 
+              name="phone" 
+              [class.is-invalid]="phone.invalid && (phone.dirty || phone.touched)"
+              required 
+              minlength="10"
+              maxlength="10"
+              [(ngModel)]="userPhone" 
+              #phone="ngModel">
+          </div>
+          <!--div class="col">
+            <button [disabled]="showPassSet" type="button" class="btn" (click)="sendVerificationCode()">{{ 'REGISTRATION.CODE' | translate }}</button>
+          </div-->
+        </div>
+        <!--div *ngIf="showValidationPhone" class="form-row mb-3">
+          <div class="input-group col-7">
+            <input 
+              type="text" 
+              class="form-control" 
+              [(ngModel)]="validationCode" 
+              placeholder="{{ 'REGISTRATION.VALIDATION' | translate }}"
+              name="code" 
+              #code="ngModel">
+          </div>
+          <div class="col">
+            <button type="button" class="btn btn-secondary" (click)="checkVerificationCode()">{{ 'BUTTONS.CHECK' | translate }}</button>
+          </div>
+        </div-->
+        <div class="form-row mb-3">
+          <div class="input-group col-7">
+            <input 
+              [disabled]="!showPassSet" 
+              class="form-control" 
+              placeholder="{{ 'REGISTRATION.NAME' | translate }}" 
+              name="username" 
+              [class.is-invalid]="username.invalid && (username.dirty || username.touched)"
+              required 
+              minlength="2"
+              [(ngModel)]="userName" 
+              #username="ngModel">
+          </div>
+        </div>
+        <div class="form-row mb-3">
+          <div class="input-group col-7">
+            <input 
+              [disabled]="!showPassSet" 
+              type="password" 
+              class="form-control" 
+              placeholder="{{ 'REGISTRATION.PASS' | translate }}" 
+              name="userpassword" 
+              [class.is-invalid]="userpassword.invalid && (userpassword.dirty || userpassword.touched)"
+              required 
+              minlength="8"
+              maxlength="20"
+              [(ngModel)]="userPassword" 
+              #userpassword="ngModel">
+          </div>
+          <div class="col">
+            <small class="text-muted">
+              {{ 'REGISTRATION.PASSINF' | translate }}
+            </small>
+          </div>
+        </div>
+        <button *ngIf="showPassSet" type="button" class="btn" [disabled]="registrationForm.invalid" (click)="registrationUser(phone.value, userpassword.value, username.value)">{{ 'BUTTONS.REGISTRATIONUSER' | translate }}</button>
+      </form>
+    </div>
+</div>

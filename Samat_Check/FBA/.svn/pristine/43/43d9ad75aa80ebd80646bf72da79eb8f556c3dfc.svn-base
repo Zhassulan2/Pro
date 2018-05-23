@@ -1,0 +1,37 @@
+#    Openbravo POS is a point of sales application designed for touch screens.
+#    Copyright (C) 2007-2009 Openbravo, S.L.
+#    http://sourceforge.net/projects/openbravopos
+#
+#    This file is part of Openbravo POS.
+#
+#    Openbravo POS is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    Openbravo POS is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
+
+
+label.title=\u0414\u0435\u0442\u0430\u043b\u0438\u0437\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0435 \u0434\u0432\u0438\u0436\u0435\u043d\u0438\u044f \u043f\u043e \u043e\u0441\u0442\u0430\u0442\u043a\u0430\u043c
+
+label.ref=\u041d\u043e\u043c\u0435\u0440
+
+label.name=\u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435
+
+label.in=\u041f\u0440\u0438\u0445\u043e\u0434
+
+label.out=\u0412\u044b\u0431\u044b\u0442\u0438\u0435
+
+label.diff=\u0420\u0430\u0437\u043d\u0438\u0446\u0430
+
+label.sumin=\u0412\u0441\u0435\u0433\u043e \u043f\u0440\u0438\u0445\u043e\u0434
+
+label.sumout=\u0412\u0441\u0435\u0433\u043e \u0432\u044b\u0431\u044b\u0442\u0438\u0435
+
+label.sumdiff=\u0412\u0441\u0435\u0433\u043e \u0440\u0430\u0437\u043d\u0438\u0446\u0430

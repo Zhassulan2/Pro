@@ -1,0 +1,48 @@
+package db
+
+import "fba/dbmodel"
+import "fmt"
+import "github.com/go-openapi/strfmt"
+
+//WorkSessionCreate create WorkSession
+func (dbm *DBManager) WorkSessionCreate(worksession dbModel.WorkSession) (worksessionRet dbModel.WorkSession, err error) {
+	if dbm.DB.NewRecord(&worksession) {
+		err = dbm.DB.Create(&worksession).Error
+		return worksession, err
+	}
+	return worksession, fmt.Errorf("%s", "запись уже существует")
+}
+
+//WorkSessionUpdate update WorkSession
+func (dbm *DBManager) WorkSessionUpdate(worksession dbModel.WorkSession) error {
+	return dbm.DB.Save(&worksession).Error
+}
+
+//WorkSessionDelete delete WorkSession
+func (dbm *DBManager) WorkSessionDelete(worksession dbModel.WorkSession) error {
+	return dbm.DB.Delete(&worksession).Error
+}
+
+//WorkSessionGet get WorkSession
+func (dbm *DBManager) WorkSessionGet(size, page int) (worksessions []dbModel.WorkSession, err error) {
+	dbm.DB.Limit(size).Order("id asc").Offset((page - 1) * size).Find(&worksessions)
+	for i := 0; i < len(worksessions); i++ {
+		worksessions[0].Point, _ = dbm.PointGetByID(worksessions[0].PointID)
+		worksessions[0].Staff, _ = dbm.StaffGetByID(worksessions[0].StaffID)
+	}
+	return
+}
+
+//WorkSessionGetByID get by id WorkSession
+func (dbm *DBManager) WorkSessionGetByID(id strfmt.UUID4) (worksession dbModel.WorkSession, err error) {
+	err = dbm.DB.Where("id = ?", id).First(&worksession).Error
+	worksession.Point, _ = dbm.PointGetByID(worksession.PointID)
+	worksession.Staff, _ = dbm.StaffGetByID(worksession.StaffID)
+	return
+}
+
+//WorkSessionCount get count WorkSession
+func (dbm *DBManager) WorkSessionCount() (count int, err error) {
+	err = dbm.DB.Model(&dbModel.WorkSession{}).Count(&count).Error
+	return
+}

@@ -1,0 +1,106 @@
+<div class="card mb-3">
+    <div class="card-header">
+      <div class="d-flex">     
+        <div class="mr-auto p-2"><h4>{{ 'PAYMENTTYPE.TITLE' | translate }}</h4></div>        
+        <div class="p-2">
+          <button type="button" class="btn" data-toggle="modal" data-target="#newPaymentType">
+            <span octicon="diff-added"></span>
+          </button>
+        </div>
+        <div class="p-2">
+          <button type="button" class="btn" (click)=deletePaymentType()>
+            <span octicon="trashcan"></span>
+          </button>
+        </div>
+        <div class="p-2">
+          <button type="button" class="btn" (click)=refreshPaymentType()>
+            <span octicon="sync"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="form-row">
+        <div *ngIf="paymentTypesScope" class="form-group col-md-12">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>
+                  {{ 'PAYMENTTYPE.NAME' | translate }}
+                </th>
+                <th>
+                </th>
+              </tr>
+            </thead>
+            <tr *ngFor="let paymentType of paymentTypes" (click)="onSelect(paymentType)">
+              <td>
+                <span *ngIf="paymentType==selectedPaymentType">--></span>
+                {{paymentType.Name}}
+              </td>
+              <td>
+                <button *ngIf="paymentType==selectedPaymentType" class="btn" data-toggle="modal" data-target="#currentPaymentType">
+                  <span octicon="pencil"></span>
+                </button>
+              </td>
+            </tr>
+          </table>
+          <nav *ngIf="paginationCities">
+            <ul class="pagination justify-content-center">
+              <li *ngIf="currentPage>1" class="page-item">
+                <a class="page-link" (click)="getCities(currentPage-1)">
+                  <</a>
+              </li>
+              <li *ngFor="let paymentTypePage of paymentTypePages" [class.active]="paymentTypePage == currentPage" (click)="getCities(paymentTypePage)" class="page-item">
+                <a class="page-link">{{paymentTypePage}}</a>
+              </li>
+              <li *ngIf="currentPage<paymentTypePages.length" class="page-item">
+                <a class="page-link" (click)="getCities(currentPage+1)">></a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modals -->
+  <div id="newPaymentType" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'PAYMENTTYPE.ADD' | translate }}</h5>
+        </div>
+        <div class="modal-body">
+          <input placeholder="{{ 'PAYMENTTYPE.NAME' | translate }}" class="form-control" #name>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="name.value = ''"  data-dismiss="modal">Отмена</button>
+          <button type="button" class="btn btn-primary" (click)="createPaymentType(name.value); name.value = '';" data-dismiss="modal">Ок</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="selectedPaymentType" id="currentPaymentType" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'PAYMENTTYPE.INF' | translate }}</h5>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <span>{{ 'PAYMENTTYPE.SELECTED' | translate }}ь: {{selectedPaymentType.Name}}
+            </span>
+          </div>
+          <div class="form-group">
+            <label>{{ 'PAYMENTTYPE.NAME' | translate }}</label>
+            <input class="form-control" [(ngModel)]="selectedPaymentType.Name">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'BUTTONS.REJECT' | translate }}</button>
+          <button type="button" class="btn btn-primary" (click)=updatePaymentType() data-dismiss="modal">{{ 'BUTTONS.APPROVE' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

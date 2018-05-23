@@ -1,0 +1,148 @@
+<div class="card mb-3">
+    <div class="card-header">
+      <div class="d-flex">   
+        <div class="mr-auto p-2"><h4>{{ 'TAX.TITLE' | translate }}</h4></div>       
+        <div class="p-2">
+          <button type="button" class="btn" data-toggle="modal" data-target="#newTax">
+            <span octicon="diff-added"></span>
+          </button>
+        </div>
+        <div class="p-2">
+          <button type="button" class="btn" (click)=deleteTax()>
+            <span octicon="trashcan"></span>
+          </button>
+        </div>
+        <div class="p-2">
+          <button type="button" class="btn" (click)=refreshTax()>
+            <span octicon="sync"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="form-row">
+        <div *ngIf="taxesScope" class="form-group col-md-12">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>
+                  {{ 'TAX.NAME' | translate }}
+                </th>
+                <th>
+                  {{ 'TAX.VALID' | translate }}
+                </th>
+                <th>
+                  {{ 'TAX.VALUE' | translate }}
+                </th>
+                <th>
+                </th>
+              </tr>
+            </thead>
+            <tr *ngFor="let tax of taxes" (click)="onSelect(tax)">
+              <td>
+                <span *ngIf="tax==selectedTax">--></span>
+                {{tax.Name}}
+              </td>
+              <td>
+                {{tax.ValidFrom | date:'MM-dd-yyyy'}}
+              </td>
+              <td>
+                {{tax.Value}}
+              </td>
+              <td>
+                <button *ngIf="tax==selectedTax" class="btn" data-toggle="modal" data-target="#currentTax">
+                  <span octicon="pencil"></span>
+                </button>
+              </td>
+            </tr>
+          </table>
+          <nav *ngIf="paginationTaxes">
+            <ul class="pagination justify-content-center">
+              <li *ngIf="currentPage>1" class="page-item">
+                <a class="page-link" (click)="getTaxes(currentPage-1)">
+                  <</a>
+              </li>
+              <li *ngFor="let taxPage of taxPages" [class.active]="taxPage == currentPage" (click)="getTaxes(taxPage)" class="page-item">
+                <a class="page-link">{{taxPage}}</a>
+              </li>
+              <li *ngIf="currentPage<taxPages.length" class="page-item">
+                <a class="page-link" (click)="getTaxes(currentPage+1)">></a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modals -->
+  <div id="newTax" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'TAX.ADD' | translate }}</h5>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <input placeholder="{{ 'TAX.NAME' | translate }}" class="form-control" #name>
+          </div>
+          <div class="form-group">
+            <div class="input-group"> 
+              <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="validFrom" ngbDatepicker #d="ngbDatepicker" readonly>
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                  <span octicon="calendar"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="number" placeholder="{{ 'TAX.VALUE' | translate }}" class="form-control" #taxValue>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="name.value = taxValue.value = validFrom = null"  data-dismiss="modal">Отмена</button>
+          <button type="button" class="btn btn-primary" (click)="createTax(name.value, validFrom, taxValue.value); name.value = taxValue.value = validFrom=null;" data-dismiss="modal">Ок</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="selectedTax" id="currentTax" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'TAX.INF' | translate }}</h5>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <span>{{ 'TAX.SELECTED' | translate }}: {{selectedTax.Name}}
+            </span>
+          </div>
+          <div class="form-group">
+            <label>{{ 'TAX.NAME' | translate }}</label>
+            <input class="form-control" [(ngModel)]="selectedTax.Name">
+          </div>
+          <div class="form-group">
+            <label>{{ 'TAX.VALID' | translate }}</label>
+            <div class="input-group"> 
+              <input class="form-control" name="dp2" [(ngModel)]="validFromSelected" ngbDatepicker #d2="ngbDatepicker" readonly>
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
+                  <span octicon="calendar"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>{{ 'TAX.VALUE' | translate }}</label>
+            <input class="form-control" type="number" [(ngModel)]="selectedTax.Value">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+          <button type="button" class="btn btn-primary" (click)=updateTax() data-dismiss="modal">Обновить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

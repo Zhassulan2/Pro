@@ -1,0 +1,11 @@
+<button *ngIf="userId" class="btn my-2 my-sm-0" routerLink="/password-flow-login">
+    <span octicon="person"></span>
+     {{givenName}}
+</button>
+<button *ngIf="userId" class="btn my-2 my-sm-0" (click)="logout()">
+    <span octicon="sign-out"></span>
+</button>
+<button *ngIf="!userId" class="btn my-2 my-sm-0" routerLink="/password-flow-login">
+    <span octicon="sign-in"></span>
+</button>
+<button *ngIf="!userId" class="btn btn-default" routerLink="/registration">{{ 'BUTTONS.REGISTRATION' | translate }}</button> 

@@ -1,0 +1,92 @@
+package http
+
+import (
+	"fba/model"
+
+	"github.com/gin-gonic/gin"
+	"github.com/go-openapi/strfmt"
+)
+
+// swagger:operation GET /role Role RoleGET
+// Получение списка ролей
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: page
+//   in: query
+//   description: номер страницы пагинатора
+//   required: false
+//   type: int
+// - name: size
+//   in: query
+//   description: количество записей на странице
+//   required: false
+//   type: int
+// - name: shortname
+//   in: query
+//   description: мнемоника роли
+//   required: false
+//   type: string
+// responses:
+//   '200':
+//     description: JSON массив ролей
+//     schema:
+//       type: array
+//       items:
+//         "$ref": "#/definitions/Role"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) ReportRemainderGET(c *gin.Context) {
+	ti := c.MustGet("TokenInfo").(model.TokenInfo)
+	Remainder, err := http.Manager.ReportRemainder(ti)
+	if err != nil {
+		c.JSON(400, err)
+	}
+	c.JSON(200, Remainder)
+}
+
+// swagger:operation GET /role Role RoleGET
+// Получение списка ролей
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: page
+//   in: query
+//   description: номер страницы пагинатора
+//   required: false
+//   type: int
+// - name: size
+//   in: query
+//   description: количество записей на странице
+//   required: false
+//   type: int
+// - name: shortname
+//   in: query
+//   description: мнемоника роли
+//   required: false
+//   type: string
+// responses:
+//   '200':
+//     description: JSON массив ролей
+//     schema:
+//       type: array
+//       items:
+//         "$ref": "#/definitions/Role"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) ReportIncomeSalesGET(c *gin.Context) {
+	pointID := strfmt.UUID4(c.Param("companyid"))
+	Remainder, err := http.Manager.ReportIncomeSales(c.Query("startdate"), c.Query("enddate"), pointID)
+	if err != nil {
+		c.JSON(400, err)
+	}
+	c.JSON(200, Remainder)
+}

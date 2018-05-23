@@ -1,0 +1,156 @@
+package db
+
+import (
+	"../dbmodel"
+	"time"
+
+	"github.com/jinzhu/gorm"
+)
+
+//DBManager для связывания методов БД
+type DBManager struct {
+	DB *gorm.DB
+}
+
+//Init инициализация таблиц в БД
+func (dbm *DBManager) Init() {
+	dbm.DB.LogMode(true)
+	dbm.DB.SingularTable(true)
+	dbm.DB.AutoMigrate(&dbModel.Role{},
+		&dbModel.Staff{},
+		&dbModel.City{},
+		&dbModel.Company{},
+		&dbModel.Supplier{},
+		&dbModel.Point{},
+		&dbModel.Category{},
+		&dbModel.Tax{},
+		&dbModel.Product{},
+		&dbModel.ActionType{},
+		&dbModel.PaymentType{},
+		&dbModel.WorkSession{},
+		&dbModel.ProductAction{},
+		&dbModel.ProductActionDetail{},
+		&dbModel.ProductStock{},
+		&dbModel.StaffPoint{},
+		&dbModel.City{},
+		&dbModel.Device{},
+		&dbModel.Customer{},
+		&dbModel.DiscountType{},
+		&dbModel.Discount{},
+		&dbModel.Inventory{},
+		&dbModel.InventoryDetail{},
+		&dbModel.Receipt{},
+	)
+
+}
+
+func (dbm *DBManager) InitTable() {
+	//-------- Заполнение базы дефолтными значениями -------------------------------------------
+	//===========  Типы действий в журнале движения товаров =========================================
+	dbm.ActionTypeCreate(dbModel.ActionType{Name: "(+)Приёмка", ShortName: "acceptance"})
+	dbm.ActionTypeCreate(dbModel.ActionType{Name: "(+)Возврат", ShortName: "return"})
+	dbm.ActionTypeCreate(dbModel.ActionType{Name: "(-)Продажа", ShortName: "sale"})
+	dbm.ActionTypeCreate(dbModel.ActionType{Name: "(-)Списание", ShortName: "refuse"})
+	dbm.ActionTypeCreate(dbModel.ActionType{Name: "(+-)Перемещение", ShortName: "relocation"})
+	//===========  Города ===========================================================================
+	dbm.CityCreate(dbModel.City{Name: "Астана"})
+	dbm.CityCreate(dbModel.City{Name: "Атырау"})
+	dbm.CityCreate(dbModel.City{Name: "Есик"})
+	dbm.CityCreate(dbModel.City{Name: "Казалинск"})
+	dbm.CityCreate(dbModel.City{Name: "Капчагай"})
+	dbm.CityCreate(dbModel.City{Name: "Лисаковск"})
+	dbm.CityCreate(dbModel.City{Name: "Степногорск"})
+	dbm.CityCreate(dbModel.City{Name: "Степняк"})
+	dbm.CityCreate(dbModel.City{Name: "Ушарал"})
+	dbm.CityCreate(dbModel.City{Name: "Хромтау"})
+	dbm.CityCreate(dbModel.City{Name: "Абай"})
+	dbm.CityCreate(dbModel.City{Name: "Алга"})
+	dbm.CityCreate(dbModel.City{Name: "Алматы"})
+	dbm.CityCreate(dbModel.City{Name: "Атбасар"})
+	dbm.CityCreate(dbModel.City{Name: "Балхаш"})
+	dbm.CityCreate(dbModel.City{Name: "Жетысай"})
+	dbm.CityCreate(dbModel.City{Name: "Зыряновск"})
+	dbm.CityCreate(dbModel.City{Name: "Кандыагаш"})
+	dbm.CityCreate(dbModel.City{Name: "Костанай"})
+	dbm.CityCreate(dbModel.City{Name: "Павлодар"})
+	dbm.CityCreate(dbModel.City{Name: "Петропавловск"})
+	dbm.CityCreate(dbModel.City{Name: "Приозерск"})
+	dbm.CityCreate(dbModel.City{Name: "Риддер"})
+	dbm.CityCreate(dbModel.City{Name: "Сары-Агаш"})
+	dbm.CityCreate(dbModel.City{Name: "Серебрянск"})
+	dbm.CityCreate(dbModel.City{Name: "Талгар"})
+	dbm.CityCreate(dbModel.City{Name: "Тараз"})
+	dbm.CityCreate(dbModel.City{Name: "Текели"})
+	dbm.CityCreate(dbModel.City{Name: "Темиртау"})
+	dbm.CityCreate(dbModel.City{Name: "Форт-Шевченко"})
+	dbm.CityCreate(dbModel.City{Name: "Аксай"})
+	dbm.CityCreate(dbModel.City{Name: "Актюбинск"})
+	dbm.CityCreate(dbModel.City{Name: "Аральск"})
+	dbm.CityCreate(dbModel.City{Name: "Аркалык"})
+	dbm.CityCreate(dbModel.City{Name: "Асу-Булак"})
+	dbm.CityCreate(dbModel.City{Name: "Байконур"})
+	dbm.CityCreate(dbModel.City{Name: "Жанаозен"})
+	dbm.CityCreate(dbModel.City{Name: "Жем"})
+	dbm.CityCreate(dbModel.City{Name: "Житикара"})
+	dbm.CityCreate(dbModel.City{Name: "Каратау"})
+	dbm.CityCreate(dbModel.City{Name: "Кентау"})
+	dbm.CityCreate(dbModel.City{Name: "Кульсары"})
+	dbm.CityCreate(dbModel.City{Name: "Курчатов"})
+	dbm.CityCreate(dbModel.City{Name: "Кызылорда"})
+	dbm.CityCreate(dbModel.City{Name: "Макинск"})
+	dbm.CityCreate(dbModel.City{Name: "Мамлютка"})
+	dbm.CityCreate(dbModel.City{Name: "Рудный"})
+	dbm.CityCreate(dbModel.City{Name: "Сергеевка"})
+	dbm.CityCreate(dbModel.City{Name: "Уральск"})
+	dbm.CityCreate(dbModel.City{Name: "Усть-Каменогорск"})
+	dbm.CityCreate(dbModel.City{Name: "Достык"})
+	dbm.CityCreate(dbModel.City{Name: "Шымкент"})
+	dbm.CityCreate(dbModel.City{Name: "Акколь"})
+	dbm.CityCreate(dbModel.City{Name: "Актау"})
+	dbm.CityCreate(dbModel.City{Name: "Аягоз"})
+	dbm.CityCreate(dbModel.City{Name: "Булаево"})
+	dbm.CityCreate(dbModel.City{Name: "Державинск"})
+	dbm.CityCreate(dbModel.City{Name: "Есиль"})
+	dbm.CityCreate(dbModel.City{Name: "Жанатас"})
+	dbm.CityCreate(dbModel.City{Name: "Жаркент"})
+	dbm.CityCreate(dbModel.City{Name: "Зайсан"})
+	dbm.CityCreate(dbModel.City{Name: "Караганда"})
+	dbm.CityCreate(dbModel.City{Name: "Каражал"})
+	dbm.CityCreate(dbModel.City{Name: "Каскелен"})
+	dbm.CityCreate(dbModel.City{Name: "Кокшетау"})
+	dbm.CityCreate(dbModel.City{Name: "Сарканд"})
+	dbm.CityCreate(dbModel.City{Name: "Сатпаев"})
+	dbm.CityCreate(dbModel.City{Name: "Семипалатинск"})
+	dbm.CityCreate(dbModel.City{Name: "Тайынша"})
+	dbm.CityCreate(dbModel.City{Name: "Талдыкорган"})
+	dbm.CityCreate(dbModel.City{Name: "Темир"})
+	dbm.CityCreate(dbModel.City{Name: "Туркестан"})
+	dbm.CityCreate(dbModel.City{Name: "Уштобе"})
+	dbm.CityCreate(dbModel.City{Name: "Аксу"})
+	dbm.CityCreate(dbModel.City{Name: "Ерейментау"})
+	dbm.CityCreate(dbModel.City{Name: "Жезказган"})
+	dbm.CityCreate(dbModel.City{Name: "Каркаралинск"})
+	dbm.CityCreate(dbModel.City{Name: "Ленгер"})
+	dbm.CityCreate(dbModel.City{Name: "Кордай"})
+	dbm.CityCreate(dbModel.City{Name: "Отеген Батыра"})
+	//===========  Типы скидки ======================================================================
+	dbm.DiscountTypeCreate(dbModel.DiscountType{Name: "Скидка на весь ассортимент", ShortName: "alldiscount"})
+	dbm.DiscountTypeCreate(dbModel.DiscountType{Name: "Скидка на выборочные товары", ShortName: "selecteddiscount"})
+	dbm.DiscountTypeCreate(dbModel.DiscountType{Name: "Распродажа по фиксированным ценам", ShortName: "saleoutfixed"})
+	//===========  Типы оплаты ======================================================================
+	dbm.PaymentTypeCreate(dbModel.PaymentType{Name: "Наличными", ShortName: "cash"})
+	dbm.PaymentTypeCreate(dbModel.PaymentType{Name: "Картой", ShortName: "card"})
+	dbm.PaymentTypeCreate(dbModel.PaymentType{Name: "Банковский перевод", ShortName: "banktransfer"})
+	dbm.PaymentTypeCreate(dbModel.PaymentType{Name: "Без оплаты", ShortName: "nopay"})
+	dbm.PaymentTypeCreate(dbModel.PaymentType{Name: "Долг", ShortName: "loan"})
+	//===========  Роли пользователей ===============================================================
+	dbm.RoleCreate(dbModel.Role{Name: "Владелец", ShortName: "owner"})
+	dbm.RoleCreate(dbModel.Role{Name: "Кассир", ShortName: "cashier"})
+	dbm.RoleCreate(dbModel.Role{Name: "Кладовщик", ShortName: "stockman"})
+	dbm.RoleCreate(dbModel.Role{Name: "Бухгалтер", ShortName: "accountant"})
+	dbm.RoleCreate(dbModel.Role{Name: "Система", ShortName: "systemroot"})
+	//===========  Налоги ===========================================================================
+	dbm.TaxCreate(dbModel.Tax{Name: "НДС", ValidFrom: time.Date(1991, 12, 16, 0, 0, 0, 1, time.UTC), Value: 12, ShortName: "nds"})
+	dbm.TaxCreate(dbModel.Tax{Name: "Без налога", ValidFrom: time.Date(1991, 12, 16, 0, 0, 0, 1, time.UTC), Value: 0, ShortName: "notax"})
+	//-------- Заполнение базы дефолтными значениями -------------------------------------------
+}

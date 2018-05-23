@@ -1,0 +1,169 @@
+<div *ngIf="importProduct.length == 0" class="card-group">
+  <div class="card mb-3">
+    <div class="card-header">
+      <div class="d-flex">
+        <div class="mr-auto p-2"><h4>{{ 'COMPANIES.TITLE' | translate }}</h4></div>        
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="form-row">
+        <div class="form-group col-12">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>
+                  {{ 'COMPANIES.NAME' | translate }} - {{ 'COMPANIES.BIN' | translate }}
+                </th>
+              </tr>
+            </thead>
+            <tr *ngFor="let company of companies" (click)="onSelectCompany(company)">
+              <td>
+                <span *ngIf="company==selectedCompany">--></span>
+                {{company.Name}} - {{company.Bin}}
+              </td>
+            </tr>
+          </table>
+          <nav *ngIf="paginationCompanies">
+            <ul class="pagination justify-content-center">
+              <li *ngIf="currentPageCompany>1" class="page-item">
+                <a class="page-link" (click)="getCompanies(currentPageCompany-1)">
+                  <</a>
+              </li>
+              <li *ngFor="let companyPage of companyPages" [class.active]="companyPage == currentPageCompany" (click)="getCompanies(companyPage)" class="page-item">
+                <a class="page-link">{{companyPage}}</a>
+              </li>
+              <li *ngIf="currentPageCompany<companyPages.length" class="page-item">
+                <a class="page-link" (click)="getCompanies(currentPageCompany+1)">></a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div  *ngIf="selectedCompany" class="card mb-3">
+    <div class="card-header">
+      <div class="d-flex">        
+        <div class="mr-auto p-2"><h4>{{ 'POINTS.TITLE' | translate }}</h4></div>    
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="form-row">
+        <div class="form-group col-12">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>
+                  {{ 'POINTS.NAME' | translate }}
+                </th>
+              </tr>
+            </thead>
+            <tr *ngFor="let point of points" (click)="onSelectPoint(point)">
+              <td>
+                <span *ngIf="point==selectedPoint">--></span>
+                {{ point.Name }}
+              </td>
+            </tr>
+          </table>
+          <nav *ngIf="paginationPoints">
+            <ul class="pagination justify-content-center">
+              <li *ngIf="currentPagePoint>1" class="page-item">
+                <a class="page-link" (click)="getPoints(currentPagePoint-1)">
+                  <</a>
+              </li>
+              <li *ngFor="let pointPage of pointPages" [class.active]="pointPage == currentPagePoint" (click)="getPoints(pointPage)" class="page-item">
+                <a class="page-link">{{pointPage}}</a>
+              </li>
+              <li *ngIf="currentPagePoint<pointPages.length" class="page-item">
+                <a class="page-link" (click)="getPoints(currentPagePoint+1)">></a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<h5 *ngIf="selectedPoint&&selectedCompany">{{ 'IMPORT.TITLE' | translate}}: {{ selectedPoint.Name}} - {{ 'IMPORT.COUNT' | translate}}: {{ importProduct.length }}</h5>
+<div class="card mb-3" *ngIf="selectedPoint&&selectedCompany">
+  <div class="card-header">
+    <input type="file" accept=".csv" (change)="handleFileInput($event.target.files)" #fileUpload hidden>
+    <div class="input-group" (click)="fileUpload.click()">
+      <input 
+        type="text" 
+        class="form-control" 
+        placeholder="{{ fileInfo }}">
+      <div class="input-group-append">
+        <button class="btn">{{ 'BUTTONS.UPLOAD' | translate}}</button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="form-row">
+      <div *ngIf="importProduct.length > 0" class="form-group col-12">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>
+                {{ 'PRODUCTS.NAME' | translate }}
+              </th>
+              <th>
+                {{ 'PRODUCTS.BARCODE' | translate }}
+              </th>
+              <th>
+                {{ 'PRODUCTACTIONDETAIL.PRICEBUY' | translate }}
+              </th>
+              <th>
+                {{ 'PRODUCTACTIONDETAIL.PRICESELL' | translate }}
+              </th>
+              <th>
+                {{ 'PRODUCTACTIONDETAIL.COUNT' | translate }}
+              </th>
+              <th>
+                {{ 'CATEGORY.NAME' | translate }}
+              </th>
+            </tr>
+          </thead>
+          <tr *ngFor="let product of importProductPreview">
+            <td>
+              {{product.Name}}
+            </td>
+            <td>
+              {{product.BarCode}}
+            </td>
+            <td>
+              {{product.PriceBuy}}
+            </td>
+            <td>
+              {{product.PriceSell}}
+            </td>
+            <td>
+              {{product.Count}}
+            </td>
+            <td>
+              {{product.CategoryName}}
+            </td>
+          </tr>
+        </table>
+        <nav *ngIf="paginationPreview">
+          <ul class="pagination justify-content-center">
+            <li *ngIf="currentPreviewPage>1" class="page-item">
+              <a class="page-link" (click)="getPreview(currentPreviewPage-1)">
+                <</a>
+            </li>
+            <li *ngFor="let previewPage of previewPages" [class.active]="previewPage == currentPreviewPage" (click)="getPreview(previewPage)" class="page-item">
+              <a class="page-link">{{previewPage}}</a>
+            </li>
+            <li *ngIf="currentPreviewPage<pageCount" class="page-item">
+              <a class="page-link" (click)="getPreview(currentPreviewPage+1)">></a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer" *ngIf="importProduct.length > 0">
+    <button class="btn" (click)="startImport()">{{ 'BUTTONS.APPROVE' | translate}}</button>
+    <button class="btn" (click)="rejectImport()">{{ 'BUTTONS.REJECT' | translate}}</button>
+  </div>
+</div>

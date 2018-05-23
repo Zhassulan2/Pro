@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="main">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/jetty/contrib/cometd/bayeux/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/jetty/contrib/cometd/bayeux/src/test/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/jetty/contrib/cometd/client/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/jetty/contrib/cometd/client/src/test/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/jetty/contrib/cometd/demo/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/jetty/contrib/grizzly/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/jetty/contrib/j2se6/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/jetty/contrib/jetty-ant/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/jetty/contrib/jetty-ant/src/test/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/jetty/contrib/jetty-openspaces/jos-maven-plugin/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/jetty/contrib/jetty-openspaces/sessions/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/jetty/contrib/jetty-openspaces/sessions/src/test/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/jetty/contrib/jetty-openspaces/webapp/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/jetty/contrib/jetty-rewrite-handler/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/jetty/contrib/jetty-rewrite-handler/src/test/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/jetty/contrib/maven-beanshell-plugin/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/jetty/contrib/maven-beanshell-plugin/src/test/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/jetty/contrib/terracotta/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/jetty/contrib/terracotta/src/test/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/jetty/contrib/wadi/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src-beans"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src-data"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src-erp"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src-pda"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src-pos"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/jetty/contrib/cometd/bayeux/src/test/java/org/mortbay/util"/>
+        <property name="context-root" value="main"/>
+        <property name="java-output-path" value="/main/build/classes/beans"/>
+    </wb-module>
+</project-modules>

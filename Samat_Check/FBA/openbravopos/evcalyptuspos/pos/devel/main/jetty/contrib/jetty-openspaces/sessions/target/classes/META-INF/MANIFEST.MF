@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Built-By: Unios
+Build-Jdk: 1.8.0_121
+mode: development
+package: org.mortbay
+Bundle-SymbolicName: org.mortbay.jetty.jetty-gigaspaces-sessions
+implementation-version: 6.1.12
+Bundle-Version: 6.1.12
+Created-By: Maven Integration for Eclipse
+Bundle-Name: Jetty Gigaspaces Sessions Implementation
+Bundle-Description: Jetty Gigaspaces Sessions Implementation
+Bundle-Vendor: Mortbay
+url: http://jetty.mortbay.org/project/jetty-openspaces/jetty-openspace
+ s-sessions
+

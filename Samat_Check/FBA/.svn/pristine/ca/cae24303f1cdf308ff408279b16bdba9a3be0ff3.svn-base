@@ -1,0 +1,235 @@
+package http
+
+import (
+	"strconv"
+
+	"fba/dbmodel"
+
+	"github.com/go-openapi/strfmt"
+
+	"github.com/gin-gonic/gin"
+)
+
+// swagger:operation GET /tax Tax TaxGET
+// Получение списка налогов
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: page
+//   in: query
+//   description: номер страницы пагинатора
+//   required: false
+//   type: int
+// - name: size
+//   in: query
+//   description: количество записей на странице
+//   required: false
+//   type: int
+// responses:
+//   '200':
+//     description: JSON массив налогов
+//     schema:
+//       type: array
+//       items:
+//         "$ref": "#/definitions/Tax"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) TaxGET(c *gin.Context) {
+	page, err := strconv.Atoi(c.DefaultQuery("page", "0"))
+	size, err := strconv.Atoi(c.DefaultQuery("size", "10"))
+
+	shortName := c.Query("shortname")
+	if shortName != "" {
+		Taxs, err := http.Manager.TaxGetByShortName(shortName)
+		if err != nil {
+			c.JSON(400, err)
+		}
+		c.JSON(200, Taxs)
+		return
+	}
+
+	Taxs, err := http.Manager.TaxGet(size, page)
+	if err != nil {
+		c.JSON(400, err)
+	}
+	c.JSON(200, Taxs)
+}
+
+// swagger:operation GET /tax/{id} Tax TaxGETByID
+// Получение налога по ID
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: id
+//   in: path
+//   description: идентификатор налога
+//   required: true
+//   type: string <uuid4>
+// responses:
+//   '200':
+//     description: JSON модель налога
+//     schema:
+//         "$ref": "#/definitions/Tax"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) TaxGETByID(c *gin.Context) {
+	id := strfmt.UUID4(c.Param("id"))
+	Taxs, err := http.Manager.TaxGetById(id)
+	if err != nil {
+		c.JSON(400, err)
+	}
+	c.JSON(200, Taxs)
+}
+
+// swagger:operation POST /tax Tax TaxPOST
+// Создание налога
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: bodyjson
+//   in: body
+//   description: JSON для создания налога
+//   required: true
+//   schema:
+//     "$ref": "#/definitions/Tax"
+// responses:
+//   '200':
+//     description: JSON созданная модель налога
+//     schema:
+//         "$ref": "#/definitions/Tax"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) TaxPOST(c *gin.Context) {
+	var Tax dbModel.Tax
+	if c.Bind(&Tax) != nil {
+		c.JSON(400, "problem decoding body")
+		return
+	}
+	Tax, err := http.Manager.TaxCreate(Tax)
+	if err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, Tax)
+	return
+}
+
+// swagger:operation PUT /tax Tax TaxPUT
+// Изменение налога
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: bodyjson
+//   in: body
+//   description: JSON для изменения модели налога
+//   required: true
+//   schema:
+//     "$ref": "#/definitions/Tax"
+// responses:
+//   '200':
+//     description: JSON ответ на изменение налога
+//     schema:
+//         "$ref": "#/definitions/Tax"
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) TaxPUT(c *gin.Context) {
+	var Tax dbModel.Tax
+	if c.Bind(&Tax) != nil {
+		c.JSON(400, "problem decoding body")
+		return
+	}
+	if err := http.Manager.TaxUpdate(Tax); err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, Tax)
+	return
+}
+
+// swagger:operation DELETE /tax/{id} Tax TaxDELETE
+// Удаление налога по ID
+//
+// ---
+// produces:
+// - application/json
+// parameters:
+// - name: id
+//   in: path
+//   description: идентификатор налога
+//   required: true
+//   type: string <uuid4>
+// responses:
+//   '200':
+//     description: Успешное удаление
+//     schema:
+//         type: string
+//   '400':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) TaxDELETE(c *gin.Context) {
+	id := strfmt.UUID4(c.Param("id"))
+
+	Tax, err := http.Manager.TaxGetById(id)
+	if err != nil {
+		c.JSON(400, err)
+	}
+
+	if err := http.Manager.TaxDelete(Tax); err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, "")
+	return
+}
+
+// swagger:operation GET /taxs/count Tax TaxCount
+// Получение количества налогов
+//
+// ---
+// produces:
+// - application/json
+// responses:
+//   '200':
+//     description: JSON с количеством налогов
+//     schema:
+//         "$ref": "#/definitions/Count"
+//   '500':
+//     description: JSON ответ об ошибке
+//     schema:
+//         "$ref": "#/definitions/Error"
+func (http *HttpManager) TaxCount(c *gin.Context) {
+	count, err := http.Manager.TaxCount()
+	if err != nil {
+		c.JSON(500, err)
+	}
+	c.JSON(200, count)
+}

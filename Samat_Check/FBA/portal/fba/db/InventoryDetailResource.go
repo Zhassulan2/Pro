@@ -1,0 +1,73 @@
+package db
+
+import "../dbmodel"
+import "../model"
+import "fmt"
+import "github.com/go-openapi/strfmt"
+
+//InventoryDetailCreate create InventoryDetail
+func (dbm *DBManager) InventoryDetailCreate(inventorydetail dbModel.InventoryDetail, ti model.TokenInfo) (inventorydetailRet dbModel.InventoryDetail, err error) {
+	uuid, err := ti.GetUserID()
+	if err != nil {
+		return
+	}
+
+	staff, err := dbm.StaffGetByUserID(uuid)
+	if err != nil {
+		return
+	}
+
+	inventorydetail.Staff = staff
+	if dbm.DB.NewRecord(&inventorydetail) {
+		err = dbm.DB.Create(&inventorydetail).Error
+		return inventorydetail, err
+	}
+	return inventorydetail, fmt.Errorf("%s", "запись уже существует")
+}
+
+//InventoryDetailUpdate update InventoryDetail
+func (dbm *DBManager) InventoryDetailUpdate(inventorydetail dbModel.InventoryDetail) error {
+	return dbm.DB.Save(&inventorydetail).Error
+}
+
+//InventoryDetailDelete delete InventoryDetail
+func (dbm *DBManager) InventoryDetailDelete(inventorydetail dbModel.InventoryDetail) error {
+	return dbm.DB.Delete(&inventorydetail).Error
+}
+
+//InventoryDetailGet get InventoryDetail
+func (dbm *DBManager) InventoryDetailGet(size, page int) (inventorydetails []dbModel.InventoryDetail, err error) {
+	dbm.DB.Limit(size).Order("id asc").Offset((page - 1) * size).Find(&inventorydetails)
+	for i := 0; i < len(inventorydetails); i++ {
+		inventorydetails[i].Inventory, _ = dbm.InventoryGetByID(inventorydetails[i].InventoryID)
+		inventorydetails[i].Product, _ = dbm.ProductGetByID(inventorydetails[i].ProductID)
+		inventorydetails[i].Staff, _ = dbm.StaffGetByID(inventorydetails[i].StaffID)
+	}
+	return
+}
+
+//InventoryDetailGetByID get by id InventoryDetail
+func (dbm *DBManager) InventoryDetailGetByID(id strfmt.UUID4) (inventorydetail dbModel.InventoryDetail, err error) {
+	err = dbm.DB.Where("id = ?", id).First(&inventorydetail).Error
+	inventorydetail.Inventory, _ = dbm.InventoryGetByID(inventorydetail.InventoryID)
+	inventorydetail.Product, _ = dbm.ProductGetByID(inventorydetail.ProductID)
+	inventorydetail.Staff, _ = dbm.StaffGetByID(inventorydetail.StaffID)
+	return
+}
+
+//InventoryDetailCount get count InventoryDetail
+func (dbm *DBManager) InventoryDetailCount() (count int, err error) {
+	err = dbm.DB.Model(&dbModel.InventoryDetail{}).Count(&count).Error
+	return
+}
+
+//InventoryDetailGetByInventory find by ProductActionID
+func (dbm *DBManager) InventoryDetailGetByInventory(inventoryID strfmt.UUID4, size, page int) (inventorydetails []dbModel.InventoryDetail, err error) {
+	dbm.DB.Where("inventory_id = ?", inventoryID).Limit(size).Offset((page - 1) * size).Find(&inventorydetails)
+	for i := 0; i < len(inventorydetails); i++ {
+		inventorydetails[i].Inventory, _ = dbm.InventoryGetByID(inventorydetails[i].InventoryID)
+		inventorydetails[i].Product, _ = dbm.ProductGetByID(inventorydetails[i].ProductID)
+		inventorydetails[i].Staff, _ = dbm.StaffGetByID(inventorydetails[i].StaffID)
+	}
+	return
+}

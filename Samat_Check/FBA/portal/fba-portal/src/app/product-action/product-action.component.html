@@ -1,0 +1,173 @@
+<div *ngIf="productActionDetails.length == 0" class="card mb-3">
+  <div class="card-header">
+    <div class="d-flex">
+      <div class="mr-auto p-2"><h4>{{ 'PRODUCTACTION.TITLE' | translate }}</h4></div>        
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="form-row">
+      <div *ngIf="productActionsScope" class="form-group col-12">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>
+                {{ 'POINTS.NAME' | translate }}
+              </th>
+              <th>
+                {{ 'PRODUCTACTION.COUNT' | translate }}
+              </th>
+              <th>
+                {{ 'PRODUCTACTION.AMOUNT' | translate }}
+              </th>
+              <th>
+                {{ 'PRODUCTACTION.ACTIONDATE' | translate }}
+              </th>
+              <th>
+                {{ 'STAFF.NAME' | translate }}
+              </th>
+              <th>
+              </th>
+            </tr>
+          </thead>
+          <tr *ngFor="let productAction of productActions" (click)="onSelect(productAction)">
+            <td>
+              <span *ngIf="productAction==selectedProductAction">--></span>
+              {{productAction.Point.Name}}
+            </td>
+            <td>
+              {{productAction.Count}}
+            </td>
+            <td>
+              {{productAction.Amount}}
+            </td>
+            <td>
+              {{productAction.ActionDate | date:'MM-dd-yyyy h:mm:ss'}}
+            </td>
+            <td>
+              {{productAction.Staff.Name}}
+            </td>
+            <td>
+              <button *ngIf="productAction==selectedProductAction" class="btn" (click)="getProductActionDetails()">
+                <span octicon="reply"></span>
+              </button>
+            </td>
+          </tr>
+        </table>
+        <nav *ngIf="paginationProductActions">
+          <ul class="pagination justify-content-center">
+            <li *ngIf="currentPagePA>1" class="page-item">
+              <a class="page-link" (click)="getProductActions(currentPagePA-1)">
+                <</a>
+            </li>
+            <li *ngFor="let productActionPage of productActionPages" [class.active]="productActionPage == currentPagePA" (click)="getProductActions(productActionPage)" class="page-item">
+              <a class="page-link">{{productActionPage}}</a>
+            </li>
+            <li *ngIf="currentPagePA<productActionPages.length" class="page-item">
+              <a class="page-link" (click)="getProductActions(currentPagePA+1)">></a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="productActionDetails.length > 0" class="card mb-3">
+    <div class="card-header">
+      <div class="d-flex">
+        <div class="mr-auto p-2">
+          <button class="btn" (click)="backToPA()"><span octicon="arrow-left"></span></button>
+        </div>
+        <div class="mr-auto p-2">
+          <h4>{{ 'PRODUCTACTIONDETAIL.TITLE' | translate }}</h4>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="form-row">
+        <div *ngIf="productActionDetailsScope" class="form-group col-12">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>
+                  {{ 'PRODUCTS.NAME' | translate }}
+                </th>
+                <th>
+                  {{ 'PRODUCTACTIONDETAIL.COUNT' | translate }}
+                </th>
+                <th>
+                  {{ 'PRODUCTACTIONDETAIL.PRICEBUY' | translate }}
+                </th>
+                <th>
+                  {{ 'PRODUCTACTIONDETAIL.PRICESELL' | translate }}
+                </th>
+                <th>
+                  {{ 'TAX.NAME' | translate }}
+                </th>
+                <th>
+                  {{ 'PRODUCTACTIONDETAIL.REFERENCE' | translate }}
+                </th>
+                <th>
+                  {{ 'PRODUCTACTIONDETAIL.PARTNUMBER' | translate }}
+                </th>
+                <th>
+                  {{ 'ACTIONTYPE.NAME' | translate }}
+                </th>
+                <th>
+                  {{ 'PAYMENTTYPE.NAME' | translate }}
+                </th>
+                <th>
+                  {{ 'SUPPLIER.NAME' | translate }}
+                </th>
+              </tr>
+            </thead>
+            <tr *ngFor="let productActionDetail of productActionDetails" (click)="onSelect(productActionDetail)">
+              <td>
+                <span *ngIf="productActionDetail==selectedProductAction">--></span>
+                {{productActionDetail.Product.Name}}
+              </td>
+              <td>
+                {{productActionDetail.Count}}
+              </td>
+              <td>
+                {{productActionDetail.Pricebuy}}
+              </td>
+              <td>
+                {{productActionDetail.Pricesell}}
+              </td>
+              <td>
+                {{productActionDetail.Tax.Name}}
+              </td>
+              <td>
+                {{productActionDetail.Reference}}
+              </td>
+              <td>
+                {{productActionDetail.Partnumber}}
+              </td>
+              <td>
+                {{productActionDetail.ActionType.Name}}
+              </td>
+              <td>
+                {{productActionDetail.PaymentType.Name}}
+              </td>
+              <td>
+                <span *ngIf="productActionDetail.Supplier">{{productActionDetail.Supplier.Name}}</span>
+              </td>
+            </tr>
+          </table>
+          <nav *ngIf="paginationProductActionDetails">
+            <ul class="pagination justify-content-center">
+              <li *ngIf="currentPagePAD>1" class="page-item">
+                <a class="page-link" (click)="getProductActionDetails(currentPagePAD-1)"><</a>
+              </li>
+              <li *ngFor="let productActionDetailPage of productActionDetailPages" [class.active]="productActionDetailPage == currentPagePAD" (click)="getProductActionDetails(productActionDetailPage)" class="page-item">
+                <a class="page-link">{{productActionDetailPage}}</a>
+              </li>
+              <li *ngIf="currentPagePAD<productActionDetailPages.length" class="page-item">
+                <a class="page-link" (click)="getProductActionDetails(currentPagePAD+1)">></a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>

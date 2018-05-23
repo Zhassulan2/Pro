@@ -1,0 +1,61 @@
+#    Openbravo POS is a point of sales application designed for touch screens.
+#    Copyright (C) 2007-2009 Openbravo, S.L.
+#    http://sourceforge.net/projects/openbravopos
+#
+#    This file is part of Openbravo POS.
+#
+#    Openbravo POS is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    Openbravo POS is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
+
+label.title=\u0417\u0430\u043a\u0440\u044b\u0442\u0430\u044f \u0441\u043c\u0435\u043d\u0430
+
+label.closedate=\u0414\u0430\u0442\u0430 \u0437\u0430\u043a\u0440\u044b\u0442\u0438\u044f
+
+label.partialtotal=\u0418\u0442\u043e\u0433\u043e
+
+label.total=\u0412\u0441\u0435\u0433\u043e
+
+label.partialtax=\u041d\u0430\u043b\u043e\u0433\u0438
+
+label.partialsubtotal=\u0418\u0442\u043e\u0433\u043e
+
+label.tax=\u041d\u0430\u043b\u043e\u0433\u0438
+
+label.subtotal=\u0418\u0442\u043e\u0433\u043e
+
+transpayment.cash=\u041d\u0430\u043b\u0438\u0447\u043d\u044b\u0435
+
+transpayment.magcard=\u041a\u0430\u0440\u0442\u0430
+
+transpayment.cashrefund=\u0412\u043e\u0437\u0432\u0440\u0430\u0442
+
+transpayment.magcardrefund=\u0412\u043e\u0437\u0432\u0440\u0430\u0442 \u043d\u0430 \u043a\u0430\u0440\u0442\u0443
+
+transpayment.cheque=\u0427\u0435\u043a
+
+transpayment.chequerefund=\u0412\u043e\u0437\u0432\u0440\u0430\u0442 \u0447\u0435\u043a\u043e\u0432
+
+transpayment.cashin=(+) \u041d\u0430\u043b\u0438\u0447\u043d\u044b\u0435
+
+transpayment.cashout=(-) \u041d\u0430\u043b\u0438\u0447\u043d\u044b\u0435
+
+transpayment.free=\u0411\u0435\u0441\u043f\u043b\u0430\u0442\u043d\u043e
+
+transpayment.ticket=\u0427\u0435\u043a
+
+transpayment.paperin=\u0412\u0432\u043e\u0434 \u0437\u0430\u043c\u0435\u0442\u043a\u0438
+
+transpayment.paperout=\u0412\u044b\u0432\u043e\u0434 \u0437\u0430\u043c\u0435\u0442\u043a\u0438
+transpayment.debt=\u0414\u043e\u043b\u0433
+transpayment.debtpaid=\u0414\u043e\u043b\u0433 \u043f\u043e\u0433\u0430\u0448\u0435\u043d
+label.sequence=\u041f\u043e\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u044c
